@@ -29,7 +29,14 @@ class SaleStoreRequest extends FormRequest
             'quantity' => 'required|integer',
             'product_id' => 'required|integer',
             'date_of_payment' => 'required',
-            'price' => 'required'
+            'price' => 'required',
+            'total_amount' => 'nullable',
+            "gst_amount" => 'nullable',
+            "gst_rate" =>'nullable',
+            'vendor_id' =>'nullable',
+            'client_id' => 'nullable',
+            'sn' => 'nullable'
         ];
     }
 }
+

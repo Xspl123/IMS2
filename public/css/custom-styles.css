@@ -40,10 +40,16 @@ input[type="search"] {
     width: 100%;
     background:#09192A;
 }
-
+    footer{
+    
+    bottom: 0px;
+    background-color: #0a72e0;
+    width: 100%;
+    color: white;
+    }
 #page-wrapper {
     padding: 0px 15px;
-    min-height: 600px;
+    /* height: 100vh; */
     background:#E5EBF2;
    
 }
@@ -199,7 +205,7 @@ margin: 0 15px 10px 0;
 width: 70px;
 height: 70px;
 line-height: 75px;
-vertical-align: middle;
+/* vertical-align: middile; */
 text-align: center;
 font-size: 40px;
 }
@@ -262,10 +268,10 @@ color: #8d8888;
 .chat-img>img {
     margin-left:20px;
 }
-footer p{
+/* footer p{
 font-size: 14px;
-text-align: right;
-}
+text-align: center;
+} */
 /*----------------------------------------------
     MENU STYLES    
 ------------------------------------------------*/
@@ -381,7 +387,7 @@ padding-top: 4px;
 	border-bottom: 1px solid rgba(107, 108, 109, 0.19);
 }
 ul.nav.nav-second-level.collapse.in {
-background: #172D44;
+background: #da6464;
 }
 .sidebar-collapse .nav > li > a:hover,
 .sidebar-collapse .nav > li > a:focus {
@@ -395,7 +401,7 @@ background: #172D44;
 	
 }
 .top-navbar {
-	background:#09192A;
+	background:#0a72e0;
 	border-bottom:none;
 	
 }
@@ -451,8 +457,8 @@ line-height: 1.428571429;
  @media(min-width:768px) {
      #page-wrapper{
         margin: 0 0 0 260px;
-        padding: 15px 30px;
-        min-height: 1200px;
+        padding: 63px 30px;
+      
 		
     }
 	
@@ -583,4 +589,45 @@ input:checked + .slider:before {
 
 .slider.round:before {
     border-radius: 50%;
+}
+
+.table {
+    overflow: auto;
+}
+
+table.table-bordered.dataTable thead tr:first-child th, table.table-bordered.dataTable thead tr:first-child td {
+    white-space: pre;
+}
+.validate_form.text-center {
+    margin-bottom: 50px;
+}
+footer {
+    /* position: fixed; */
+    left: 0px;
+    bottom: 0px !important;
+    display: block;
+    padding: 13px 20px;
+}
+div#page-wrapper {
+    min-height: calc(100vh - 5px) !important;
+}
+.product_caption {
+    font-size: 21px;
+    margin-bottom: 25px;
+}
+footer p {
+    padding: 0px !important;
+    margin: 0px;
+}
+textarea{
+    resize: none;
+    height: 100px;
+}
+span.input-group-addon {
+    padding: 0px !important;
+}
+
+.input-group-addon:last-child {
+    border-left: 0;
+    border: none;
 }

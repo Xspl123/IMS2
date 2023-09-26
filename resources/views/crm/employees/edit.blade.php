@@ -4,7 +4,7 @@
 
 @section('title', 'Edit empoloyees')
 
-@section('lyric', 'lorem ipsum')
+@section('lyric', '')
 
 @section('content')
     @if(session()->has('message_success'))

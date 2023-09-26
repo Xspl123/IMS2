@@ -7,7 +7,8 @@ use App\Models\SalesModel;
 
 class SalesService
 {
-    private SalesModel $salesModel;
+    private $salesModel;
+    protected $table = 'sales'; // Replace with your actual table name
 
     public function __construct()
     {
@@ -19,9 +20,23 @@ class SalesService
         return $this->salesModel->storeSale($requestedData, $adminId);
     }
 
-    public function update(int $saleId, array $requestedData)
+    public function find($saleId)
     {
-        return $this->salesModel->updateSale($saleId, $requestedData);
+        return $this->salesModel->find($saleId);
+    }
+
+    public function updateSale(int $saleId, array $data)
+    {
+        $sale = $this->find($saleId);
+
+        if (!$sale) {
+            throw new \Exception('Sale not found.');
+        }
+
+        $sale->fill($data);
+        $sale->save();
+
+        return $sale;
     }
 
     public function loadSales()

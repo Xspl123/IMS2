@@ -13,7 +13,7 @@ class FakerDealsSeeder extends Seeder
     {
         $faker = \Faker\Factory::create();
         $companiesIds = \App\Models\CompaniesModel::all()->pluck('id')->toArray();
-        $rowRand = rand(30,100);
+        $rowRand = rand(0,1);
 
         for ($i = 0; $i<$rowRand; $i++) {
             $deals = [

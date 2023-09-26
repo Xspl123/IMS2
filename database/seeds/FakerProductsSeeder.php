@@ -17,7 +17,7 @@ class FakerProductsSeeder extends Seeder
             'Binoculars', 'Maps','beverages', 'Band', 'Toothpaste', 'Cape', 'Undershirt', 'Wallet', 'Snacks on the road',
             'Towel', 'Gloves', 'Socks', 'Trousers', 'Shampoo', 'Brush', 'Sleeping bag', 'Phone', 'Bags','Shower gel'];
 
-        for ($i = 0; $i<=30; $i++) {
+        for ($i = 0; $i<=3; $i++) {
             $products = [
                 'name' => $names[$i],
                 'category' => $faker->lastName,

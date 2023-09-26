@@ -47,25 +47,29 @@
                                     <td class="text-center">{{ $value->phone }}</td>
                                     <td class="text-center">{{ $value->email }}</td>
                                     <td class="text-center">{{ $value->job }}</td>
-                                    <td class="text-center"><a
-                                                href="{{ URL::to('clients/view/' . $value->client->id) }}">{{ $value->client->full_name }}</a>
+                                    <td class="text-center">
+                                        @if($value->client)
+                                            <a href="{{ URL::to('clients/view/' . $value->client->id) }}">{{ $value->client->full_name }}</a>
+                                        @else
+                                            N/A
+                                        @endif
                                     </td>
                                     <td class="text-center">
-                                            @if($value->is_active)
-                                                <label class="switch">
-                                                    <input type="checkbox"
-                                                           onchange='window.location.assign("{{ URL::to('employees/set-active/' . $value->id . '/0') }}")' checked>
-                                                    <span class="slider"></span>
-                                                </label>
-                                            @else
-                                                <label class="switch">
-                                                    <input type="checkbox"
-                                                           onchange='window.location.assign("{{ URL::to('employees/set-active/' . $value->id . '/1') }}")'>
-                                                    <span class="slider"></span>
-                                                </label>
-                                            @endif
+                                        @if($value->is_active)
+                                            <label class="switch">
+                                                <input type="checkbox"
+                                                       onchange='window.location.assign("{{ URL::to('employees/set-active/' . $value->id . '/0') }}")' checked>
+                                                <span class="slider"></span>
+                                            </label>
+                                        @else
+                                            <label class="switch">
+                                                <input type="checkbox"
+                                                       onchange='window.location.assign("{{ URL::to('employees/set-active/' . $value->id . '/1') }}")'>
+                                                <span class="slider"></span>
+                                            </label>
+                                        @endif
                                     </td>
-                                    <td class="text-right" style="text-align: center">>
+                                    <td class="text-right" style="text-align: center">
                                         <div class="btn-group">
                                             <a class="btn btn-small btn-primary"
                                                href="{{ URL::to('employees/view/' . $value->id) }}">More information</a>
@@ -83,7 +87,6 @@
                         </table>
                     </div>
                     {!! $employeesPaginate->render() !!}
-
                 </div>
             </div>
         </div>

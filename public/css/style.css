@@ -83,3 +83,57 @@ body {
 	padding: 10px;
 	margin-bottom: 20px;
 }
+.welcome-footer {
+    position: fixed;
+    width: 100%;
+    background: #758bfd;
+    left: 0px;
+    bottom: 0px;
+    padding: 10px;
+    text-align: left !important;
+}
+.welcome-footer a {
+    text-decoration: none !important;
+}
+.text-footer-1 {
+    font-size: 18px;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    line-height: 29px;
+    cursor: pointer;
+    font-weight: 600;
+	margin-bottom: 0px !important;
+}
+.radial-gradient::before {
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: .3;
+    background: radial-gradient(#d2f1df,#d3d7fa,#bad8f4) 0 0/400% 400%;
+    animation: 15s ease 0s infinite normal none running gradient;
+}
+.authentication-login-left {
+    background: #edf2f4;
+    padding: 29px;
+}
+body .text-primary {
+    color: #0077b6 !important;
+}
+.form-label {
+    margin-bottom: 0.5rem;
+}
+.form-label {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #2a3547;
+    font-size: 0.875rem;
+}
+body .fs-4 {
+    font-size: 1rem!important;
+}
+a.btn.btn-primary.w-100.py-8.mb-4.rounded-2 {
+    background: #0d2744;
+    border-color: #0d2744;
+    border-radius: 31px !important;
+}

@@ -22,7 +22,9 @@ class SystemLogs extends Migration
             $table->string('country')->nullable();
             $table->dateTime('date')->nullable();
             $table->unsignedInteger('admin_id');
-            $table->foreign('admin_id')->references('id')->on('admins');
+            $table->foreign('admin_id')->references('id')->on('admins')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
         });
     }
 

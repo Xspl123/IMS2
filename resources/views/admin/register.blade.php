@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SoftCRM</title>
+    <title>IMS</title>
     <!-- Bootstrap Styles-->
     <link href="{{ asset('/css/bootstrap.css') }}" rel="stylesheet" />
     <!-- FontAwesome Styles-->
@@ -19,7 +19,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <h1 style="text-align: center;padding: 10px;font-weight: bold">SoftCRM</h1>
+                <h1 style="text-align: center;padding: 10px;font-weight: bold">IMS</h1>
                 <div class="panel-heading">Register</div>
                 <div class="panel-body">
                     <form class="form-horizontal" method="POST" action="{{ route('register') }}">

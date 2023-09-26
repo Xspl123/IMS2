@@ -1,8 +1,10 @@
-<footer>
-    <p>
-        All right reserved. Template by: <a href="http://webthemez.com">WebThemez</a> | Code by: <a
-                href="https://github.com/KamilGrzechulski/">Kamil Grzechulski</a> | @version
+<footer >
+    <div class="footer">
+    <p style="text-align: center">
+        All right reserved. <a href="https://www.vert-age.com/" style="color: rgb(127, 255, 170)"> Xenottabyte Services Pvt. Ltd.</a> | Code by: <a
+                href="https://www.vert-age.com/" class="text-white"style="color: rgb(127, 255, 170)"> Xenottabyte Services Pvt. Ltd.</a> 
     </p>
+    </div>
 </footer>
 </div>
 </div>
@@ -12,6 +14,7 @@
 <script src="{{ asset('/js/jquery.metisMenu.js') }}"></script>
 <script src="{{ asset('/js/custom-scripts.js') }}"></script>
 <script src="{{ asset('js/jsclock-0.8.min.js') }}"></script>
+<script src="{{ asset('js/main.js')}}"></script>
 
 </body>
 

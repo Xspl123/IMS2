@@ -11,7 +11,7 @@ class SystemLogsModel extends Model
 {
     protected $table = 'systemlogs';
 
-    public string $ip = '66.249.69.115'; // googlebot
+    
 
     public function __construct()
     {
@@ -44,6 +44,7 @@ class SystemLogsModel extends Model
 
     public function getUserInformation()
     {
+        $ip = $_SERVER['REMOTE_ADDR'];
         return unserialize(file_get_contents("http://www.geoplugin.net/php.gp?ip=$this->ip"));
     }
 

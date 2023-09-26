@@ -13,13 +13,13 @@ class FakerTasksSeeder extends Seeder
     {
         $faker = \Faker\Factory::create();
         $employeeIds = \App\Models\EmployeesModel::all()->pluck('id')->toArray();
-        $rowRand = rand(30,100);
+        $rowRand = rand(1,2);
 
         for ($i = 0; $i<$rowRand; $i++) {
             $tasks = [
                 'name' => 'test_task',
                 'employee_id' => $faker->randomElement($employeeIds),
-                'duration' => rand(1,30),
+                'duration' => rand(1,3),
                 'completed' => rand(0,1),
                 'created_at' => \Carbon\Carbon::today()->subDays(rand(0, 365)),
                 'updated_at' => \Carbon\Carbon::now(),

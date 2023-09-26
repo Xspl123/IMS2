@@ -13,9 +13,9 @@ use View;
 
 class SettingsController extends Controller
 {
-    private HelpersFncService $helpersFncService;
-    private SettingsService $settingsService;
-    private SystemLogService $systemLogsService;
+    private  $helpersFncService;
+    private  $settingsService;
+    private  $systemLogsService;
 
     public function __construct(HelpersFncService $helpersFncService, SettingsService $settingsService, SystemLogService $systemLogService)
     {

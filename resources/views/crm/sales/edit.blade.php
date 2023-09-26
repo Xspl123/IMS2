@@ -16,6 +16,7 @@
             <strong>Danger!</strong> {{ session()->get('message_danger') }}
         </div>
     @endif
+   
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
@@ -25,7 +26,7 @@
                             {{ Form::model($sale, ['route' => ['processUpdateSale', $sale->id], 'method' => 'PUT']) }}
                             <div class="form-group input-row">
                                 {{ Form::label('name', 'Name') }}
-                                {{ Form::text('name', null, ['class' => 'form-control']) }}
+                                {{ Form::text('name', null, ['class' => 'form-control' ,'readonly']) }}
                             </div>
                         </div>
 
@@ -67,6 +68,78 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                {{ Form::label('status', 'Status') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-flag"></i></span>
+                                    {{ Form::select('status', [
+                                        'ok' => 'Ok',
+                                        'defected' => 'Defected',
+                                        'replacement' => 'Replacement',
+                                    ], null, ['class' => 'form-control', 'id' => 'statusSelect']) }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                         <div class="col-lg-6" id="approved_by" style="display: none;">
+                            <div class="form-group">
+                                {{ Form::label('approved_by', 'Approved By') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-exclamation-circle"></i></span>
+                                    {{ Form::text('approved_by', $auth, ['class' => 'form-control' ,'readonly', 'placeholder' => 'Write product issues here']) }}
+                                </div>
+                            </div>
+                        </div>
+
+
+                        
+                        <div class="col-lg-6" id="replacementWith" style="display: none;">
+                            <div class="form-group">
+                                {{ Form::label('replacement_with', 'Replacement with') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-exclamation-circle"></i></span>
+                                    {{ Form::select('replacement_with', $dataWithPluckOfProducts, null, ['class' => 'form-control', 'id' => 'defectedInput', 'placeholder' => 'Select a Product']) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6" id="replacement_product_sn" style="display: none;">
+                            <div class="form-group">
+                                {{ Form::label('replacement_product_sn', 'Replacement Serial') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-comment"></i></span>
+                                    {{ Form::text('replacement_product_sn', null, ['class' => 'form-control', 'placeholder' => 'Write product issues here']) }}
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="col-lg-6" id="replacementTo" style="display: none;">
+                            <div class="form-group">
+                                {{ Form::label('replacement_to', 'Replacement To') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-exclamation-circle"></i></span>
+                                    {{ Form::select('replacement_to', $dataOfCustomer, null, ['class' => 'form-control', 'id' => 'defectedInput', 'placeholder' => 'Select a Customer']) }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6" id="replacementRemarkInput" style="display: none;">
+                            <div class="form-group">
+                                {{ Form::label('replace_remark', 'Replacement Remark') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-comment"></i></span>
+                                    {{ Form::text('replace_remark', null, ['class' => 'form-control','placeholder' => 'Write product issues hear']) }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <script>
+                           
+                        </script>
+                        
 
                         <div class="col-lg-6">
                         </div>
@@ -167,5 +240,40 @@
                 return false;
             });
         });
+ 
+        $('#statusSelect').change(function () {
+            var selectedStatus = $(this).val();
+
+            // Hide both input fields initially
+            $('#replacementWith').hide();
+            $('#replacementTo').hide();
+            $('#replacementRemarkInput').hide();
+            $('#replacement_product_sn').hide();
+            $('#approved_by').hide();
+
+
+            // Show/hide input fields based on selected option
+            if (selectedStatus === 'replacement') {
+                $('#replacementWith').show();
+                $('#replacementTo').show();
+                $('#replacementRemarkInput').show();
+                $('#replacement_product_sn').show();
+                $('#approved_by').show();
+            }
+
+            $('#productSelect').change(function () {
+            var selectedProductId = $(this).val();
+
+            // Fetch the product name based on the selected product ID (dataWithPluckOfProducts is assumed to be an object mapping product IDs to product names)
+            var productName = dataWithPluckOfProducts[selectedProductId];
+
+            // Update the input field with the product name
+            $('#defectedInput').val(productName);
+        });
+    
+          
+});
+
+        
     </script>
 @endsection

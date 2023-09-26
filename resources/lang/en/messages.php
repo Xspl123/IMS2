@@ -100,6 +100,16 @@ return [
     'SalesIsDeactivated' => 'Sales has been already deactivated.',
     'ErrorSalesActive' => 'Sales hasn\'t been active yet.',
 
+     /** Purchase Messages **/
+     'SuccessPurchaseStore' => 'Purchase item has been added.',
+     'SuccessPurchaseDelete' => 'Purchase item has been deleted.',
+     'SuccessPurchaseUpdate' => 'Purchase item has been updated.',
+     'SuccessPurchaseActive' => 'Purchase item has been active.',
+     'PurchaseIsNowDeactivated' => 'Purchase item has been deactivated.',
+     'PurchaseIsDeactivated' => 'Purchase has item been already deactivated.',
+     'ErrorPurchaseActive' => 'Purchase item hasn\'t been active yet.',
+ 
+
     /** Finances Messages **/
     'SuccessFinancesStore' => 'Finances has been added.',
     'SuccessFinancesDelete' => 'Finances has been deleted.',

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 use Config;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 
 class ClientsModel extends Model
 {
@@ -15,6 +17,11 @@ class ClientsModel extends Model
 
     protected $table = 'clients';
     protected $dates = ['deleted_at'];
+
+    public function transactions()
+    {
+        return $this->hasMany(TransactionsModel::class, 'payerid', 'id');
+    }
 
     public function companies()
     {
@@ -93,19 +100,34 @@ class ClientsModel extends Model
     }
 
     public function getClientByGivenClientId(int $clientId) : self
-    {
-        $query = $this->find($clientId);
-
-        if(is_null($query)) {
-            throw new BadRequestHttpException('User with given clientId not exists.');
-        }
-
-        Arr::add($query, 'companiesCount', count($query->companies));
-        Arr::add($query, 'employeesCount', count($query->employees));
-        Arr::add($query, 'formattedBudget', Money::{SettingsModel::getSettingValue('currency')}($query->budget));
-
-        return $query;
+{
+    try {
+        $query = $this->findOrFail($clientId);
+    } catch (ModelNotFoundException $exception) {
+        throw new NotFoundHttpException('User with the given clientId does not exist.');
     }
+
+    Arr::add($query, 'companiesCount', count($query->companies));
+    Arr::add($query, 'employeesCount', count($query->employees));
+    Arr::add($query, 'formattedBudget', Money::{SettingsModel::getSettingValue('currency')}($query->budget));
+
+    return $query;
+}
+
+//     public function getClientByGivenClientId(int $clientId) : self
+// {
+//     $query = $this->find($clientId);
+
+//     if (is_null($query)) {
+//         throw new NotFoundHttpException('User with the given clientId does not exist.');
+//     }
+
+//     Arr::add($query, 'companiesCount', count($query->companies));
+//     Arr::add($query, 'employeesCount', count($query->employees));
+//     Arr::add($query, 'formattedBudget', Money::{SettingsModel::getSettingValue('currency')}($query->budget));
+
+//     return $query;
+// }
 
     public function getClientSortedBy($createForm = false)
     {

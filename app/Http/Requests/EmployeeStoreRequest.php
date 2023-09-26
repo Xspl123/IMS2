@@ -28,9 +28,13 @@ class EmployeeStoreRequest extends FormRequest
             'full_name' => 'required|string',
             'phone' => 'required|string',
             'email' => 'required|email',
-            'job' => 'required|string',
+            'category' => 'nullable|string',
             'note' => 'required|string',
-            'client_id' => 'required|integer'
+            'client_id' => 'required|integer',
+            'city' => 'required|string',
+            'billing_address' => 'required|email',
+            'country' => 'nullable|string',
+            'postal_code' => 'required|string',
         ];
     }
 }

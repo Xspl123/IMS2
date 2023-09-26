@@ -20,7 +20,7 @@
             @endif
 
             <a href="{{ URL::to('clients/form/create') }}">
-                <button type="button" class="btn btn-primary btn active">Add client</button>
+                <button type="button" class="btn btn-primary btn active">Add Coustmor Company</button>
             </a>
             <br><br>
                 <div class="panel panel-default">
@@ -32,7 +32,7 @@
                             <table class="table table-striped table-bordered table-hover" id="dataTables-example" data-sortable>
                                 <thead>
                                 <tr>
-                                    <th class="text-center">Full name</th>
+                                    <th class="text-center">Company name</th>
                                     <th class="text-center">Phone</th>
                                     <th class="text-center">Email address</th>
                                     <th class="text-center">Section</th>
@@ -50,7 +50,7 @@
                                         <td class="text-center">{{ $value->section }}</td>
                                         <td class="text-center">
                                             <button type="submit"
-                                                    class="btn btn-default">{{ $value->budget }}</button>
+                                                    class="btn btn-default">₹ {{ $value->budget }}</button>
                                         </td>
                                         <td class="text-center">
                                             @if($value->is_active)
@@ -67,10 +67,10 @@
                                                 </label>
                                             @endif
                                         </td>
-                                        <td class="text-right" style="text-align: center">>
+                                        <td class="text-right" style="text-align: center">
                                             <div class="btn-group">
                                                 <a class="btn btn-small btn-primary"
-                                                   href="{{ URL::to('clients/view/' . $value->id) }}">More information</a>
+                                                   href=" {{ URL::to('clients/view/'  . $value->id) }}">More information</a>
                                                 <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="caret"></span></button>
                                                 <ul class="dropdown-menu">
                                                     <li><a href="{{ URL::to('clients/form/update/' . $value->id) }}">Edit</a></li>

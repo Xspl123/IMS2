@@ -19,10 +19,14 @@ class CreateTableSales extends Migration
             $table->integer('price');
             $table->date('date_of_payment');
             $table->unsignedInteger('product_id');
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_id')->references('id')->on('products')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
             $table->boolean('is_active')->nullable()->default(1);
             $table->unsignedInteger('admin_id');
-            $table->foreign('admin_id')->references('id')->on('admins');
+            $table->foreign('admin_id')->references('id')->on('admins')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
             $table->timestamps();
             $table->dateTime('deleted_at')->nullable();
         });

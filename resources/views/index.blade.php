@@ -1,11 +1,13 @@
 @extends('layouts.base')
 
-@section('title', 'Welcome in SoftCRM')
+@section('title', '')
 
-@section('caption', 'Welcome in SoftCRM')
+@section('caption', 'Welcome in Vert-Age ERP')
 
 @section('content')
-    <div class="row">
+         
+    <div class="row ">
+      
         <div class="col-md-3 col-sm-12 col-xs-12">
             <div class="panel panel-primary text-center no-boder bg-color-green">
                 <div class="panel-body boxes">
@@ -40,13 +42,13 @@
             <div class="panel panel-primary text-center no-boder bg-color-red">
                 <div class="panel-body boxes">
                     <i class="fa fa fa-users fa-3x"></i>
-                    <h3 style="padding:8px;font-size:18px">Employees: {{ Cache::get('countFinances') }}
-                        ({{ Cache::get('deactivatedEmployees') }})
+                    <h3 style="padding:8px;font-size:18px">Vendors: {{ Cache::get('countVendors') }}
+                        ({{ Cache::get('deactivatedVendors') }})
                     </h3>
                 </div>
-                <a href="{{ route('employees') }}" style="text-decoration: none">
+                <a href="{{ route('vendors') }}" style="text-decoration: none">
                     <div class="panel-footer back-footer-red boxes-font">
-                        {{ Cache::get('employeesInLatestMonth') }}% Increase in 30 Days
+                        {{ Cache::get('vendorsInLatestMonth') }}% Increase in 30 Days
                     </div>
                 </a>
             </div>
@@ -142,6 +144,47 @@
         <div class="col-md-6 col-sm-12 col-xs-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
+                    Latest transactions <span class="badge"> {{ Cache::get('countTransactions') }}</span>
+                </div>
+                <div class="panel-body">
+                    <div class="list-group">
+                        @if(is_array($dataWithAllTransactions) || $dataWithAllTransactions instanceof Countable)
+                            @if(count($dataWithAllTransactions) > 0)
+                                @foreach ($dataWithAllTransactions as $result)
+                                    <a href="{{ URL::to('transactions/view/' . $result->id) }}" class="list-group-item">
+                                        <span class="badge badge" style="background-color: #428bca !important;">
+                                            {{ $result->created_at->diffForHumans() }}</span>
+
+                                            <span class="badge badge" style="background-color: #eb0c0c !important;">
+                                                ₹ {{$result->dr }}
+                                            </span>
+
+                                            <span class="badge badge" style="background-color: #1069a5 !important;">
+                                                ₹ {{$result->cr }}
+                                            </span>
+                                          <td>{{ $result->date }}</td> &nbsp;  &nbsp; &nbsp;
+                                        {{ $result->type }}
+                                        
+                                    </a>
+                                @endforeach
+                            @else
+                                There are no transactions.
+                            @endif
+                        @else
+                            Invalid data format for $dataWithAllExpence.
+                        @endif
+                    </div>
+                    
+                    <div class="text-right">
+                        <a href="{{ URL::to('transactions') }}">More transactions <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-sm-12 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
                     Latest add products <span class="badge"> {{ Cache::get('countProducts') }}</span>
                 </div>
                 <div class="panel-body">
@@ -154,7 +197,8 @@
                                     <span class="badge badge" style="background-color: #8a3a44 !important;">
                                          {{ $result->count }} qty</span>
                                     <span class="badge badge" style="background-color: #298a15 !important;">
-                                        {{ Cknow\Money\Money::{$currency}($result->price) }}</span>
+                                        ₹ {{$result->price }}
+                                    </span>
                                     <i class="fa fa-fw fa-product-hunt"></i> {{ $result->name }}
                                 </a>
                             @endforeach

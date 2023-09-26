@@ -9,8 +9,8 @@ use Carbon\Carbon;
 
 class DealsService
 {
-    private DealsModel $dealsModel;
-    private DealsTermsModel $dealsTermsModel;
+    private $dealsModel;
+    private  $dealsTermsModel;
 
     public function __construct()
     {

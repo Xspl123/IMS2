@@ -73,7 +73,11 @@
                                 <tr>
                                     <th>Assigned client</th>
                                     <td>
-                                        <a href="{{ URL::to('clients/view/' . $company->client->id) }}">{{ $company->client->full_name }}</a>
+                                        @if($company->client)
+                                            <a href="{{ URL::to('clients/view/' . $company->client->id) }}">{{ $company->client->full_name }}</a>
+                                        @else
+                                            N/A
+                                        @endif
                                     </td>
                                 </tr>
                                 <tr>
@@ -107,7 +111,7 @@
                     <h4 class="modal-title" id="myModalLabel">You want delete this company?</h4>
                 </div>
                 <div class="modal-body">
-                    Ation will delete permanently this company.
+                    Action will delete permanently this company.
                 </div>
                 <div class="modal-footer">
                     {{ Form::open(['url' => 'companies/delete/' . $company->id,'class' => 'pull-right']) }}

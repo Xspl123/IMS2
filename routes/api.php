@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\CRM\AdminController;
+use App\Http\Controllers\DecryptionController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +16,16 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::post('/register', [AdminController::class, 'register']);
+Route::post('/login', [DecryptionController::class, 'login']);
+Route::get('/getBarcodeValue', [DecryptionController::class, 'getBarcodeValue']);
+
+
+
+Route::middleware(['auth:api'])->group(function(){
+
+   Route::post('/decode', [DecryptionController::class, 'decryptValue']);
+   
+
 });

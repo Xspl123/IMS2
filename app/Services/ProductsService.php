@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\ProductsModel;
+use Illuminate\Support\Facades\DB;
+
 use App\Traits\Language;
 use Config;
 
@@ -10,7 +12,7 @@ class ProductsService
 {
     use Language;
 
-    private ProductsModel $productsModel;
+    private $productsModel;
 
     public function __construct()
     {
@@ -30,6 +32,13 @@ class ProductsService
     public function loadProducts()
     {
         return $this->productsModel->getProducts();
+    }
+
+    public function getProductsByBrand()
+    {
+        return ProductsModel::select('brand_name', DB::raw('count(*) as product_count'))
+            ->groupBy('brand_name')
+            ->get();
     }
 
     public function loadPagination()
@@ -55,15 +64,16 @@ class ProductsService
     public function checkIfProductHaveAssignedSale(int $productId)
     {
         $product = $this->productsModel->findClientByGivenClientId($productId);
-
+    
         $countSales = $product->sales()->count();
-
+    
         if ($countSales > 0) {
-            return $this->getMessage('messages.firstDeleteSales');
+            return 'Cannot delete the product. It has assigned sales.';
         } else {
             return true;
         }
     }
+    
 
     public function loadCountProducts()
     {

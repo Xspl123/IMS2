@@ -72,13 +72,18 @@ class TasksModel extends Model
     public function getAllCompletedTasks()
     {
         $tasks = $this->where('completed', '=', 1)->count();
-
-        $taskAll = $this->all()->count();
-
-        $percentage = round(($tasks / $taskAll) * 100);
-
+    
+        $taskAll = $this->countTasks();
+    
+        if ($taskAll == 0) {
+            $percentage = 0;
+        } else {
+            $percentage = round(($tasks / $taskAll) * 100);
+        }
+    
         return $tasks . ' (' . $percentage .  '%)';
     }
+    
 
     public function getTask(int $taskId)
     {

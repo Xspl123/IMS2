@@ -8,14 +8,20 @@ use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Services\ProductsService;
 use App\Services\SystemLogService;
+use Picqer\Barcode\BarcodeGeneratorHTML;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\DB;
+use App\Models\ProductsModel;
+use App\Models\VendorModel;
 use View;
 use Illuminate\Http\Request;
-Use Illuminate\Support\Facades\Redirect;
+
 
 class ProductsController extends Controller
 {
-    private ProductsService $productsService;
-    private SystemLogService $systemLogsService;
+    private  $productsService;
+    private  $systemLogsService;
 
     public function __construct(ProductsService $productsService, SystemLogService $systemLogService)
     {
@@ -27,13 +33,19 @@ class ProductsController extends Controller
 
     public function processRenderCreateForm()
     {
-        return View::make('crm.products.create');
+       // Fetch only the names of clients to use in the dropdown select
+       $dataOfVendors = VendorModel::pluck('name','id');
+
+        return view('crm.products.create', compact('dataOfVendors'));
     }
+
+    
 
     public function processShowProductsDetails(int $productId)
     {
         return View::make('crm.products.show')->with(['product' => $this->productsService->loadProduct($productId)]);
     }
+
 
     public function processRenderUpdateForm(int $productId)
     {
@@ -49,16 +61,42 @@ class ProductsController extends Controller
         );
     }
 
+
     public function processStoreProduct(ProductStoreRequest $request)
     {
-        $storedProductId = $this->productsService->execute($request->validated(), $this->getAdminId());
+        $validatedData = $request->validated();
+
+        // Check if the barcode is provided
+        $barcode = $validatedData['barcode'] ?? null;
+        if (!$barcode) {
+            // Generate random 11-digit barcode
+            $barcode = $this->generateRandomBarcode();
+        }
+
+        // Add the generated or provided barcode to the validated data
+        $validatedData['barcode'] = $barcode;
+
+        $product = VendorModel::find($validatedData['vendor_id']);
+
+        $storedProductId = $this->productsService->execute($validatedData, $this->getAdminId());
 
         if ($storedProductId) {
-            $this->systemLogsService->loadInsertSystemLogs('Product has been add with id: ' . $storedProductId, $this->systemLogsService::successCode, $this->getAdminId());
+            $this->systemLogsService->loadInsertSystemLogs('Product has been added with id: ' . $storedProductId, $this->systemLogsService::successCode, $this->getAdminId());
+
+            // Delete the authenticated user from the live_agent table
+            $username = Auth::user()->name;
+            DB::table('live_agent')->where('user_name', $username)->delete();
+
             return Redirect::to('products')->with('message_success', $this->getMessage('messages.SuccessProductsStore'));
         } else {
             return Redirect::back()->with('message_success', $this->getMessage('messages.ErrorProductsStore'));
         }
+    }
+
+    // Method to generate a random 11-digit barcode
+    private function generateRandomBarcode()
+    {
+        return strval(rand(10000000000, 99999999999)); // Generates 11-digit barcode
     }
 
     public function processUpdateProduct(ProductUpdateRequest $request, int $productId)
@@ -72,18 +110,31 @@ class ProductsController extends Controller
 
     public function processDeleteProduct(int $productId)
     {
-        $clientAssigned = $this->productsService->checkIfProductHaveAssignedSale($productId);
+        // $clientAssigned = $this->productsService->checkIfProductHaveAssignedSale($productId);
 
-        if (!empty($clientAssigned)) {
-            return Redirect::back()->with('message_danger', $clientAssigned);
-        } else {
-            $productsDetails = $this->productsService->loadProduct($productId);
-            $productsDetails->delete();
+        // if (!empty($clientAssigned)) {
+        //     return Redirect::back()->with('message_danger', $clientAssigned);
+        // } else {
+        //     $productsDetails = $this->productsService->loadProduct($productId);
+        //     $productsDetails->delete();
+        // }
+
+        // $this->systemLogsService->loadInsertSystemLogs('ProductsModel has been deleted with id: ' . $productsDetails->id, $this->systemLogsService::successCode, $this->getAdminId());
+
+        // return Redirect::to('products')->with('message_success', $this->getMessage('messages.SuccessProductsDelete'));
+      
+        $product = ProductsModel::find($productId);
+
+        if (!$product) {
+            return Redirect::back()->with('message_danger', 'Product not found.');
         }
-
-        $this->systemLogsService->loadInsertSystemLogs('ProductsModel has been deleted with id: ' . $productsDetails->id, $this->systemLogsService::successCode, $this->getAdminId());
-
-        return Redirect::to('products')->with('message_success', $this->getMessage('messages.SuccessProductsDelete'));
+    
+        $product->delete();
+    
+        $this->systemLogsService->loadInsertSystemLogs('Product has been deleted with id: ' . $productId, $this->systemLogsService::successCode, $this->getAdminId());
+    
+        return Redirect::to('products')->with('message_success', 'Product deleted successfully.');
+    
     }
 
     public function processProductSetIsActive(int $productId, bool $value)

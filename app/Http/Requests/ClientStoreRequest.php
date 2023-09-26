@@ -27,7 +27,7 @@ class ClientStoreRequest extends FormRequest
         return [
             'full_name' => 'required|string',
             'phone' => 'required|string',
-            'budget' => 'required|integer',
+            'budget' => 'nullable|integer',
             'section' => 'required|string',
             'email' => 'required|email',
             'location' => 'required|string',

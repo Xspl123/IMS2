@@ -6,7 +6,7 @@ use App\Models\SettingsModel;
 
 class SettingsService
 {
-    private SettingsModel $settingsModel;
+    private  $settingsModel;
 
     public function __construct()
     {

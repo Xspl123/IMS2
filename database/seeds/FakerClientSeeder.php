@@ -15,7 +15,7 @@ class FakerClientSeeder extends Seeder
         $faker = \Faker\Factory::create();
         $section = ['transport', 'logistic', 'finances'];
 
-        for ($i = 0; $i<=30; $i++) {
+        for ($i = 0; $i<=1; $i++) {
             $client = [
                 'full_name' => $faker->name,
                 'phone' => $faker->phoneNumber,

@@ -8,15 +8,16 @@ use App\Http\Requests\TaskStoreRequest;
 use App\Http\Requests\TaskUpdateRequest;
 use App\Services\EmployeesService;
 use App\Services\SystemLogService;
+use App\Models\EmployeesModel;
 use App\Services\TasksService;
 use View;
 Use Illuminate\Support\Facades\Redirect;
 
 class TasksController extends Controller
 {
-    private TasksService $tasksService;
-    private SystemLogService $systemLogsService;
-    private EmployeesService $employeesService;
+    private  $tasksService;
+    private  $systemLogsService;
+    private  $employeesService;
 
     public function __construct(TasksService $tasksService, SystemLogService $systemLogService, EmployeesService $employeesService)
     {
@@ -50,7 +51,8 @@ class TasksController extends Controller
         return View::make('crm.tasks.edit')->with(
             [
                 'task' => $this->tasksService->loadTask($taskId),
-                'employees' => $this->employeesService->loadEmployees()
+                
+                'employees' => EmployeesModel::pluck('full_name', 'id')
             ]
         );
     }

@@ -10,12 +10,13 @@ use App\Services\ClientService;
 use App\Services\SystemLogService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\ClientsModel;
 use View;
 
 class ClientController extends Controller
 {
-    private ClientService $clientService;
-    private SystemLogService $systemLogsService;
+     private  $clientService;
+     private  $systemLogsService;
 
     public function __construct(ClientService $clientService, SystemLogService $systemLogService)
     {
@@ -72,13 +73,11 @@ class ClientController extends Controller
 
     public function processDeleteClient(int $clientId)
     {
-        $clientAssigned = $this->clientService->checkIfClientHaveAssignedEmployeeOrCompany($clientId);
+            //$clientAssigned = $this->clientService->checkIfClientHaveAssignedEmployeeOrCompany($clientId);
 
-        if (!empty($clientAssigned)) {
-            return Redirect::back()->with('message_danger', $clientAssigned);
-        } else {
+       
             $this->clientService->loadDeleteClient($clientId);
-        }
+        
 
         return Redirect::to('clients')->with('message_success', $this->getMessage('messages.SuccessClientDelete'));
     }

@@ -1,10 +1,10 @@
 @extends('layouts.base')
 
-@section('caption', 'Add sales')
+@section('caption', 'Add Sales Products')
 
-@section('title', 'Add sales')
+@section('title', 'Add Sales')
 
-@section('lyric', 'lorem ipsum')
+@section('lyric', '')
 
 @section('content')
     @if($errors->any())
@@ -22,6 +22,7 @@
             <strong>Danger!</strong> {{ session()->get('message_danger') }}
         </div>
     @endif
+
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
@@ -30,33 +31,73 @@
                         <div class="col-lg-6">
                             {{ Form::open(['route' => 'processStoreSale']) }}
                             <div class="form-group input-row">
+                                {{ Form::label('sn', 'Serial Number') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-pencil-square-o"></i></span>
+                                    {{ Form::text('sn', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
+                                </div>
+                            </div>
+                            <div class="form-group input-row">
                                 {{ Form::label('name', 'Name') }}
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-pencil-square-o"></i></span>
-                                {{ Form::text('name', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
+                                    {{ Form::text('name', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group col-lg-6">
+                            {{ Form::label('client_id', 'Choose Customer') }}
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-handshake-o"></i></span>
+                                {{ Form::select('client_id', $dataOfCustomer, null, ['class' => 'form-control', 'placeholder' => 'Choose Customer']) }}
+                            </div>
+                        </div>
                         <div class="col-lg-6">
+                           
                             <div class="form-group input-row">
-                                {{ Form::label('product_id', 'Assign product') }}
+                                {{ Form::label('product_id', 'Select Brand') }}
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-handshake-o"></i></span>
-                                    {{ Form::select('product_id', $dataOfProducts, null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
+                                    <select name="product_id" class="form-control" id="product_id">
+                                        <option value="" disabled selected>Select Brand</option>
+                                        @foreach ($dataOfProducts as $product)
+                                            <option value="{{ $product->id }}" data-name="{{ $product->name }}" data-price="{{ $product->price }}">{{ $product->brand_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="form-group input-row">
+                                {{ Form::label('product_name', 'Product') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-cube"></i></span>
+                                    <input type="text" name="product_name" id="product_name" class="form-control" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="form-group input-row">
+                                {{ Form::label('quantity', 'Quantity') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-pencil-square-o"></i></span>
+                                    {{ Form::text('quantity', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group input-row">
-                                <div class="form-group input-row">
-                                    {{ Form::label('quantity', 'Quantity') }}
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fa fa-pencil-square-o"></i></span>
-                                        {{ Form::text('quantity', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
-                                    </div>
+                                {{ Form::label('gst_rate', 'GST Rate') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon"> %</span>
+                                    {{ Form::select('gst_rate', ['igst' => 'IGST 18%', 'sgst' => 'SGST 9%', 'cgst' => 'CGST 9%', 'sgst_cgst' => 'SGST + CGST 9%'], null, ['class' => 'form-control', 'placeholder' => 'Select GST Rate']) }}
                                 </div>
                             </div>
                         </div>
+                        
+                        
                         <div class="col-lg-6">
                             <div class="form-group">
                                 {{ Form::label('date_of_payment', 'Date of payment') }}
@@ -66,21 +107,50 @@
                                 </div>
                             </div>
                         </div>
+                        {{-- <div class="col-lg-6">
+                            <div class="form-group">
+                                {{ Form::label('rent_start', 'Rent Start Date') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    {{ Form::date('rent_start', \Carbon\Carbon::now(), ['class' => 'form-control', 'required', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
+                                </div>
+                            </div>
+                        </div> --}}
+                        {{-- <div class="col-lg-6">
+                            <div class="form-group">
+                                {{ Form::label('rent_end', 'Rent End Date') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    {{ Form::date('rent_end', \Carbon\Carbon::now(), ['class' => 'form-control', 'required', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
+                                </div>
+                            </div>
+                        </div> --}}
                         <div class="col-lg-6">
                             <div class="form-group input-row">
                                 <div class="form-group input-row">
                                     {{ Form::label('price', 'Price') }}
                                     <div class="input-group">
-                                        <span class="input-group-addon"><i class="fa fa-pencil-square-o"></i></span>
-                                        {{ Form::text('price', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
+                                        <span class="input-group-addon"><i class="fa fa-money"></i></span>
+                                        {{ Form::text('price', null, ['class' => 'form-control', 'id' => 'price', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-lg-6">
+                            <div class="form-group input-row">
+                                {{ Form::label('total_amount', 'Total Amount') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-calculator"></i></span>
+                                    {{ Form::text('total_amount', null, ['class' => 'form-control', 'readonly']) }}
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="col-lg-6">
                         </div>
                         <div class="col-lg-12 validate_form">
-                            {{ Form::submit('Add sales', ['class' => 'btn btn-primary']) }}
+                            {{ Form::submit('Save', ['class' => 'btn btn-primary']) }}
                         </div>
                     {{ Form::close() }}
                     </div>
@@ -88,107 +158,58 @@
             </div>
         </div>
     </div>
-        <script>
-            $(document).ready(function () {
-                //create formValidator object
-                //there are a lot of configuration options that need to be passed,
-                //but this makes it extremely flexibility and doesn't make any assumptions
-                var validator = new formValidator({
-                    //this function adds an error message to a form field
-                    addError: function (field, message) {
-                        //get existing error message field
-                        var error_message_field = $('.error_message', field.parent('.input-group'));
+    <script>
+        // Get references to the select and input elements
+        const selectBrand = document.getElementById('product_id');
+        const productNameInput = document.getElementById('product_name');
+        const productPriceInput = document.getElementById('price');
 
-                        //if the error message field doesn't exist yet, add it
-                        if (!error_message_field.length) {
-                            error_message_field = $('<span/>').addClass('error_message');
-                            field.parent('.input-group').append(error_message_field);
-                        }
+        // Call the function to set the initial total amount value
+        calculateTotalPrice();
 
-                        error_message_field.text(message).show(200);
-                        field.addClass('error');
-                    },
-                    //this removes an error from a form field
-                    removeError: function (field) {
-                        $('.error_message', field.parent('.input-row')).text('').hide();
-                        field.removeClass('error');
-                    },
-                    //this is a final callback after failing to validate one or more fields
-                    //it can be used to display a summary message, scroll to the first error, etc.
-                    onErrors: function (errors, event) {
-                        //errors is an array of objects, each containing a 'field' and 'message' parameter
-                    },
-                    //this defines the actual validation rules
-                    rules: {
-                        //this is a basic non-empty check
-                        'name': {
-                            'field': $('input[name=name]'),
-                            'validate': function (field, event) {
-                                if (!field.val()) {
-                                    throw "A name is required.";
-                                }
-                            }
-                        },
-                        'quantity': {
-                            'field': $('input[name=quantity]'),
-                            'validate': function (field, event) {
-                                if (!field.val()) {
-                                    throw "A quantity is required.";
-                                }
-                            }
-                        },
-                        'date_of_payment': {
-                            'field': $('input[name=date_of_payment]'),
-                            'validate': function (field, event) {
-                                if (!field.val()) {
-                                    throw "A date_of_payment is required.";
-                                }
-                            }
-                        }
-                    }
-                });
+        // Add event listeners to the required fields
+        $('input[name="quantity"], select[name="gst_rate"], #price').on('change', function () {
+            calculateTotalPrice();
+        });
 
-                //now, we attach events
+        // Add event listener to the select element
+        selectBrand.addEventListener('change', (event) => {
+            const selectedOption = event.target.options[event.target.selectedIndex];
 
-                //this does validation every time a field loses focus
-                $('form').on('blur', 'input,select', function () {
-                    validator.validateField($(this).attr('name'), 'blur');
-                });
+            // Get the data attributes from the selected option
+            const productName = selectedOption.getAttribute('data-name');
+            const productPrice = selectedOption.getAttribute('data-price');
 
-                //this clears errors every time a field gains focus
-                $('form').on('focus', 'input,select', function () {
-                    validator.clearError($(this).attr('name'));
-                });
+            // Update the input fields with the selected product and its price
+            productNameInput.value = productName;
+            productPriceInput.value = productPrice;
 
-                //this is for the validate links
-                $('.validate_section').click(function () {
-                    var fields = [];
-                    $('input,select', $(this).closest('.section')).each(function () {
-                        fields.push($(this).attr('name'));
-                    });
+            // Update the total price
+            calculateTotalPrice();
+        });
 
-                    if (validator.validateFields(fields, 'submit')) {
-                        alert('success');
-                    }
-                    return false;
-                });
-                $('.validate_form').click(function () {
-                    if (!validator.validateFields('submit')) {
-                        return false;
-                    }
-                    return true;
-                });
+       function calculateTotalPrice() {
+        var price = parseFloat($('#price').val());
+        var quantity = parseInt($('input[name="quantity"]').val());
+        var gstRate = $('select[name="gst_rate"]').val();
 
-                //this is for the clear links
-                $('.clear_section').click(function () {
-                    var fields = [];
-                    $('input,select', $(this).closest('.section')).each(function () {
-                        fields.push($(this).attr('name'));
-                    });
+        if (!isNaN(price) && !isNaN(quantity)) {
+            var gstAmount = 0;
 
-                    validator.clearErrors(fields);
-                    return false;
-                });
-            });
-        </script>
+            if (gstRate === 'igst') {
+                gstAmount = price * quantity * 0.18; // IGST 18%
+            } else if (gstRate === 'sgst') {
+                gstAmount = price * quantity * 0.09; // SGST 9%
+            } else if (gstRate === 'cgst') {
+                gstAmount = price * quantity * 0.09; // CGST 9%
+            } else if (gstRate === 'sgst_cgst') {
+                gstAmount = (price * quantity * 0.09) * 2; // SGST 9% + CGST 9%
+            }
+
+            var totalPrice = price * quantity + gstAmount;
+            $('input[name="total_amount"]').val(totalPrice.toFixed(2));
+        }
+    }
+
+    </script>
 @endsection

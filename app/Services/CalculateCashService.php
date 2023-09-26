@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Services;
 
 use App\Models\FinancesModel;
@@ -12,17 +11,14 @@ use Illuminate\Support\Facades\DB;
 
 class CalculateCashService
 {
-    private SettingsService $settingsService;
+    private $settingsService;
 
     public function __construct()
     {
         $this->settingsService = new SettingsService();
     }
 
-    /**
-     * @return mixed
-     */
-    public function loadCountCashTurnover(): mixed
+    public function loadCountCashTurnover()
     {
         $products = ProductsModel::all();
         $sales = SalesModel::all();
@@ -32,15 +28,15 @@ class CalculateCashService
         $salesSum = 0;
         $financesSum = 0;
 
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $productSum += $product->price * $product->count;
         }
 
-        foreach($finances as $finance) {
+        foreach ($finances as $finance) {
             $financesSum += $finance->net;
         }
 
-        foreach($sales as $sale) {
+        foreach ($sales as $sale) {
             $salesSum += $sale->price * $sale->quantity;
         }
 
@@ -49,10 +45,7 @@ class CalculateCashService
         return Money::{$this->settingsService->loadSettingValue('currency')}($officialSum);
     }
 
-    /**
-     * @return mixed
-     */
-    public function loadCountTodayIncome(): mixed
+    public function loadCountTodayIncome()
     {
         $products = ProductsModel::whereDate('created_at', Carbon::today())->get();
         $sales = SalesModel::whereDate('created_at', Carbon::today())->get();
@@ -61,14 +54,15 @@ class CalculateCashService
         $salesSum = 0;
         $financesSum = 0;
 
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $productSum += $product->price * $product->count;
         }
 
-        foreach($sales as $sale) {
+        foreach ($sales as $sale) {
             $salesSum += $sale->price * $sale->quantity;
         }
-        foreach($finances as $finance) {
+
+        foreach ($finances as $finance) {
             $financesSum += $finance->net;
         }
 
@@ -77,10 +71,7 @@ class CalculateCashService
         return Money::{$this->settingsService->loadSettingValue('currency')}($todayIncome);
     }
 
-    /**
-     * @return mixed
-     */
-    public function loadCountYesterdayIncome(): mixed
+    public function loadCountYesterdayIncome()
     {
         $products = ProductsModel::whereDate('created_at', Carbon::yesterday())->get();
         $sales = SalesModel::whereDate('created_at', Carbon::yesterday())->get();
@@ -89,12 +80,12 @@ class CalculateCashService
         $productSum = 0;
         $financesSum = 0;
 
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $productSum += $product->price * $product->count;
-            foreach($sales as $sale) {
+            foreach ($sales as $sale) {
                 $salesSum += $product->price * $sale->quantity;
             }
-            foreach($finances as $finance) {
+            foreach ($finances as $finance) {
                 $financesSum += $finance->net;
             }
         }
@@ -104,10 +95,7 @@ class CalculateCashService
         return Money::{$this->settingsService->loadSettingValue('currency')}($yesterdayIncome);
     }
 
-    /**
-     * @return int
-     */
-    public function loadCountAllRowsInDb(): int
+    public function loadCountAllRowsInDb()
     {
         $counter = 0;
         $tables = DB::select('SHOW TABLES');
@@ -121,32 +109,33 @@ class CalculateCashService
         return $counter;
     }
 
-    public function loadTaskEveryMonth($isCompleted) {
-
+    public function loadTaskEveryMonth($isCompleted)
+    {
         $dates = collect();
-        foreach( range( -6, 0 ) AS $i ) {
-            $date = Carbon::now()->addDays( $i )->format( 'Y-m-d' );
-            $dates->put( $date, 0);
+        foreach (range(-6, 0) as $i) {
+            $date = Carbon::now()->addDays($i)->format('Y-m-d');
+            $dates->put($date, 0);
         }
 
-        if($isCompleted) {
-            $posts = TasksModel::where( 'created_at', '>=', $dates->keys()->first() )->where('completed', '=', 1)
-                ->groupBy( 'date' )
-                ->orderBy( 'date' )
-                ->get( [
-                    DB::raw( 'DATE( created_at ) as date' ),
-                    DB::raw( 'COUNT( * ) as "count"' )
-                ] )
-                ->pluck( 'count', 'date' );
+        if ($isCompleted) {
+            $posts = TasksModel::where('created_at', '>=', $dates->keys()->first())
+                ->where('completed', '=', 1)
+                ->groupBy('date')
+                ->orderBy('date')
+                ->get([
+                    DB::raw('DATE(created_at) as date'),
+                    DB::raw('COUNT(*) as "count"')
+                ])
+                ->pluck('count', 'date');
         } else {
-            $posts = TasksModel::where( 'created_at', '>=', $dates->keys()->first() )
-                ->groupBy( 'date' )
-                ->orderBy( 'date' )
-                ->get( [
-                    DB::raw( 'DATE( created_at ) as date' ),
-                    DB::raw( 'COUNT( * ) as "count"' )
-                ] )
-                ->pluck( 'count', 'date' );
+            $posts = TasksModel::where('created_at', '>=', $dates->keys()->first())
+                ->groupBy('date')
+                ->orderBy('date')
+                ->get([
+                    DB::raw('DATE(created_at) as date'),
+                    DB::raw('COUNT(*) as "count"')
+                ])
+                ->pluck('count', 'date');
         }
 
         $dates = $dates->merge($posts)->toArray();

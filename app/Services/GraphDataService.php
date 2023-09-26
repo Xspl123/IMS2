@@ -4,8 +4,8 @@ namespace App\Services;
 
 class GraphDataService
 {
-    private int $width = 400;
-    private int $height = 200;
+    private  $width = 400;
+    private $height = 200;
 
     public function taskGraphData() {
 
@@ -13,7 +13,7 @@ class GraphDataService
 
         $taskGraphData = app()->chartjs
             ->name('taskGraphData')
-            ->type('line')
+            ->type('bar')
             ->size(['width' => $this->width, 'height' => $this->height])
             ->labels(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
             ->datasets([
@@ -43,38 +43,36 @@ class GraphDataService
         return $taskGraphData;
     }
 
-    /**
-     * @return mixed
-     */
-    public function itemsCountGraphData() {
+    
+    public function itemsCountGraphData()
+    {
         $itemsCountGraphData = app()->chartjs
             ->name('cashTurnoverGraphData')
-            ->type('bar')
+            ->type('doughnut')
             ->size(['width' => $this->width, 'height' => $this->height])
+            ->labels(['Products', 'Sales', 'Purchase',  'Rents'])
             ->datasets([
                 [
-                    "label" => "Products",
-                    'backgroundColor' => ['rgba(227, 67, 51, 1)', 'rgba(54, 162, 235, 0.2)'],
-                    'data' => [$this->getCalculateProducts()]
-                ],
-                [
-                    "label" => "Sales",
-                    'backgroundColor' => ['rgba(228, 115, 45, 1)', 'rgba(54, 162, 235, 0.3)'],
-                    'data' => [$this->getCalculateSales()]
-                ],
-                [
-                    "label" => "Finances",
-                    'backgroundColor' => ['rgba(249, 195, 100, 1)', 'rgba(54, 162, 235, 0.3)'],
-                    'data' => [$this->getCalculateFinances()]
-                ],
-                [
-                    "label" => "Deal",
-                    'backgroundColor' => ['rgba(92, 141, 93, 1)', 'rgba(54, 162, 235, 0.3)'],
-                    'data' => [$this->getCalculateDeals()]
+                    'backgroundColor' => [
+                        'rgba(0, 255, 0, 0.6)',     // Green for Products
+                        'rgba(0, 0, 255, 0.6)',     // Blue for Sales
+                        'rgba(255, 255, 0, 0.6)',   // Yellow for Purchase
+                        // 'rgba(255, 165, 0, 0.6)',   // Orange for Deals
+                        // 'rgba(255, 192, 203, 0.6)', // Pink for Finance
+                        'rgba(255, 0, 0, 0.6)'      // Red for Rents (Unique color)
+                    ],
+                    'data' => [
+                        $this->getCalculateProducts(),
+                        $this->getCalculateSales(),
+                        $this->getCalculatePurchase(),
+                        // $this->getCalculateDeals(),
+                        // $this->getCalculateFinances(),
+                        $this->getCalculateRents()
+                    ]
                 ]
             ])
             ->options([]);
-
+    
         return $itemsCountGraphData;
     }
 
@@ -104,5 +102,18 @@ class GraphDataService
         $salesService = new SalesService();
 
         return $salesService->loadCountSales();
+    }
+    private function getCalculateRents()
+    {
+        $rentsService = new RentsService();
+
+        return $rentsService->loadCountRents();
+    }
+
+    private function getCalculatePurchase()
+    {
+        $purchaseService = new PurchaseService();
+
+        return $purchaseService->loadCountPurchases();
     }
 }

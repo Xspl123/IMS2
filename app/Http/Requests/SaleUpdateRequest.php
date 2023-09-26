@@ -29,7 +29,16 @@ class SaleUpdateRequest extends FormRequest
             'quantity' => 'required|integer',
             'product_id' => 'required|integer',
             'date_of_payment' => 'required',
-            'price' => 'required'
+            'price' => 'required',
+            'total_amount' => 'nullable',
+            'gst_rate' => 'nullable',
+            'status' => 'required|in:ok,defected,replacement',
+            'replace_remark' => 'nullable',
+            'replacement_with'=> 'nullable',
+            'replacement_to' => 'nullable',
+            'replacement_product_sn' => 'nullable',
+            'approved_by' => 'nullable'
+
         ];
     }
 }

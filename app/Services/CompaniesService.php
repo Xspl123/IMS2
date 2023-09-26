@@ -3,15 +3,14 @@
 namespace App\Services;
 
 use App\Models\CompaniesModel;
-use App\Models\DealsModel;
 
 class CompaniesService
 {
-    private CompaniesModel $companiesModel;
+    private $companiesModel;
 
-    public function __construct()
+    public function __construct(CompaniesModel $companiesModel)
     {
-        $this->companiesModel = new CompaniesModel();
+        $this->companiesModel = $companiesModel;
     }
 
     public function execute(array $requestedData, int $adminId)

@@ -16,12 +16,16 @@ class CreateTableTasks extends Migration
             $table->increments('id');
             $table->text('name');
             $table->unsignedInteger('employee_id');
-            $table->foreign('employee_id')->references('id')->on('employees');
+            $table->foreign('employee_id')->references('id')->on('employees')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
             $table->integer('duration');
             $table->boolean('is_active')->nullable()->default(1);
             $table->boolean('completed')->nullable()->default(0);
             $table->unsignedInteger('admin_id');
-            $table->foreign('admin_id')->references('id')->on('admins');
+            $table->foreign('admin_id')->references('id')->on('admins')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
             $table->timestamps();
             $table->dateTime('deleted_at')->nullable();
         });

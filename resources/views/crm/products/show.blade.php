@@ -1,6 +1,6 @@
 @extends('layouts.base')
 
-@section('caption', 'Information about product')
+@section('caption', '')
 
 @section('title', 'Information about product')
 
@@ -20,43 +20,69 @@
             <br/>
             <div class="panel panel-default">
                 <div class="panel-body">
+                    <h2 class="product_caption">Information About Product</h2>
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#home" data-toggle="tab">Basic information</a>
                         </li>
-                        <div class="text-right">
+                        <div class="pull-right">
                             <button class="btn btn-danger" data-toggle="modal" data-target="#myModal">
-                                Delete this product <li class="fa fa-trash-o"></li>
+                                Delete this product <i class="fa fa-trash-o"></i>
                             </button>
                         </div>
-
                     </ul>
                     <div class="tab-pane fade active in" id="home">
                         <h4></h4>
-
-                        <table class="table table-striped table-bordered">
+                       
+                        <div class="product_row">
+                        <table class="table table-striped table_Information table-bordered">
                             <tbody class="text-right">
-                            <tr>
-                                <th>Name</th>
-                                <td>{{ $product->name }}</td>
-                            </tr>
-                            <tr>
-                                <th>Category</th>
-                                <td>{{ $product->category  }}</td>
-                            </tr>
-                            <tr>
-                                <th>Count</th>
-                                <td>{{ $product->count  }}</td>
-                            </tr>
-                            <tr>
-                                <th>Price</th>
-                                <td>{{ $product->price  }}</td>
-                            </tr>
-                            <tr>
-                                <th>Status</th>
-                                <td>{{ $product->is_active ? 'Active' : 'Deactivate' }}</td>
-                            </tr>
+                                <tr>
+                                    <th>Barcode</th>
+                                    <td>{{ $product->barcode }}</td>
+                                    <th>Vendor Name</th>
+                                    <td class="text-center">
+                                        @if($product->vendor)
+                                            <a href="{{ URL::to('vendors/view/' . $product->vendor->id) }}">{{ $product->vendor->name }}</a>
+                                        @endif
+                                    </td>
+                                    <th>Product Name</th>
+                                    <td>{{ $product->name }}</td>
+                                    <th>Product Description</th>
+                                    <td>{{ $product->description  }}</td>
+                                    <th>Price (Incl. GST)</th>
+                                   <td>₹ {{ $product->price_with_gst }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Brand Name</th>
+                                    <td>{{ $product->brand_name  }}</td>
+                                    <th>Quentity</th>
+                                    <td>{{ $product->count  }}</td>
+                                    <th>Base Price</th>
+                                    <td> ₹ {{ $product->price }}</td>
+                                    <th>Purchase Pruduct</th>
+                                    <td>{{ $product->purchase  }}</td>
+                                    <th>Rent Product</th>
+                                    <td>{{ $product->rented  }}</td>
+                                    
+                                </tr>
+                                <tr>
+                                   
+                                    <th>Rent Start Date</th>
+                                    <td>{{ $product->rent_start_date  }}</td>
+                                    <th>Rent End Date</th>
+                                    <td>{{ $product->rent_end_date  }}</td>
+                                    <th>Status</th>
+                                    <td>{{ $product->is_active ? 'Active' : 'Deactivate' }}</td>
+                                    <th>GST Amount</th>
+                                    {{-- <td>₹ @php echo $product->gstAmount; @endphp </td> --}}
+                                    <td>₹ {{$product->gstAmount}}</td>
+                                </tr>
+                                <tr>
+                                   
+                                </tr>
                             </tbody>
                         </table>
+                    </div>
                     </div>
                 </div>
             </div>

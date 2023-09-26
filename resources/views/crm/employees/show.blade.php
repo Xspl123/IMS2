@@ -65,9 +65,12 @@
                                 <tr>
                                     <th>Assigned client</th>
                                     <td>
-                                        <a href="{{ URL::to('clients/view/' . $employee->client->id) }}">{{ $employee->client->full_name }}</a>
+                                        @if($employee->client)
+                                            <a href="{{ URL::to('clients/view/' . $employee->client->id) }}">{{ $employee->client->full_name }}</a>
+                                        @else
+                                            N/A
+                                        @endif
                                     </td>
-
                                 </tr>
                                 <tr>
                                     <th>Status</th>
@@ -86,18 +89,19 @@
                                 </tr>
                                 </thead>
                                 </tr>
-                                @foreach($employee->tasks as $tasks)
+                                @foreach($employee->tasks as $task)
                                     <tbody>
                                     <tr class="odd gradeX">
-                                        <td>{{ $tasks->name }}</td>
+                                        <td>{{ $task->name }}</td>
                                         <td>
-                                            {{ Form::open(['url' => 'tasks/view/' . $tasks->id,'class' => 'pull-right']) }}
+                                            {{ Form::open(['url' => 'tasks/view/' . $task->id,'class' => 'pull-right']) }}
                                             {{ Form::hidden('_method', 'GET') }}
-                                            {{ Form::submit('More information about this tasks', ['class' => 'btn btn-primary btn-sm']) }}
+                                            {{ Form::submit('More information about this task', ['class' => 'btn btn-primary btn-sm']) }}
                                             {{ Form::close() }}
                                         </td>
-                                    @endforeach
+                                    </tr>
                                     </tbody>
+                                @endforeach
                             </table>
                         </div>
                     </div>
@@ -111,10 +115,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">You want delete this employee?</h4>
+                    <h4 class="modal-title" id="myModalLabel">You want to delete this employee?</h4>
                 </div>
                 <div class="modal-body">
-                    Ation will delete permanently this employees.
+                    Action will permanently delete this employee.
                 </div>
                 <div class="modal-footer">
                     {{ Form::open(['url' => 'employees/delete/' . $employee->id,'class' => 'pull-right']) }}

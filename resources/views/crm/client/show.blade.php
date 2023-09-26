@@ -22,12 +22,12 @@
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#home" data-toggle="tab">Basic information</a>
                         </li>
-                        <li class=""><a href="#profile" data-toggle="tab">Assigned companies <span
+                        {{-- <li class=""><a href="#profile" data-toggle="tab">Assigned companies <span
                                         class="badge badge-warning">{{ $clientDetails->companiesCount }}</span></a>
                         </li>
                         <li class=""><a href="#messages" data-toggle="tab">Assigned employees <span
                                         class="badge badge-warning">{{ $clientDetails->employeesCount }}</span></a>
-                        </li>
+                        </li> --}}
                         <div class="text-right">
                             <button class="btn btn-danger" data-toggle="modal" data-target="#myModal">
                                 Delete this client
@@ -41,7 +41,7 @@
                             <table class="table table-striped table-bordered">
                                 <tbody class="text-right">
                                 <tr>
-                                    <th>Full name</th>
+                                    <th>Company name</th>
                                     <td>{{ $clientDetails->full_name }}</td>
                                 </tr>
                                 <tr>
@@ -58,10 +58,9 @@
                                 </tr>
                                 <tr>
                                     <th>Budget</th>
-                                    <td>
-                                        <button type="submit"
-                                                class="btn btn-default">{{ $clientDetails->formattedBudget }}</button>
-                                    </td>
+                                     <td class="">   
+                                      ₹ {{ $clientDetails->budget }}
+                                     </td>
                                 </tr>
                                 <tr>
                                     <th>Status</th>

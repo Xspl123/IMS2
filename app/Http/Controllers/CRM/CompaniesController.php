@@ -8,33 +8,44 @@ use App\Http\Requests\CompanyStoreRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 use App\Services\CompaniesService;
 use App\Services\DealsService;
+use App\Services\ClientService;
 use App\Services\SystemLogService;
+use App\Models\ClientsModel;
 use View;
 use Illuminate\Support\Facades\Redirect;
 
 class CompaniesController extends Controller
 {
-    private CompaniesService $companiesService;
-    private SystemLogService $systemLogsService;
-    private DealsService $dealsService;
+    private $companiesService;
+    private $systemLogsService;
+    private $dealsService;
+    private $clientService;
 
-    public function __construct(CompaniesService $companiesService, SystemLogService $systemLogService, DealsService $dealsService)
+    public function __construct(CompaniesService $companiesService, SystemLogService $systemLogService, DealsService $dealsService, ClientService $clientService)
     {
         $this->middleware(SystemEnums::middleWareAuth);
 
         $this->companiesService = $companiesService;
         $this->systemLogsService = $systemLogService;
         $this->dealsService = $dealsService;
+        $this->clientService = $clientService;
     }
 
     public function processRenderCreateForm()
     {
-        return View::make('crm.companies.create')->with(['dataWithPluckOfClient' => $this->companiesService->pluckData()]);
+        return View::make('crm.companies.create')->with(['dataOfClients' => $this->clientService->loadClients(true)]);
     }
 
-    public function processViewCompanyDetails(int $companiesId)
+    public function processViewCompanyDetails(int $companyId)
     {
-        return View::make('crm.companies.show')->with(['company' => $this->companiesService->loadCompany($companiesId)]);
+        $company = $this->companiesService->loadCompany($companyId);
+
+        if ($company) {
+            return view('crm.companies.show')->with(['company' => $company]);
+        } else {
+            // Handle the case when the company is not found
+            // You can redirect, show an error message, etc.
+        }
     }
 
     public function processListOfCompanies()
@@ -51,7 +62,7 @@ class CompaniesController extends Controller
         return View::make('crm.companies.edit')->with(
             [
                 'company' => $this->companiesService->loadCompany($companiesId),
-                'clients' => $this->companiesService->pluckData()
+                'clients' => ClientsModel::pluck('full_name', 'id')
             ]
         );
     }

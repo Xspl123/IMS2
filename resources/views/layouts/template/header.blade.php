@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>SoftCRM - @yield('title')</title>
+    <title>Welcome to Vert-Age IMS - @yield('title')</title>
     <link href="{{ asset('/css/bootstrap.css') }}" rel="stylesheet"/>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
           integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
@@ -15,7 +15,7 @@
     <script src="http://www.chartjs.org/dist/2.7.1/Chart.bundle.js"></script>
     <script src="http://www.chartjs.org/samples/latest/utils.js"></script>
     <script src="{{ asset('/js/validator.js') }}"></script>
-    <link rel="shortcut icon" type="image/png" href="{{ asset('/images/favicon.ico') }}"/>
+    <link rel="shortcut icon" type="image/png" href="{{ asset('/images/logo-color.jpg') }}"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
     <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>

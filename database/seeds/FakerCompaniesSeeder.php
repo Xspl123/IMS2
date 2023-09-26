@@ -13,7 +13,7 @@ class FakerCompaniesSeeder extends Seeder
     {
         $faker = \Faker\Factory::create();
         $userIds = \App\Models\ClientsModel::all()->pluck('id')->toArray();
-        $rowRand = rand(30,100);
+        $rowRand = rand(1,5);
 
         for ($i = 0; $i<$rowRand; $i++) {
             $companies = [

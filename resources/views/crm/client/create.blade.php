@@ -1,10 +1,10 @@
 @extends('layouts.base')
 
-@section('caption', 'Add client')
+@section('caption', 'Add customer')
 
-@section('title', 'Add client')
+@section('title', 'Add customer')
 
-@section('lyric', 'lorem ipsum')
+@section('lyric', '')
 
 @section('content')
 
@@ -84,7 +84,7 @@
                                 {{ Form::label('section', 'Section') }}
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-feed"></i></span>
-                                    {{ Form::select('section', ['transport' => 'transport', 'logistic' => 'logistic', 'finances' => 'finances'], null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
+                                    {{ Form::select('section', ['transport' => 'transport', 'logistic' => 'logistic', 'finances' => 'finances','IT' => 'IT'], null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
                                 </div>
                             </div>
 

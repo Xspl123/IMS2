@@ -9,7 +9,7 @@ class ClientService
 {
     use Language;
 
-    private ClientsModel $clientsModel;
+    private $clientsModel;
 
     public function __construct()
     {

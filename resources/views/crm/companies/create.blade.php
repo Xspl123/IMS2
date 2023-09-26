@@ -7,9 +7,9 @@
 @section('lyric', '')
 
 @section('content')
-    @if(count($dataWithPluckOfClient) == 0)
+    @if(count($dataOfClients) == 0)
         <div class="alert alert-danger">
-            <strong>Danger!</strong> There is no  in system. Please create any client. <a href="{{ URL::to('client/create') }}">Click here!</a>
+            <strong>Danger!</strong> There is no client in the system. Please create a client. <a href="{{ URL::to('client/create') }}">Click here!</a>
         </div>
     @endif
 
@@ -110,7 +110,7 @@
                                 {{ Form::label('client_id', 'Assign client') }}
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-handshake-o"></i></span>
-                                    {{ Form::select('client_id', $dataWithPluckOfClient, null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')])  }}
+                                    {{ Form::select('client_id', $dataOfClients, null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
                                 </div>
                             </div>
 

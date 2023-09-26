@@ -14,6 +14,11 @@ class EmployeesModel extends Model
     protected $table = 'employees';
     protected $dates = ['deleted_at'];
 
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
     public function companies()
     {
         return $this->hasMany(CompaniesModel::class);
@@ -34,22 +39,16 @@ class EmployeesModel extends Model
         return $this->hasMany(TasksModel::class, 'employee_id');
     }
 
-    public function storeEmployee(array $requestedData, int $adminId) : int
+
+    public function storeEmployee(array $requestedData, int $adminId): int
     {
-        return $this->insertGetId(
-            [
-                'full_name' => $requestedData['full_name'],
-                'phone' => $requestedData['phone'],
-                'email' => $requestedData['email'],
-                'job' => $requestedData['job'],
-                'note' => $requestedData['note'],
-                'client_id' => $requestedData['client_id'],
-                'created_at' => now(),
-                'is_active' => true,
-                'admin_id' => $adminId
-            ]
-        );
+        $requestedData['created_at'] = now();
+        $requestedData['is_active'] = true;
+        $requestedData['admin_id'] = $adminId;
+
+        return $this->insertGetId($requestedData);
     }
+
 
     public function updateEmployee(int $employeeId, array $requestedData) : int
     {

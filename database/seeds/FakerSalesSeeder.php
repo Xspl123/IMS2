@@ -18,7 +18,7 @@ class FakerSalesSeeder extends Seeder
             foreach($productDetails as $detail) {
                 $sales = [
                     'name' => $faker->name,
-                    'quantity' => rand(10,20),
+                    'quantity' => rand(1,2),
                     'product_id' => $detail->id,
                     'date_of_payment' => $faker->dateTimeThisMonth(),
                     'price' => $detail->price, //update this manual

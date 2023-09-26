@@ -16,7 +16,9 @@ class AddDealsTermsTable extends Migration
             $table->increments('id');
             $table->longText('body');
             $table->unsignedInteger('deal_id');
-            $table->foreign('deal_id')->references('id')->on('deals');
+            $table->foreign('deal_id')->references('id')->on('deals')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
             $table->timestamps();
             $table->dateTime('deleted_at')->nullable();
         });

@@ -7,7 +7,7 @@ use App\Models\TasksModel;
 
 class TasksService
 {
-    private TasksModel $tasksModel;
+    private  $tasksModel;
 
     public function __construct()
     {
@@ -63,7 +63,11 @@ class TasksService
     {
         $data = $this->tasksModel->getAllUncompletedTasks();
 
-        $percentage = round(($data['tasks'] / $data['all']) * 100);
+        if ($data['all'] == 0) {
+            $percentage = 0;
+        } else {
+            $percentage = round(($data['tasks'] / max(1, $data['all'])) * 100);
+        }
 
         return $data['tasks'] . ' (' . $percentage .  '%)';
     }

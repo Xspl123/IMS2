@@ -7,7 +7,7 @@
 @section('lyric', 'lorem ipsum')
 
 @section('content')
-    @if(count($dataOfDeals) == 0)
+    @if(count($companies) == 0)
         <div class="alert alert-danger">
             <strong>Danger!</strong> There is no company in system. Please create one. <a
                     href="{{ URL::to('companies/create') }}">Click here!</a>
@@ -61,15 +61,15 @@
                                     {{ Form::date('end_time', \Carbon\Carbon::now(), ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
                                 </div>
                             </div>
-
                             <div class="form-group input-row">
-                                {{ Form::label('companies_id', 'Deal between company:') }}
+                                <label for="companies_id">Deal between company:</label>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-handshake-o"></i></span>
-                                    {{ Form::select('companies_id', $dataOfDeals, null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText'),
-                                    'placeholder' => 'Please select companie'])  }}
+                                    {!! Form::select('companies_id', $companies, null, ['class' => 'form-control', 'placeholder' => 'Please select a company']) !!}
                                 </div>
                             </div>
+
+
 
                         </div>
                         <div class="col-lg-12 validate_form">

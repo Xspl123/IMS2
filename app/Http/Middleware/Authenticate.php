@@ -18,7 +18,7 @@ class Authenticate extends Middleware
         if (! $request->expectsJson()) {
             return route('login');
         } else {
-            throw new \Exception('invalid request');
+            throw new \Exception('invalid request api');
         }
     }
 }

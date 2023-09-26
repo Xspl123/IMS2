@@ -14,7 +14,7 @@ class FakerFinancesSeeder extends Seeder
     {
         $faker = \Faker\Factory::create();
         $companiesIds = \App\Models\CompaniesModel::all()->pluck('id')->toArray();
-        $rowRand = rand(30,70);
+        $rowRand = rand(1,3);
         $category = ['steady income', 'large order', 'small order', 'one-off order'];
         $type = ['Invoice', 'proforma invoice', 'advance', 'simple transfer'];
 

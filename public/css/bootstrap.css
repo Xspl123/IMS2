@@ -4312,6 +4312,9 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .label-sales {
   background-color: #00BCD4;
 }
+.label-purchase {
+  background-color: #00BCD4;
+}
 
 .label-mailing {
   background-color: #795548;

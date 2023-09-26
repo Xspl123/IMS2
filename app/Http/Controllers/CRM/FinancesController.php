@@ -14,9 +14,9 @@ Use Illuminate\Support\Facades\Redirect;
 
 class FinancesController extends Controller
 {
-    private FinancesService $financesService;
-    private SystemLogService $systemLogsService;
-    private CompaniesService $companiesService;
+    private  $financesService;
+    private  $systemLogsService;
+    private  $companiesService;
 
     public function __construct(FinancesService $financesService, SystemLogService $systemLogService, CompaniesService $companiesService)
     {

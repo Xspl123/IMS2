@@ -25,10 +25,21 @@ class ProductUpdateRequest extends FormRequest
     public function rules()
     {
         return [
+            'barcode' => 'nullable',
             'name' => 'required|string',
-            'category' => 'required|string',
+            'description' => 'nullable',
+            'brand_name' => 'required|string|unique:products',
             'count' => 'required|integer',
-            'price' => 'required|integer'
+            'price' => 'required|integer',
+            'rented' => 'nullable|string',
+            'purchase' => 'nullable|string',
+            'rent_start_date' => 'nullable',
+            'rent_end_date' => 'nullable',
+            'price_with_gst' => 'nullable',
+            "gstAmount"  => 'nullable',
+            'vendor_id' => 'nullable',
+            'gst_rate' => 'nullable',
+            'total_amount' => 'nullable',
         ];
     }
 }

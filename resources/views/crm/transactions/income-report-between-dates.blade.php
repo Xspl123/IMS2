@@ -1,0 +1,19 @@
+@extends('layouts.base')
+
+@section('title', 'Select Date Range')
+
+@section('content')
+<div class="report-container">
+   
+
+    <form action="{{ route('income.report.between.dates') }}" method="GET">
+        <label for="start_date">Start Date:</label>
+        <input type="date" id="start_date" name="start_date" required>
+        
+        <label for="end_date">End Date:</label>
+        <input type="date" id="end_date" name="end_date" required>
+
+        <button type="submit">Generate Report</button>
+    </form>
+</div>
+@endsection

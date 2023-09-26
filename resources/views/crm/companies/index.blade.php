@@ -4,7 +4,7 @@
 
 @section('title', 'List of companies')
 
-@section('lyric', '')
+@section('lyric', 'Vert-Age')
 
 @section('content')
     <div class="row">
@@ -18,9 +18,9 @@
                     <strong>Danger!</strong> {{ session()->get('message_danger') }}
                 </div>
             @endif
-            <a href="{{ URL::to('companies/form/create') }}">
+            {{-- <a href="{{ URL::to('companies/form/create') }}">
                 <button type="button" class="btn btn-primary btn active">Add companies</button>
-            </a>
+            </a> --}}
             <br><br>
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -45,7 +45,6 @@
                             <tbody>
                             @foreach($companiesPaginate as $key => $value)
                                 <tr class="odd gradeX">
-
                                     <td class="text-center">{{ $value->name }}</td>
                                     <td class="text-center">{{ $value->phone }}</td>
                                     <td class="text-center">{{ $value->city }}</td>
@@ -53,24 +52,28 @@
                                     <td class="text-center">{{ $value->employees_size }}</td>
                                     <td class="text-center">{{ $value->tax_number }}</td>
                                     <td class="text-center">
-                                        <a href="{{ URL::to('clients/view/' . $value->client->id) }}">{{ $value->client->full_name }}</a>
+                                        @if($value->client)
+                                            <a href="{{ URL::to('clients/view/' . $value->client->id) }}">{{ $value->client->full_name }}</a>
+                                        @else
+                                            N/A
+                                        @endif
                                     </td>
                                     <td class="text-center">
-                                            @if($value->is_active)
-                                                <label class="switch">
-                                                    <input type="checkbox"
-                                                           onchange='window.location.assign("{{ URL::to('companies/set-active/' . $value->id . '/0') }}")' checked>
-                                                    <span class="slider"></span>
-                                                </label>
-                                            @else
-                                                <label class="switch">
-                                                    <input type="checkbox"
-                                                           onchange='window.location.assign("{{ URL::to('companies/set-active/' . $value->id . '/1') }}")'>
-                                                    <span class="slider"></span>
-                                                </label>
-                                            @endif
+                                        @if($value->is_active)
+                                            <label class="switch">
+                                                <input type="checkbox"
+                                                       onchange='window.location.assign("{{ URL::to('companies/set-active/' . $value->id . '/0') }}")' checked>
+                                                <span class="slider"></span>
+                                            </label>
+                                        @else
+                                            <label class="switch">
+                                                <input type="checkbox"
+                                                       onchange='window.location.assign("{{ URL::to('companies/set-active/' . $value->id . '/1') }}")'>
+                                                <span class="slider"></span>
+                                            </label>
+                                        @endif
                                     </td>
-                                    <td class="text-right" style="text-align: center">>
+                                    <td class="text-right" style="text-align: center">
                                         <div class="btn-group">
                                             <a class="btn btn-small btn-primary"
                                                href="{{ URL::to('companies/view/' . $value->id) }}">More information</a>

@@ -13,10 +13,14 @@ class CreateTableDeals extends Migration
             $table->string('start_time');
             $table->string('end_time');
             $table->unsignedInteger('companies_id');
-            $table->foreign('companies_id')->references('id')->on('companies');
+            $table->foreign('companies_id')->references('id')->on('companies')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
             $table->boolean('is_active')->nullable()->default(1);
             $table->unsignedInteger('admin_id');
-            $table->foreign('admin_id')->references('id')->on('admins');
+            $table->foreign('admin_id')->references('id')->on('admins')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
             $table->timestamps();
             $table->dateTime('deleted_at')->nullable();
         });

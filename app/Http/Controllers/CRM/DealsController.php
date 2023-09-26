@@ -8,6 +8,8 @@ use App\Http\Requests\DealStoreRequest;
 use App\Http\Requests\DealsTermsStoreRequest;
 use App\Http\Requests\DealUpdateRequest;
 use App\Services\DealsService;
+use App\Services\CompaniesService;
+use App\Models\CompaniesModel;
 use App\Services\SystemLogService;
 use View;
 use Illuminate\Http\Request;
@@ -15,20 +17,24 @@ Use Illuminate\Support\Facades\Redirect;
 
 class DealsController extends Controller
 {
-    private DealsService $dealsService;
-    private SystemLogService $systemLogsService;
+    private $dealsService;
+    private  $systemLogsService;
+    private  $companiesService;
 
-    public function __construct(DealsService $dealsService, SystemLogService $systemLogService)
+    public function __construct(CompaniesService $companiesService,DealsService $dealsService, SystemLogService $systemLogService)
     {
         $this->middleware(SystemEnums::middleWareAuth);
-
+        
+        $this->dealsService = $companiesService;
         $this->dealsService = $dealsService;
         $this->systemLogsService = $systemLogService;
     }
 
     public function processRenderCreateForm()
     {
-        return View::make('crm.deals.create')->with(['dataOfDeals' => $this->dealsService->pluckDeals()]);
+        
+        $companies = CompaniesModel::pluck('name', 'id');
+        return view('crm.deals.create', compact('companies'));
     }
 
     public function processShowDealsDetails(int $dealId)
@@ -46,11 +52,11 @@ class DealsController extends Controller
     }
 
     public function processRenderUpdateForm(int $dealId)
-    {
+    {   
         return View::make('crm.deals.edit')->with(
             [
                 'deal' => $this->dealsService->loadDeal($dealId),
-                'companies' => $this->dealsService->pluckDeals()
+                'companies' => CompaniesModel::pluck('name', 'id')
             ]
         );
     }

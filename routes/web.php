@@ -1,15 +1,12 @@
 <?php
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DecryptionController;   
+use App\Http\Controllers\ExportController;
+use App\Http\Controllers\CRM\InvoiceController;
+//Route::get('/getBarcodeValue', [DecryptionController::class, 'getBarcodeValue']);
+Route::get('/export/products', [ExportController::class, 'exportProducts'])->name('export.products');
+Route::get('/saleInvoice', [InvoiceController::class, 'index'])->name('saleInvoice');;
+Route::get('/invoice/{invoiceId}', [InvoiceController::class, 'showInvoice'])->name('invoice.show');
 
 Route::get('login', 'CRM\AdminController@showLoginForm')->name('login');
 Route::post('login/process', 'CRM\AdminController@processLoginAdmin')->name('login/process');
@@ -42,6 +39,17 @@ Route::group(['prefix' => 'companies'], function () {
     Route::put('update/{employeeId}', 'CRM\CompaniesController@processUpdateCompany')->name('processUpdateCompanies');
     Route::delete('delete/{clientId}', 'CRM\CompaniesController@processDeleteCompany')->name('processDeleteCompanies');
     Route::get('set-active/{id}/{value}', 'CRM\CompaniesController@processCompanySetIsActive')->name('processSetIsActive');
+});
+
+Route::group(['prefix' => 'vendors'], function () {
+    Route::get('/', 'CRM\VendorsController@processListOfVendors')->name('vendors');
+    Route::get('form/create', 'CRM\VendorsController@processRenderCreateForm')->name('processRenderCreateForm');
+    Route::get('form/update/{clientId}', 'CRM\VendorsController@processRenderUpdateForm')->name('processRenderUpdateForm');
+    Route::get('view/{clientId}', 'CRM\VendorsController@processViewVendorDetails')->name('viewVendorsDetails');
+    Route::post('store', 'CRM\VendorsController@processStoreVendor')->name('processStoreVendors');
+    Route::put('update/{employeeId}', 'CRM\VendorsController@processUpdateVendor')->name('processUpdateVendors');
+    Route::delete('delete/{clientId}', 'CRM\VendorsController@processDeleteVendor')->name('processDeleteVendors');
+    Route::get('set-active/{id}/{value}', 'CRM\VendorsController@processVendorSetIsActive')->name('processSetIsActive');
 });
 
 Route::group(['prefix' => 'deals'], function () {
@@ -90,6 +98,36 @@ Route::group(['prefix' => 'sales'], function () {
     Route::put('update/{employeeId}', 'CRM\SalesController@processUpdateSale')->name('processUpdateSale');
     Route::delete('delete/{clientId}', 'CRM\SalesController@processDeleteSale')->name('processDeleteSale');
     Route::get('set-active/{id}/{value}', 'CRM\SalesController@processSaleSetIsActive')->name('processSetIsActive');
+    Route::get('invoice/{id}', 'CRM\SalesController@showInvoice');
+    Route::get('showReplaceItem', 'CRM\SalesController@showReplaceItem')->name('showReplaceItem');
+
+});
+
+Route::group(['prefix' => 'rents'], function () {
+    Route::get('/', 'CRM\RentsController@processListOfRents')->name('rents');
+    Route::get('form/create', 'CRM\RentsController@processRenderCreateForm')->name('processRenderCreateForm');
+    Route::get('form/update/{clientId}', 'CRM\RentsController@processRenderUpdateForm')->name('processRenderUpdateForm');
+    Route::get('view/{clientId}', 'CRM\RentsController@processShowRentsDetails')->name('viewRentsDetails');
+    Route::post('store', 'CRM\RentsController@processStoreRent')->name('processStoreRent');
+    Route::put('update/{employeeId}', 'CRM\RentsController@processUpdateRent')->name('processUpdateRent');
+    Route::delete('delete/{clientId}', 'CRM\RentsController@processDeleteRent')->name('processDeleteRent');
+    Route::get('set-active/{id}/{value}', 'CRM\RentsController@processRentSetIsActive')->name('processSetIsActive');
+    Route::get('invoice/{id}', 'CRM\RentsController@showInvoice');
+
+
+
+
+});
+
+Route::group(['prefix' => 'purchase'], function () {
+    Route::get('/purchase', 'CRM\PurchaseController@processListOfPurchase')->name('purchase');
+    Route::get('form/create', 'CRM\PurchaseController@processRenderCreateForm')->name('processRenderCreateForm');
+    Route::get('form/update/{clientId}', 'CRM\PurchaseController@processRenderUpdateForm')->name('processRenderUpdateForm');
+    Route::get('view/{clientId}', 'CRM\PurchaseController@processShowPurchaseDetails')->name('viewSalesDetails');
+    Route::post('store', 'CRM\PurchaseController@processStorePurchase')->name('processStorePurchase');
+    Route::put('update/{employeeId}', 'CRM\PurchaseController@processUpdatePurchase')->name('processUpdatePurchase');
+    Route::delete('delete/{clientId}', 'CRM\PurchaseController@processDeletePurchase')->name('processDeletePurchase');
+    Route::get('set-active/{id}/{value}', 'CRM\PurchaseController@processPurchaseSetIsActive')->name('processSetIsActive');
 });
 
 Route::group(['prefix' => 'products'], function () {
@@ -113,6 +151,54 @@ Route::group(['prefix' => 'finances'], function () {
     Route::delete('delete/{clientId}', 'CRM\FinancesController@processDeleteFinance')->name('processDeleteFinance');
     Route::get('set-active/{id}/{value}', 'CRM\FinancesController@processFinanceSetIsActive')->name('processSetIsActive');
 });
+
+Route::group(['prefix' => 'accounts'], function () {
+    Route::get('/', 'CRM\AccountsController@processListOfAccounts')->name('accounts');
+    Route::get('form/create', 'CRM\AccountsController@processRenderCreateForm')->name('processRenderCreateForm');
+    Route::get('form/update/{clientId}', 'CRM\AccountsController@processRenderUpdateForm')->name('processRenderUpdateForm');
+    Route::get('view/{clientId}', 'CRM\AccountsController@processShowAccountsDetails')->name('viewAccountsDetails');
+    Route::post('store', 'CRM\AccountsController@processStoreAccount')->name('processStoreAccount');
+    Route::put('update/{employeeId}', 'CRM\AccountsController@processUpdateAccount')->name('processUpdateAccount');
+    Route::delete('delete/{clientId}', 'CRM\AccountsController@processDeleteAccount')->name('processDeleteAccount');
+    Route::get('set-active/{id}/{value}', 'CRM\AccountsController@processAccountsetIsActive')->name('processSetIsActive');
+});
+
+Route::group(['prefix' => 'transactions'], function () {
+    Route::get('/', 'CRM\TransactionsController@processListOfTransactions')->name('transactions');
+    Route::get('form/create', 'CRM\TransactionsController@processRenderCreateForm')->name('processRenderCreateForm');
+    Route::get('form/update/{clientId}', 'CRM\TransactionsController@processRenderUpdateForm')->name('processRenderUpdateForm');
+    Route::get('view/{clientId}', 'CRM\TransactionsController@processShowTransactionsDetails')->name('viewTransactionsDetails');
+    Route::post('processStorIncome', 'CRM\TransactionsController@processStoreIncome')->name('processStoreIncome');
+    Route::put('update/{employeeId}', 'CRM\TransactionsController@processUpdateTransaction')->name('processUpdateTransaction');
+    Route::delete('delete/{clientId}', 'CRM\TransactionsController@processDeleteTransaction')->name('processDeleteTransaction');
+    Route::get('set-active/{id}/{value}', 'CRM\TransactionsController@processTransactionsetIsActive')->name('processSetIsActive');
+    Route::post('store', 'CRM\TransactionsController@processStoreExpence')->name('processStoreExpence');
+    Route::get('expence-create', 'CRM\TransactionsController@processRenderCreateExpenceForm')->name('processRenderCreateExpenceForm');
+    Route::post('store', 'CRM\TransactionsController@processStoreExpense')->name('processStoreExpense');
+    Route::get('/income-report', 'CRM\TransactionsController@incomeReport')->name('income.report');
+    Route::get('/expence-report', 'CRM\TransactionsController@expenceReport')->name('expence.report');
+    Route::get('/incomeVsExpense', 'CRM\TransactionsController@incomeVsExpense')->name('incomeVsExpense.report');
+    Route::get('/income-report-between-dates/generate', 'CRM\TransactionsController@incomeReportBetweenDates')->name('income.report.between.dates');
+});
+
+Route::group(['prefix' => 'daybooks'], function () {
+    Route::get('/', 'CRM\DaybooksController@processListOfDaybooks')->name('daybooks');
+    Route::get('form/create', 'CRM\DaybooksController@processRenderCreateForm')->name('processRenderCreateForm');
+    Route::get('form/update/{clientId}', 'CRM\DaybooksController@processRenderUpdateForm')->name('processRenderUpdateForm');
+    Route::get('view/{clientId}', 'CRM\DaybooksController@processShowDaybooksDetails')->name('viewDaybooksDetails');
+    Route::post('processStorIncome', 'CRM\DaybooksController@processStoreIncome')->name('processStoreIncome');
+    Route::put('update/{employeeId}', 'CRM\DaybooksController@processUpdateDaybook')->name('processUpdateDaybook');
+    Route::delete('delete/{clientId}', 'CRM\DaybooksController@processDeleteDaybook')->name('processDeleteDaybook');
+    Route::get('set-active/{id}/{value}', 'CRM\DaybooksController@processDaybooksetIsActive')->name('processSetIsActive');
+    Route::post('store', 'CRM\DaybooksController@processStoreExpence')->name('processStoreExpence');
+    Route::get('expence-create', 'CRM\DaybooksController@processRenderCreateExpenceForm')->name('processRenderCreateExpenceForm');
+    Route::post('store', 'CRM\DaybooksController@processStoreExpense')->name('processStoreExpense');
+    Route::get('/income-report', 'CRM\DaybooksController@incomeReport')->name('income.report');
+    Route::get('/expence-report', 'CRM\DaybooksController@expenceReport')->name('expence.report');
+    Route::get('/incomeVsExpense', 'CRM\DaybooksController@incomeVsExpense')->name('incomeVsExpense.report');
+    Route::get('/income-report-between-dates/generate', 'CRM\DaybooksController@incomeReportBetweenDates')->name('income.report.between.dates');
+});
+
 
 Route::group(['prefix' => 'settings'], function () {
     Route::get('/', 'CRM\SettingsController@processListOfSettings')->name('settings');

@@ -20,10 +20,14 @@ class CreateTableEmployees extends Migration
             $table->string('job');
             $table->text('note');
             $table->unsignedInteger('client_id');
-            $table->foreign('client_id')->references('id')->on('clients');
+            $table->foreign('client_id')->references('id')->on('clients')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
             $table->boolean('is_active')->nullable()->default(1);
             $table->unsignedInteger('admin_id');
-            $table->foreign('admin_id')->references('id')->on('admins');
+            $table->foreign('admin_id')->references('id')->on('admins')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
             $table->timestamps();
             $table->dateTime('deleted_at')->nullable();
         });

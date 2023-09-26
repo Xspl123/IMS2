@@ -9,15 +9,16 @@ use App\Services\ClientService;
 use App\Services\EmployeesService;
 use App\Services\SystemLogService;
 use App\Http\Controllers\Controller;
+use App\Models\ClientsModel;
 use http\Client;
 use View;
 use Illuminate\Support\Facades\Redirect;
 
 class EmployeesController extends Controller
 {
-    private EmployeesService $employeesService;
-    private SystemLogService $systemLogsService;
-    private ClientService $clientService;
+    private  $employeesService;
+    private  $systemLogsService;
+    private  $clientService;
 
     public function __construct(EmployeesService $employeesService, SystemLogService $systemLogService, ClientService $clientService)
     {
@@ -51,7 +52,7 @@ class EmployeesController extends Controller
         return View::make('crm.employees.edit')->with(
             [
                 'employee' => $this->employeesService->loadEmployeeDetails($employeeId),
-                'clients' => $this->employeesService->loadPluckClients()
+                'clients' => ClientsModel::pluck('full_name', 'id')
             ]
         );
     }

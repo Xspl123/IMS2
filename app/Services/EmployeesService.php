@@ -8,7 +8,7 @@ use Config;
 
 class EmployeesService
 {
-    private EmployeesModel $employeesModel;
+    private  $employeesModel;
 
     public function __construct()
     {

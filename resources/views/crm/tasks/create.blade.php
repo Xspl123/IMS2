@@ -48,15 +48,15 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-6">
-                            <div class="form-group input-row">
-                                {{ Form::label('employee_id', 'Assign employees') }}
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-handshake-o"></i></span>
-                                    {{ Form::select('employee_id', $dataOfEmployees, null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
-                                </div>
+                    <div class="col-lg-6">
+                        <div class="form-group input-row">
+                            {{ Form::label('employee_id', 'Assign employees') }}
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-handshake-o"></i></span>
+                                {{ Form::select('employee_id', $dataOfEmployees, $company->employee_id ?? null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
                             </div>
                         </div>
+                    </div>    
 
                         <div class="col-lg-6">
                             <div class="form-group input-row">
