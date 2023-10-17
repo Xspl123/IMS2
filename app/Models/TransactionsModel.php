@@ -48,7 +48,7 @@ class TransactionsModel extends Model
     public function storeTransaction(array $requestedData, int $adminId): int
     {
         $now = Carbon::now();
-        $requestedData['admin_id'] = $adminId; // Add admin_id to the requested data
+        $requestedData['admin_id'] = $adminId;
     
         $data = array_merge($requestedData, [
             'created_at' => $now,
@@ -88,6 +88,13 @@ class TransactionsModel extends Model
 
     public function getPaginate()
     {
-        return $this->paginate(SettingsModel::where('key', 'pagination_size')->get()->last()->value);
+        $settings = SettingsModel::where('key', 'pagination_size')->latest('created_at')->first();
+
+        if ($settings && !empty($settings->value)) {
+            return $this->paginate($settings->value);
+        } else {
+            // Provide a default pagination size or handle the case when the value is empty
+            return $this->paginate(10); // You can replace 10 with your desired default pagination size
+        }
     }
 }

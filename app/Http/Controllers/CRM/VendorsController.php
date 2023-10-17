@@ -72,7 +72,8 @@ class VendorsController extends Controller
         $storedVendorId = $this->vendorsService->execute($request->validated(), $this->getAdminId());
 
         if ($storedVendorId) {
-            $this->systemLogsService->loadInsertSystemLogs('VendorsModel has been add with id: ' . $storedVendorId, $this->systemLogsService::successCode, $this->getAdminId());
+            $message = 'Vendor has been added with ID ' . $storedVendorId . ' - ' . json_encode($request->validated());
+            $this->systemLogsService->loadInsertSystemLogs($message, $this->systemLogsService::successCode, $this->getAdminId());            
             return Redirect::to('vendors')->with('message_success', $this->getMessage('messages.SuccessVendorsStore'));
         } else {
             return Redirect::back()->with('message_danger', $this->getMessage('messages.ErrorVendorsStore'));

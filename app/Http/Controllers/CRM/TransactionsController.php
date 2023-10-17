@@ -136,7 +136,8 @@ class TransactionsController extends Controller
         $storedTransactionId = $this->transactionsService->execute($transactionData, $adminId);
     
         if ($storedTransactionId) {
-            $this->systemLogsService->loadInsertSystemLogs('TransactionsModel has been added with id: ' . $storedTransactionId, $this->systemLogsService::successCode, $adminId);
+            $message = 'Transaction has been added with ID ' . $storedTransactionId . ' - ' . json_encode($validator);
+            $this->systemLogsService->loadInsertSystemLogs($message, $this->systemLogsService::successCode, $this->getAdminId());            
             return Redirect::to('transactions')->with('message_success', $this->getMessage('messages.SuccessTransactionsStore'));
         } else {
             return Redirect::back()->with('message_danger', $this->getMessage('messages.ErrorTransactionsStore'));

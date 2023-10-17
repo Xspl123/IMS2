@@ -36,9 +36,9 @@
                                 <th class="text-center">City</th>
                                 <th class="text-center">Country</th>
                                 {{-- <th class="text-center">Employes count</th> --}}
-                                <th class="text-center">Gst number</th>
+                                {{-- <th class="text-center">Gst number</th> --}}
                                 {{-- <th class="text-center">Client</th> --}}
-                                <th class="text-center">Status</th>
+                                {{-- <th class="text-center">Status</th> --}}
                                 <th class="text-center" style="width:200px">Action</th>
                             </tr>
                             </thead>
@@ -50,7 +50,7 @@
                                     <td class="text-center">{{ $value->city }}</td>
                                     <td class="text-center">{{ $value->country }}</td>
                                     {{-- <td class="text-center">{{ $value->employees_size }}</td> --}}
-                                    <td class="text-center">{{ $value->gst_number }}</td>
+                                    {{-- <td class="text-center">{{ $value->gst_number }}</td> --}}
                                     {{-- <td class="text-center">
                                         @if($value->client)
                                             <a href="{{ URL::to('clients/view/' . $value->client->id) }}">{{ $value->client->full_name }}</a>
@@ -58,7 +58,7 @@
                                             N/A
                                         @endif
                                     </td> --}}
-                                    <td class="text-center">
+                                    {{-- <td class="text-center">
                                         @if($value->is_active)
                                             <label class="switch">
                                                 <input type="checkbox"
@@ -72,7 +72,7 @@
                                                 <span class="slider"></span>
                                             </label>
                                         @endif
-                                    </td>
+                                    </td> --}}
                                     <td class="text-right" style="text-align: center">
                                         <div class="btn-group">
                                             <a class="btn btn-small btn-primary"

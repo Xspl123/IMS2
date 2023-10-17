@@ -1,0 +1,7 @@
+# Remove trailing whitespace
+[*]
+trim_trailing_whitespace = true
+
+# Ensure consistent line endings (e.g., LF for Unix-like systems)
+[*]
+end_of_line = lf

@@ -46,13 +46,13 @@
                                 </div>
                             </div>
 
-                            <div class="form-group input-row">
+                            {{-- <div class="form-group input-row">
                                 {{ Form::label('budget', 'Budget') }}
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-shopping-cart"></i></span>
                                     {{ Form::text('budget', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="form-group input-row">
                                 {{ Form::label('city', 'City') }}
@@ -158,25 +158,25 @@
 
                         //this demonstrates more than one error message
                         //and handling more than one event
-                        'budget': {
-                            'field': $('input[name=budget]'),
-                            'validate': function (field, event) {
-                                //if the validation is fired from a blur event,
-                                //don't throw any errors if it is empty
+                        // 'budget': {
+                        //     'field': $('input[name=budget]'),
+                        //     'validate': function (field, event) {
+                        //         //if the validation is fired from a blur event,
+                        //         //don't throw any errors if it is empty
 
-                                if (!field.val()) {
-                                    throw "A budget is required."
+                        //         if (!field.val()) {
+                        //             throw "A budget is required."
 
-                                }
-                                ;
+                        //         }
+                        //         ;
 
-                                var phone_pattern = /[0-9]$/i;
-                                if (!phone_pattern.test(field.val())) {
-                                    throw "Please enter only number.";
-                                }
+                        //         var phone_pattern = /[0-9]$/i;
+                        //         if (!phone_pattern.test(field.val())) {
+                        //             throw "Please enter only number.";
+                        //         }
 
-                            }
-                        },
+                        //     }
+                        // },
 
                         //this demonstrates more than one error message
                         //and handling more than one event

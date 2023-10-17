@@ -79,13 +79,13 @@ class DecryptionController extends Controller
         return response()->json(['status'=>'success', 'scannedValue' => $scannedValue]);
     }
 
-    public function getBarcodeValue()
-    {
-        $live_agent = DB::table('live_agent')->latest('create_at')->first();
+    // public function getBarcodeValue()
+    // {
+    //     $live_agent = DB::table('live_agent')->latest('create_at')->first();
 
-       return response()->json(['live_agent'=> $live_agent], 200);
+    //    return response()->json(['live_agent'=> $live_agent], 200);
         
-    }
+    // }
 
     public function getByBarcode($barcode)
     {

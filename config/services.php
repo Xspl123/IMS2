@@ -30,4 +30,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'geoip2' => [
+        'database_path' => storage_path('app/tmp/GeoLite2-City.mmdb'),
+    ],
+    
+
 ];

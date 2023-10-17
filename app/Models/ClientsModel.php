@@ -41,7 +41,7 @@ class ClientsModel extends Model
                 'phone' => $requestedData['phone'],
                 'email' => $requestedData['email'],
                 'section' => $requestedData['section'],
-                'budget' => $requestedData['budget'],
+                // 'budget' => $requestedData['budget'],
                 'location' => $requestedData['location'],
                 'zip' => $requestedData['zip'],
                 'city' => $requestedData['city'],
@@ -61,7 +61,7 @@ class ClientsModel extends Model
                 'phone' => $requestedData['phone'],
                 'email' => $requestedData['email'],
                 'section' => $requestedData['section'],
-                'budget' => $requestedData['budget'],
+                // 'budget' => $requestedData['budget'],
                 'location' => $requestedData['location'],
                 'zip' => $requestedData['zip'],
                 'city' => $requestedData['city'],
@@ -100,19 +100,19 @@ class ClientsModel extends Model
     }
 
     public function getClientByGivenClientId(int $clientId) : self
-{
-    try {
-        $query = $this->findOrFail($clientId);
-    } catch (ModelNotFoundException $exception) {
-        throw new NotFoundHttpException('User with the given clientId does not exist.');
+    {
+        try {
+            $query = $this->findOrFail($clientId);
+        } catch (ModelNotFoundException $exception) {
+            throw new NotFoundHttpException('User with the given clientId does not exist.');
+        }
+
+        Arr::add($query, 'companiesCount', count($query->companies));
+        Arr::add($query, 'employeesCount', count($query->employees));
+        Arr::add($query, 'formattedBudget', Money::{SettingsModel::getSettingValue('currency')}($query->budget));
+
+        return $query;
     }
-
-    Arr::add($query, 'companiesCount', count($query->companies));
-    Arr::add($query, 'employeesCount', count($query->employees));
-    Arr::add($query, 'formattedBudget', Money::{SettingsModel::getSettingValue('currency')}($query->budget));
-
-    return $query;
-}
 
 //     public function getClientByGivenClientId(int $clientId) : self
 // {
@@ -144,9 +144,18 @@ class ClientsModel extends Model
         return $query;
     }
 
+
+
     public function getPaginate()
     {
-        return $this->paginate(SettingsModel::where('key', 'pagination_size')->get()->last()->value);
+        $settings = SettingsModel::where('key', 'pagination_size')->latest('created_at')->first();
+
+        if ($settings && !empty($settings->value)) {
+            return $this->paginate($settings->value);
+        } else {
+            // Provide a default pagination size or handle the case when the value is empty
+            return $this->paginate(10); // You can replace 10 with your desired default pagination size
+        }
     }
 
     public function deleteClient(int $clientId)

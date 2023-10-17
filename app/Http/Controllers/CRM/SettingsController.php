@@ -9,7 +9,7 @@ use App\Services\HelpersFncService;
 use App\Services\SettingsService;
 use App\Services\SystemLogService;
 use Illuminate\Support\Facades\Redirect;
-use View;
+use Illuminate\Support\Facades\View;
 
 class SettingsController extends Controller
 {

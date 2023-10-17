@@ -15,10 +15,15 @@
                 <div class="alert alert-danger">
                     <strong>Danger!</strong> {{ session()->get('message_danger') }}
                 </div>
+
             @endif
             <a href="{{ URL::to('sales/form/create') }}">
-                <button type="button" class="btn btn-primary btn active">Add</button>
+                <button type="button" class="btn btn-primary btn active">Create Sale</button>
             </a>
+            <a href="{{ URL::to('sales/challan') }}">
+                <button type="button" class="btn btn-primary btn active">Replacement Challan</button>
+            </a>
+            
             <div class="panel panel-default">
 
                 <div class="panel-body">
@@ -28,48 +33,51 @@
                             <thead>
                                 <tr>
                                     <th class="text-center">Customer name</th>
+                                    <th class="text-center">Customer Company</th>
+                                    <th class="text-center">Category Name</th>
+                                    <th class="text-center">Brand Name</th>
                                     <th class="text-center">Product Name</th>
                                     <th class="text-center">Serial Number</th>
-                                    <th class="text-center">Brand Name</th>
-                                    <th class="text-center">Status</th>
-                                    <th class="text-center" style="width: 200px; text-align:center">Action</th>
+                                    <th class="text-center" style="width: 400px; text-align:center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($salesPaginate as $key => $value)
+                                {{-- @php
+                                    dd($value);
+                                @endphp --}}
                                     <tr class="odd gradeX">
+                                        <td class="text-center">{{$value->name}}</td>
                                         <td class="text-center">
-                                            
                                             @if ($value->custmorData)
-                                            
                                                 <a href="{{ URL::to('clients/view/' . $value->custmorData->id) }}">{{ $value->custmorData->full_name }}</a>
                                             @endif
                                         </td>
+                                        <td class="text-center">{{$value->category->cat_name}}</td>
+                                        <td class="text-center">{{$value->brand_name}}</td>
                                         <td class="text-center">
                                             @if ($value->products)
                                                 <a href="{{ URL::to('products/view/' . $value->products->id) }}">{{ $value->products->name }}</a>
                                             @endif
                                         </td>
-                                        <td>{{$value->sn}}</td>
-                                        
-                                        <td class="text-center">
-                                            @if ($value->products)
-                                                <a href="{{ URL::to('products/view/' . $value->products->id) }}">{{ $value->products->brand_name }}</a>
-                                            @endif
-                                        </td>
-                                        <td class="text-center">{{ $value->status }}</td>
-                                        <td class="text-center" style="text-align: center">
+                                        <td class="text-center">{{$value->sn}}</td>
+                                        <td >
                                             <div class="btn-group">
-                                                <a class="btn btn-small btn-primary" href="{{ URL::to('sales/view/' . $value->id) }}">View &nbsp;</a>
-                                                <a class="btn btn-small btn-success" href="{{ URL::to('sales/form/update/' . $value->id) }}">Edit</a>
-                                                <form action="{{ route('processDeleteSale', ['clientId' => $value->id]) }}" method="POST" style="display: inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this sale?')">Delete</button>
-                                                </form>
+                                                <a class="btn btn-small btn-primary btn-sm"
+                                                    href="{{ URL::to('sales/view/' . $value->id) }}">Details</a>
+                                                <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-sm "><span
+                                                        class="caret"></span></button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a href="{{ URL::to('sales/form/update/' . $value->id) }}">Edit</a>
+                                                    </li>
+                                                    <li class="divider"></li>
+                                                    <li><a href="#">Some option</a></li>
+                                                </ul>
                                             </div>
+                                            <a href="{{ URL::to('sales/sendmailChallan/' . $value->id) }}"><button type="button" class="btn btn-success btn-sm"> <i class="fa fa-paper-plane"> Send Mail</i>
+                                            </button></a>
                                         </td>
-                                          
                                     </tr>
                                 @endforeach
                             </tbody>

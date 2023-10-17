@@ -194,11 +194,11 @@
                                 <a href="{{ URL::to('products/view/' . $result->id) }}" class="list-group-item">
                                     <span class="badge badge"
                                           style="background-color: #428bca !important;">{{ $result->created_at->diffForHumans() }}</span>
-                                    <span class="badge badge" style="background-color: #8a3a44 !important;">
-                                         {{ $result->count }} qty</span>
-                                    <span class="badge badge" style="background-color: #298a15 !important;">
+                                    {{-- <span class="badge badge" style="background-color: #8a3a44 !important;">
+                                         {{ $result->count }} qty</span> --}}
+                                    {{-- <span class="badge badge" style="background-color: #298a15 !important;">
                                         ₹ {{$result->price }}
-                                    </span>
+                                    </span> --}}
                                     <i class="fa fa-fw fa-product-hunt"></i> {{ $result->name }}
                                 </a>
                             @endforeach

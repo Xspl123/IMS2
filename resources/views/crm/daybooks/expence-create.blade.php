@@ -26,17 +26,47 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
-                <div class="row mt-4">
+                {{-- <div class="row mt-4">
                     <div class="col-md-12 mt-4">
-                        <button type="button" class="btn btn-primary pull-right " data-toggle="modal" data-target="#myModal"><i class="fa fa-money" aria-hidden="true" style="font-size:20px;"></i> {{$wallet->amount}}</button>
-
+                        <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal"
+                        @if(auth()->user()->role_type !== 2)
+                            disabled
+                        @endif
+                         >
+                        <i class="fa fa-money" aria-hidden="true" style="font-size:20px;"></i>
+                        @if(isset($wallet->amount) && $wallet->amount !== null && $wallet->amount !== '')
+                            {{$wallet->amount}}
+                        @endif
+                    </button>
+                    @if(auth()->user()->role_type !== 2)
+                    <div class="alert alert-danger">
+                        You are not authorized for topup wallet amount.
+                    </div>
+                    @endif
+                    
+                    </div>
+                </div> --}}
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <a href="{{ URL::to('/getDetails') }}" class="btn btn-primary">Wallet Topup List</a>
                     </div>
                 </div>
+                
+                <div class="row ">
+                    <div class="col-md-12 ">
+                        <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">
+                            <i class="fa fa-money" aria-hidden="true" style="font-size:20px;"></i>
+                            @if(isset($wallet->amount) && $wallet->amount !== null && $wallet->amount !== '')
+                                {{$wallet->amount}}
+                            @endif
+                        </button>
+                    </div>
+                </div>
+                
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-lg-6">
                             {{ Form::open(['route' => 'processStoreExpense']) }}
-                            <input type="hidden" name="wallet_amt" value="{{$wallet->amount}}">
                             <div class="form-group input-row ">
                                 {{ Form::label('payer', 'Payer Name') }}
                                 <div class="input-group">
@@ -46,8 +76,10 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-lg-6">
+                        @if(isset($wallet->amount) && $wallet->amount !== null)
+                        <input type="hidden" name="wallet_amt" value="{{$wallet->amount}}">
+                        @endif                      
+                      <div class="col-lg-6">
                             <div class="form-group input-row">
                                 {{ Form::label('date', 'Date') }}
                                 <div class="input-group">
@@ -110,37 +142,73 @@
                         <div class="col-lg-12 validate_form">
                             {{ Form::submit('Save', ['class' => 'btn btn-primary']) }}
                         </div>
+                        
                     {{ Form::close() }}
                     </div>
                 </div>
             </div>
         </div>
     {{-- *************** open modal*** --}}
+    @php
+    $authtype = auth()->user()->role_type;
+    @endphp
 
+   
     <div class="modal fade" id="myModal" role="dialog">
         <div class="modal-dialog modal-sm">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title">Recharge your wallet</h4>
-            </div>
-            <div class="modal-body">
-                <form action="" method="POST">
-                    @csrf
-                    <div class="form-group input-row">
-                        <div class="input-group">
-                            <label>Enter Amount</label>
-                            <input type="number" name="amount" class="form-control">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Topup your wallet</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="wallet-form" action="{{ route('update.wallet') }}" method="POST">
+                        @csrf
+                        <div class="form-group input-row">
+                            <div class="input-group">
+                                <label>Enter Amount</label>
+                                <input type="number" name="amount" class="form-control"  required>
+                            </div>
                         </div>
-                    </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary" data-dismiss="modal">Submit</button>
-            </div>
-        </form>
-          </div>
         </div>
-      </div>
+    </div>
+
+
+
+
+         
+{{-- 
+        <script>
+            $(document).ready(function () {
+                $('#wallet-form').submit(function (e) {
+                    e.preventDefault();
+                    
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ route('update.wallet') }}',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            amount: $('input[name="amount"]').val()
+                        },
+                        success: function (data) {
+                            // Handle the response data, update UI, etc.
+                            console.log(data);
+                        },
+                        error: function (xhr, status, error) {
+                            // Handle errors, show error messages, etc.
+                            console.error(xhr.responseText);
+                        }
+                    });
+                });
+            });
+        </script> --}}
+
         <script>
             $(document).ready(function () {
 

@@ -14,21 +14,17 @@ class ProductsModel extends Model
 
     protected $table = 'products';
     protected $dates = ['deleted_at'];
-
-
-
-
+    public $timestamps = true;
     protected $fillable = [
         'barcode',
         'name',
         'description',
-        'purchase',
         'brand_name',
         'price_with_gst',
         'count',
         'price',
+        'category',
         'gstAmount',
-        'rented',
         'rent_start_date',
         'rent_end_date',
         'created_at',
@@ -36,10 +32,22 @@ class ProductsModel extends Model
         'is_active',
         'admin_id',
         'vendor_id',
+        'product_serial_no',
+        'product_type'
     ];
+
+    public function barcode()
+    {
+        return $this->hasOne(Barcode::class);
+    }
     public function vendor()
     {
         return $this->belongsTo(VendorModel::class);
+    }
+
+    public function challan()
+    {
+        return $this->belongsTo(Challan::class);
     }
 
     public function sales()
@@ -47,71 +55,76 @@ class ProductsModel extends Model
         return $this->hasMany(SalesModel::class, 'id');
     }
 
+    public function category()
+    {
+        return $this->belongsTo(ProductCategory::class, 'product_category_id');
+    }
+
     public function storeProduct(array $requestedData, int $adminId): int
     {
+
         $data = [
             'barcode' => $requestedData['barcode'],
+            'product_serial_no' => $requestedData['product_serial_no'],
             'name' => $requestedData['name'],
+            'product_category_id' => $requestedData['catgory_name'],
             'description' => $requestedData['description'],
-            'purchase' => $requestedData['purchase'],
             'brand_name' => $requestedData['brand_name'],
             'price_with_gst' => $requestedData['price_with_gst'],
             'gst_rate' => $requestedData['gst_rate'],
-            'count' => $requestedData['count'],
             'price' => $requestedData['price'],
             'gstAmount' => $requestedData['gstAmount'],
             'total_amount' => $requestedData['total_amount'],
-            'rented' => isset($requestedData['rented']) ? $requestedData['rented'] : 0,
-            'rent_start_date' => isset($requestedData['rent_start_date']) ? $requestedData['rent_start_date'] : 0,
-            'rent_end_date' => isset($requestedData['rent_end_date']) ? $requestedData['rent_end_date'] : 0,
             'created_at' => now(),
             'updated_at' => now(),
             'is_active' => true,
             'admin_id' => $adminId,
             'vendor_id' => $requestedData['vendor_id'],
-    
+            'rent_start_date' => $requestedData['rent_start_date'],
+            'rent_end_date' => $requestedData['rent_end_date'],
+            'product_type' => $requestedData['product_type'],
+
         ];
-        if ($requestedData['rented'] == '1') {
-            $data['rent_start_date'] = isset($requestedData['rent_start_date']) ? $requestedData['rent_start_date'] : null;
-            $data['rent_end_date'] = isset($requestedData['rent_end_date']) ? $requestedData['rent_end_date'] : null;
-        }
-    
+       
         return $this->insertGetId($data);
     }
 
 
+
+
+
     public function updateProduct(int $productId, array $requestedData): int
-{
-    $data = [
-        'name' => $requestedData['name'],
-        'description' => $requestedData['description'],
-        'brand_name' => $requestedData['brand_name'],
-        'count' => $requestedData['count'],
-        'price' => $requestedData['price'],
-        'rented' => isset($requestedData['rented']) ? $requestedData['rented'] : 0,
-        'rent_start_date' => isset($requestedData['rent_start_date']) ? $requestedData['rent_start_date'] : null,
-        'rent_end_date' => isset($requestedData['rent_end_date']) ? $requestedData['rent_end_date'] : null,
-        'updated_at' => now()
-    ];
-
-    if ($requestedData['rented'] != '1') {
-        $data['rent_start_date'] = null;
-        $data['rent_end_date'] = null;
-    }
-
-    return $this->where('id', '=', $productId)->update($data);
-}
-
-
-    public function setActive(int $productId, int $activeType) : int
     {
-        return $this->where('id', '=', $productId)->update(
-            [
-                'is_active' => $activeType,
-                'updated_at' => now()
-            ]
-        );
-    }
+        $data = [
+            'name' => $requestedData['name'],
+            'description' => $requestedData['description'],
+            'brand_name' => $requestedData['brand_name'],
+            'count' => $requestedData['count'],
+            'price' => $requestedData['price'],
+            'rented' => isset($requestedData['rented']) ? $requestedData['rented'] : 0,
+            'rent_start_date' => isset($requestedData['rent_start_date']) ? $requestedData['rent_start_date'] : null,
+            'rent_end_date' => isset($requestedData['rent_end_date']) ? $requestedData['rent_end_date'] : null,
+            'updated_at' => now()
+        ];
+
+        if ($requestedData['rented'] != '1') {
+            $data['rent_start_date'] = null;
+            $data['rent_end_date'] = null;
+        }
+
+        return $this->where('id', '=', $productId)->update($data);
+       }
+
+
+        public function setActive(int $productId, int $activeType) : int
+        {
+            return $this->where('id', '=', $productId)->update(
+                [
+                    'is_active' => $activeType,
+                    'updated_at' => now()
+                ]
+            );
+        }
 
     public function countProducts() : int
     {
@@ -140,7 +153,14 @@ class ProductsModel extends Model
 
     public function getPaginate()
     {
-        return $this->paginate(SettingsModel::where('key', 'pagination_size')->get()->last()->value);
+        $settings = SettingsModel::where('key', 'pagination_size')->latest('created_at')->first();
+
+        if ($settings && !empty($settings->value)) {
+            return $this->paginate($settings->value);
+        } else {
+            // Provide a default pagination size or handle the case when the value is empty
+            return $this->paginate(10); // You can replace 10 with your desired default pagination size
+        }
     }
 
     public function getProduct(int $productId) : self

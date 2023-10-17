@@ -21,8 +21,8 @@ class VendorStoreRequest extends FormRequest
             'billing_address' => 'required|string',
             'country' => 'required|string',
             'postal_code' => 'required|string',
-            'fax' => 'required|string',
-            'description' => 'required|string',
+            'fax' => 'nullable|string',
+            'description' => 'nullable|string',
             'phone' => 'required|string',
             
         ];

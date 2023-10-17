@@ -13,7 +13,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
 use App\Models\ProductsModel;
+use App\Models\ProductBrand;
 use App\Models\VendorModel;
+use App\Models\ProductCategory;
+use App\Models\CustomLog;
+use GeoIp2\Database\Reader;
+use Log;
+
+
 use View;
 use Illuminate\Http\Request;
 
@@ -22,7 +29,7 @@ class ProductsController extends Controller
 {
     private  $productsService;
     private  $systemLogsService;
-
+    
     public function __construct(ProductsService $productsService, SystemLogService $systemLogService)
     {
         $this->middleware(SystemEnums::middleWareAuth);
@@ -35,8 +42,10 @@ class ProductsController extends Controller
     {
        // Fetch only the names of clients to use in the dropdown select
        $dataOfVendors = VendorModel::pluck('name','id');
+       $getbrands =  ProductBrand::getbrands();
+       $product_cat =  ProductCategory::get();
 
-        return view('crm.products.create', compact('dataOfVendors'));
+        return view('crm.products.create', compact('dataOfVendors','getbrands','product_cat'));
     }
 
     
@@ -54,9 +63,12 @@ class ProductsController extends Controller
 
     public function processListOfProducts()
     {
+        $productCount = ProductsModel::where('is_active', 1)->count();
+
         return View::make('crm.products.index')->with(
             [
-                'productsPaginate' => $this->productsService->loadPagination()
+                'productsPaginate' => $this->productsService->loadPagination(),
+                'productCount' => $productCount
             ]
         );
     }
@@ -65,38 +77,49 @@ class ProductsController extends Controller
     public function processStoreProduct(ProductStoreRequest $request)
     {
         $validatedData = $request->validated();
-
+    
         // Check if the barcode is provided
         $barcode = $validatedData['barcode'] ?? null;
         if (!$barcode) {
-            // Generate random 11-digit barcode
+            // Generate a random 11-digit barcode
             $barcode = $this->generateRandomBarcode();
         }
-
+    
         // Add the generated or provided barcode to the validated data
         $validatedData['barcode'] = $barcode;
-
+    
         $product = VendorModel::find($validatedData['vendor_id']);
-
+       
         $storedProductId = $this->productsService->execute($validatedData, $this->getAdminId());
+       
+            // Use the customLog helper function to log and insert data
+            $message = 'Product has been added ';
+            $logData = ['data' => $validatedData];
+            $userId = Auth::id();
+            $ipAddress = $request->ip();
+            customLog($message, $logData, $userId, $ipAddress); 
+            //end customLog helper function
 
         if ($storedProductId) {
-            $this->systemLogsService->loadInsertSystemLogs('Product has been added with id: ' . $storedProductId, $this->systemLogsService::successCode, $this->getAdminId());
-
+            $message = 'Product has been added with ID ' . $storedProductId . ' - ' . json_encode($validatedData);
+            $this->systemLogsService->loadInsertSystemLogs($message, $this->systemLogsService::successCode, $this->getAdminId());
+                
             // Delete the authenticated user from the live_agent table
             $username = Auth::user()->name;
             DB::table('live_agent')->where('user_name', $username)->delete();
-
-            return Redirect::to('products')->with('message_success', $this->getMessage('messages.SuccessProductsStore'));
+    
+            return redirect('products')->with('message_success', $this->getMessage('messages.SuccessProductsStore'));
         } else {
-            return Redirect::back()->with('message_success', $this->getMessage('messages.ErrorProductsStore'));
+            return back()->with('message_success', $this->getMessage('messages.ErrorProductsStore'));
         }
     }
+    
+
 
     // Method to generate a random 11-digit barcode
     private function generateRandomBarcode()
     {
-        return strval(rand(10000000000, 99999999999)); // Generates 11-digit barcode
+        return strval(rand(10000000000, 99999999999));
     }
 
     public function processUpdateProduct(ProductUpdateRequest $request, int $productId)

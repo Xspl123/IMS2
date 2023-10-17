@@ -80,7 +80,14 @@ class DealsModel extends Model
 
     public function getPaginate()
     {
-        return $this->paginate(SettingsModel::where('key', 'pagination_size')->get()->last()->value);
+        $settings = SettingsModel::where('key', 'pagination_size')->latest('created_at')->first();
+
+        if ($settings && !empty($settings->value)) {
+            return $this->paginate($settings->value);
+        } else {
+            // Provide a default pagination size or handle the case when the value is empty
+            return $this->paginate(10); // You can replace 10 with your desired default pagination size
+        }
     }
 
     public function getDeal(int $dealId) : self

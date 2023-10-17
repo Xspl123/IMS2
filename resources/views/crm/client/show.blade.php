@@ -56,12 +56,12 @@
                                     <th>Section</th>
                                     <td>{{ $clientDetails->section }}</td>
                                 </tr>
-                                <tr>
+                                {{-- <tr>
                                     <th>Budget</th>
                                      <td class="">   
                                       ₹ {{ $clientDetails->budget }}
                                      </td>
-                                </tr>
+                                </tr> --}}
                                 <tr>
                                     <th>Status</th>
                                     <td>{{ $clientDetails->is_active ? 'Active' : 'Deactivate' }}</td>

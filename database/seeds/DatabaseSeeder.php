@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         $this->call(AdminAccSeeder::class);
+        $this->call(AdminAccSeeder::class);
          $this->call(FakerClientSeeder::class);
          $this->call(FakerCompaniesSeeder::class);
          $this->call(FakerEmployeesSeeder::class);
@@ -21,5 +21,6 @@ class DatabaseSeeder extends Seeder
          $this->call(FakerTasksSeeder::class);
          $this->call(FakerFinancesSeeder::class);
          $this->call(SettingsSeeder::class);
+
     }
 }

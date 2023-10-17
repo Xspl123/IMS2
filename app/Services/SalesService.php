@@ -27,8 +27,9 @@ class SalesService
 
     public function updateSale(int $saleId, array $data)
     {
+      // dd($data);
         $sale = $this->find($saleId);
-
+       
         if (!$sale) {
             throw new \Exception('Sale not found.');
         }

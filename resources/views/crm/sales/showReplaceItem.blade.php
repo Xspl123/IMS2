@@ -17,8 +17,8 @@
                             <thead>
                                 <tr>
                                     
-                                    <th class="text-center">Replacement with</th>
-                                    <th class="text-center">Client</th>
+                                    <th class="text-center">Replacement Item</th>
+                                    <th class="text-center">Customer</th>
                                     <th class="text-center">Replacement Product Remark </th>
                                     <th class="text-center">Defected Product Sn.</th>
                                     <th class="text-center">Replacement Product Sn.</th>
@@ -28,22 +28,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-
-                                    
+                                @foreach($salesData as $key => $data)
                                 <tr>
-                                @foreach($salesData as $data)
-                                @foreach ($dataWithPluckOfProducts as $item)
-                                <td>{{ $item}}</td>
-                                @endforeach
-                                <td>{{$data->full_name}}</td>
-                                <td>{{$data->replace_remark}}</td>
-                                <td>{{$data->sn}}</td>
-                                <td>{{$data->replacement_product_sn}}</td>
-                                <td>{{$data->approved_by}}</td>
-                                <td>{{$data->formatted_created_at}}</td>
-                                <td>{{$data->formatted_updated_at}}</td>
+                                    <td>{{ $dataWithPluckOfProducts[$key] ?? 'N/A' }}</td> 
+                                    <td>{{ $data->full_name ?? 'N/A' }}</td>
+                                    <td>{{ $data->replace_remark }}</td>
+                                    <td>{{ $data->sn }}</td>
+                                    <td>{{ $data->replacement_product_sn }}</td>
+                                    <td>{{ $data->approved_by }}</td>
+                                    <td>{{ $data->formatted_created_at }}</td>
+                                    <td>{{ $data->formatted_updated_at }}</td>
                                 </tr>
-
                                 @endforeach
                             </tbody>
                         </table>

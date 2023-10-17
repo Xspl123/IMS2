@@ -22,9 +22,21 @@
                 <button type="button" class="btn btn-primary btn active">New Accounts</button>
             </a> --}}
             <br><br>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-code-fork" aria-hidden="true"></i> List of Transactions
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-keyboard-o" aria-hidden="true"></i> List of Transactions
+                    </div>
+                    <div class="panel-body">
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="card-text text-right">
+                                    <span class="badge badge-primary" style="background-color: blue; color: white;">
+                                        Closing Balance: ₹ {{ number_format($latestBalance, 0) }}
+                                    </span>                                    
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="panel-body">
                     <div class="table">

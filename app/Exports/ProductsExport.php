@@ -15,14 +15,23 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class ProductsExport implements FromCollection, WithHeadings, WithStyles
 {
+    // public function collection(): Collection
+    // {
+    //     return ProductsModel::select('name', 'description', 'product_category_id', 'brand_name', 'price', 'gstAmount', 'price_with_gst', 'product_type')->get();
+    // }
+
     public function collection(): Collection
     {
-        return ProductsModel::select('id','barcode', 'name', 'description', 'brand_name', 'count', 'price', 'gstAmount', 'price_with_gst', 'rented', 'purchase', 'rent_start_date', 'rent_end_date', 'is_active')->get();
+        return ProductsModel::select('name', 'description', 'brand_name', 'product_type', 'price', 'gstAmount', 'price_with_gst', 'product_type')
+            ->join('product_categories', 'products.product_category_id', '=', 'product_categories.id')
+            ->select('products.name', 'products.description', 'product_categories.cat_name', 'products.brand_name', 'products.price', 'products.gstAmount', 'products.price_with_gst', 'products.product_type')
+            ->get();
     }
+
 
     public function headings(): array
     {
-        return ['ID','Barcode', 'Name', 'Product Description', 'Brand Name', 'Quantity', 'Base Price', 'GST Amount',  'Price (Incl. GST)', 'Rented Product', 'Purchase Product', 'Rent Start Date', 'Rent End Date', 'Is Active'];
+        return ['Product Name', 'Product Description', 'Category Name', 'Brand Name','Base Price', 'GST Amount',  'Price (Incl. GST)', 'Product Type'];
     }
 
     public function styles(Worksheet $sheet)

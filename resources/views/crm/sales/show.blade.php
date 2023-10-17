@@ -125,11 +125,12 @@
                             <thead>
                                 <tr>
                                     {{-- <th style="width: 30%;">Invoice No.</th> --}}
-                                    <th style="width: 30%;">Coustmer Details</th>
+                                    <th style="width: 30%;">Coustmer Name</th>
                                     <th style="width: 30%;">Product Name</th>
-                                    <th style="width: 10%;">Qty.</th>
-                                    <th style="width: 15%;">Price</th>
-                                    <th style="width: 15%;">Total Amount</th>
+                                    <th style="width: 15%;">Product Brand Name</th>
+                                    <th style="width: 10%;">Product Category Name</th>
+                                    <th style="width: 10%;">Product Sn</th>
+                                    <th style="width: 15%;">Product Base Price</th>
                                     <th style="width: 15%;">GST Rate</th>
                                 </tr>
                             </thead>
@@ -137,9 +138,7 @@
                                 <tr>
                                     {{-- <td>{{ $sale->invoice_number ?? 'N/A' }}</td> --}}
                                     <td class="">
-                                        @if ($sale->custmorData)
-                                           {{ $sale->custmorData->full_name }} <br>
-                                        @endif
+                                           {{ $sale->name }}
                                      </td>
 
                                     <td>
@@ -149,9 +148,10 @@
                                             N/A
                                         @endif
                                     </td>
-                                    <td>{{ $sale->quantity ?? 'N/A' }}</td>
+                                    <td>{{$sale->brand_name}}</td>
+                                    <td>{{$sale->category->cat_name}}</td>
+                                    <td>{{ $sale->sn ?? 'N/A' }}</td>
                                     <td>₹ {{ $sale->price ?? 'N/A' }}</td>
-                                    <td>₹ {{ $sale->price * $sale->quantity }}</td>
                                     <td>{{ $sale->gst_rate}}</td>
                                 </tr>
                             </tbody>
@@ -160,11 +160,11 @@
                         <table class="invoice-summary">
                             <tbody>
                                 <tr>
-                                    <td style="width: 85%; text-align: left;"><strong>Subtotal:</strong></td>
-                                    <td style="width: 15%;">₹ {{ $sale->price * $sale->quantity }}</td>
+                                    <td style="width: 85%; text-align: left;"><strong>Product Sale Price:</strong></td>
+                                    <td style="width: 15%;">₹ {{ $sale->sale_price}}</td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 85%; text-align: left;"><strong>Tax:</strong></td>
+                                    <td style="width: 85%; text-align: left;"><strong>Gst Amount:</strong></td>
                                     <td style="width: 15%;">₹ {{$sale->gst_amount}}</td>
                                 </tr>
                                 <tr>
@@ -172,15 +172,34 @@
                                     <td style="width: 15%;">₹ {{$sale->total_amount}}</td>
                                 </tr>
                                
-                                <tr>
+                                {{-- <tr>
                                     <td style="width: 85%; text-align: left;"><strong>Status:</strong></td>
                                     <td style="width: 15%;">{{ isset($sale->is_active) ? ($sale->is_active ? 'Active' : 'Deactivate') : 'N/A' }}</td>
-                                </tr>
+                                </tr> --}}
                             </tbody>
                         </table>
                     </div>
                 </div> 
-            </div>        
+            </div>  
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel">You want to delete this product?</h4>
+                        </div>
+                        <div class="modal-body">
+                            Action will delete this product permanently.
+                        </div>
+                        <div class="modal-footer">
+                            {{ Form::open(['url' => 'sales/delete/' . $sale->id, 'class' => 'pull-right']) }}
+                            {{ Form::hidden('_method', 'DELETE') }}
+                            {{ Form::submit('Delete this Sale', ['class' => 'btn btn-small btn-danger']) }}
+                            {{ Form::close() }}
+                        </div>
+                    </div>
+                </div>
+            </div>      
                     {{-- <div class="text-center">
                         <button onclick="printAndDownloadInvoice()">Print and Download Invoice</button>
                     </div> --}}

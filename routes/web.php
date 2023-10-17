@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DecryptionController;   
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\CRM\InvoiceController;
+use App\Http\Controllers\CRM\WalletController;
 //Route::get('/getBarcodeValue', [DecryptionController::class, 'getBarcodeValue']);
 Route::get('/export/products', [ExportController::class, 'exportProducts'])->name('export.products');
 Route::get('/saleInvoice', [InvoiceController::class, 'index'])->name('saleInvoice');;
@@ -94,12 +95,22 @@ Route::group(['prefix' => 'sales'], function () {
     Route::get('form/create', 'CRM\SalesController@processRenderCreateForm')->name('processRenderCreateForm');
     Route::get('form/update/{clientId}', 'CRM\SalesController@processRenderUpdateForm')->name('processRenderUpdateForm');
     Route::get('view/{clientId}', 'CRM\SalesController@processShowSalesDetails')->name('viewSalesDetails');
+    Route::get('challan', 'CRM\SalesController@viewChallansDetails')->name('viewChallansDetails');
+    Route::get('challan-details', 'CRM\SalesController@saleChallanDetails')->name('saleChallanDetails');
+    Route::get('challan-invoice/{id}', 'CRM\SalesController@challanInvoice')->name('challanInvoice');
+
+    Route::get('challan-invoice-mail/{id}', 'CRM\SalesController@sendmailInvoice')->name('sendmailInvoice');
+    Route::get('sendmailChallan/{id}', 'CRM\SalesController@sendmailChallan')->name('sendmailChallan');
+
     Route::post('store', 'CRM\SalesController@processStoreSale')->name('processStoreSale');
     Route::put('update/{employeeId}', 'CRM\SalesController@processUpdateSale')->name('processUpdateSale');
     Route::delete('delete/{clientId}', 'CRM\SalesController@processDeleteSale')->name('processDeleteSale');
     Route::get('set-active/{id}/{value}', 'CRM\SalesController@processSaleSetIsActive')->name('processSetIsActive');
     Route::get('invoice/{id}', 'CRM\SalesController@showInvoice');
     Route::get('showReplaceItem', 'CRM\SalesController@showReplaceItem')->name('showReplaceItem');
+    Route::post('getProducts', 'CRM\SalesController@getProductName')->name('getProductName');
+    Route::get('saleCreateChallan/{id}', 'CRM\SalesController@saleChallanCreate')->name('saleChallanCreate');
+
 
 });
 
@@ -186,7 +197,7 @@ Route::group(['prefix' => 'daybooks'], function () {
     Route::get('form/create', 'CRM\DaybooksController@processRenderCreateForm')->name('processRenderCreateForm');
     Route::get('form/update/{clientId}', 'CRM\DaybooksController@processRenderUpdateForm')->name('processRenderUpdateForm');
     Route::get('view/{clientId}', 'CRM\DaybooksController@processShowDaybooksDetails')->name('viewDaybooksDetails');
-    Route::post('processStorIncome', 'CRM\DaybooksController@processStoreIncome')->name('processStoreIncome');
+    // Route::post('processStorIncome', 'CRM\DaybooksController@processStoreIncome')->name('processStoreIncome');
     Route::put('update/{employeeId}', 'CRM\DaybooksController@processUpdateDaybook')->name('processUpdateDaybook');
     Route::delete('delete/{clientId}', 'CRM\DaybooksController@processDeleteDaybook')->name('processDeleteDaybook');
     Route::get('set-active/{id}/{value}', 'CRM\DaybooksController@processDaybooksetIsActive')->name('processSetIsActive');
@@ -198,9 +209,16 @@ Route::group(['prefix' => 'daybooks'], function () {
     Route::get('/incomeVsExpense', 'CRM\DaybooksController@incomeVsExpense')->name('incomeVsExpense.report');
     Route::get('/income-report-between-dates/generate', 'CRM\DaybooksController@incomeReportBetweenDates')->name('income.report.between.dates');
 });
+Route::post('/update-wallet', 'CRM\WalletController@updateWallet')->name('update.wallet');
 
+Route::get('/getDetails', 'CRM\WalletController@getDetails');
 
 Route::group(['prefix' => 'settings'], function () {
     Route::get('/', 'CRM\SettingsController@processListOfSettings')->name('settings');
     Route::put('update', 'CRM\SettingsController@processUpdateSettings')->name('processUpdateSettings');
 });
+
+Route::get('/challanCompanyPDF', 'CRM\SalesController@downloadCompanyPDF')->name('download.com');
+Route::get('/challanCustomerPDF', 'CRM\SalesController@downloadCustomerPDF')->name('download.cust');
+Route::get('/challanDownloadCompanyPDF', 'CRM\SalesController@challanDownloadCompanyPDF')->name('challanDownloadCompanyPDF');
+Route::get('/challanDownloadCustomerPDF', 'CRM\SalesController@challanDownloadCustomerPDF')->name('challanDownloadCustomerPDF');

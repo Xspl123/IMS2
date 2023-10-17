@@ -28,11 +28,9 @@ class ProductUpdateRequest extends FormRequest
             'barcode' => 'nullable',
             'name' => 'required|string',
             'description' => 'nullable',
-            'brand_name' => 'required|string|unique:products',
+            'brand_name' => 'required',
             'count' => 'required|integer',
             'price' => 'required|integer',
-            'rented' => 'nullable|string',
-            'purchase' => 'nullable|string',
             'rent_start_date' => 'nullable',
             'rent_end_date' => 'nullable',
             'price_with_gst' => 'nullable',
@@ -40,6 +38,7 @@ class ProductUpdateRequest extends FormRequest
             'vendor_id' => 'nullable',
             'gst_rate' => 'nullable',
             'total_amount' => 'nullable',
+            'product_type'=> 'nullable',
         ];
     }
 }

@@ -21,6 +21,7 @@ class ProductsService
 
     public function execute(array $requestedData, int $adminId)
     {
+        //dd($requestedData);
         return $this->productsModel->storeProduct($requestedData, $adminId);
     }
 

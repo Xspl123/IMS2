@@ -31,56 +31,74 @@
          </div>
       </div>
       <div class="form-group col-lg-4">
+        {{ Form::label('category', 'Product Category') }}
+        <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-handshake-o"></i></span>
+            <select name="catgory_name" class="form-control" id="catgory_name">
+                <option value="" disabled selected>Select Product Brand</option>
+                @foreach ($product_cat as $value)
+                    <option value="{{ $value->id }}" >{{ $value->cat_name }}</option>
+                    @endforeach
+            </select>
+        </div>
+     </div>
+     <div class="form-group col-lg-4">
+        {{ Form::label('name', 'Product Name') }}
+        <div class="input-group">
+           <span class="input-group-addon">
+           {{ Form::text('name', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
+           </span>
+        </div>
+     </div>
+      <div class="form-group col-lg-4">
+        {{ Form::label('product_serial_no', 'Product Serial Number') }}
+        <div class="input-group">
+            <span class="input-group-addon">
+            {{ Form::number('product_serial_no', null, ['class' => 'form-control', 'placeholder' => 'Enter product serial number', 'id' => 'barcode']) }}
+            </span>
+         </div>
+     </div>
+     <div class="form-group col-lg-4">
+        <label for="brand_name">Product Brand Name</label>
+        <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-handshake-o"></i></span>
+            <select name="brand_name" class="form-control" id="brand_name">
+                <option value="" disabled selected>Select Product Brand</option>
+                <option value="Dell">Dell</option>
+                <option value="Lenovo">Lenovo</option>
+                <option value="Sumsung">Sumsung</option>
+                <option value="Hp">Hp</option>
+                <option value="Hcl">Hcl</option>
+                <option value="OTHER">OTHER</option>
+            </select>
+        </div>
+    </div>
+      <div class="form-group col-lg-4">
          {{ Form::label('vendor_id', 'Assign Vendor') }}
          <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-handshake-o"></i></span>
-            {{ Form::select('vendor_id', $dataOfVendors, null, ['class' => 'form-control', 'placeholder' => 'Select a Vendor Name']) }}
+            {{ Form::select('vendor_id', $dataOfVendors, null, ['class' => 'form-control', 'requried', 'placeholder' => 'Select a Vendor Name']) }}
          </div>
       </div>
+      
+      
+      
       <div class="form-group col-lg-4">
-         {{ Form::label('name', 'Product Name') }}
+         {{ Form::label('price', 'Product Base Price') }}
          <div class="input-group">
             <span class="input-group-addon">
-            {{ Form::text('name', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
+            {{ Form::number('price', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText'), 'name' => 'price']) }}
             </span>
          </div>
       </div>
-      <div class="form-group col-lg-4">
-         {{ Form::label('brand_name', 'Brand Name') }}
-         <div class="input-group">
-            <span class="input-group-addon">
-            {{ Form::select('brand_name', [
-            'AlphaGear' => 'AlphaGear',
-            'BetaTech' => 'BetaTech',
-            'CyberNova' => 'CyberNova',
-            'DeltaFusion' => 'DeltaFusion',
-            'EpicQuest' => 'EpicQuest',
-            'FutureTech' => 'FutureTech',
-            'GalaxyGadgets' => 'GalaxyGadgets',
-            'HorizonHaven' => 'HorizonHaven',
-            'InfinityTech' => 'InfinityTech',
-            'JupiterJunction' => 'JupiterJunction',
-            // Add more brand names as needed
-            ], null, ['class' => 'form-control', 'placeholder' => 'Select a Brand Name']) }}
-            </span>
-         </div>
-      </div>
-      <div class="form-group col-lg-4">
-         {{ Form::label('price', 'Base Price') }}
-         <div class="input-group">
-            <span class="input-group-addon">
-            {{ Form::text('price', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText'), 'name' => 'price']) }}
-            </span>
-         </div>
-      </div>
-      <div class="form-group col-lg-4">
+      {{-- <div class="form-group col-lg-4">
         {{ Form::label('count', 'Quantity') }}
         <div class="input-group">
             <span class="input-group-addon">
                 <input type="number" class="form-control" name="count" min="1" max="1" step="1" placeholder="1">
             </span>
         </div>
-    </div>
+    </div> --}}
     
       <div class="form-group col-lg-4">
          {{ Form::label('gst_rate', 'GST Rate') }}
@@ -93,57 +111,91 @@
          {{ Form::label('gstAmount', 'GST Amount') }}
          <div class="input-group">
             <span class="input-group-addon">
-            {{ Form::text('gstAmount', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText'), 'name' => 'gstAmount', 'readonly', 'id' => 'gstAmount']) }}
+            {{ Form::number('gstAmount', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText'), 'name' => 'gstAmount', 'readonly', 'id' => 'gstAmount']) }}
             </span>
          </div>
       </div>
       <div class="form-group col-lg-4">
-         {{ Form::label('total_amount', 'Total Amount') }}
+         {{ Form::label('total_amount', 'Product Total Price') }}
          <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-calculator"></i></span>
-            {{ Form::text('total_amount', null, ['class' => 'form-control', 'readonly', 'name' => 'total_amount', 'id' => 'total_amount']) }}
+            {{ Form::number('total_amount', null, ['class' => 'form-control', 'readonly', 'name' => 'total_amount', 'id' => 'total_amount']) }}
          </div>
       </div>
       <div class="form-group col-lg-4">
-         {{ Form::label('price_with_gst', 'Price (Incl. GST):  ') }}
+         {{ Form::label('price_with_gst', 'Product Price (Incl. GST):  ') }}
          <div class="input-group">
             <span class="input-group-addon">
             {{ Form::text('price_with_gst', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText'), 'name' => 'price_with_gst', 'readonly', 'id' => 'price_with_gst']) }}
             </span>
          </div>
       </div>
-      <div class="form-group col-lg-4">
-         {{ Form::label('rented', 'Rented Product') }}
-         <div class="input-group">
+      <div class="form-group col-lg-4" id="rent-type">
+        {{ Form::label('product_type', 'Product Type') }}
+        <div class="input-group">
             <span class="input-group-addon">
-            {{ Form::select('rented', ['1' => 'Yes', '0' => 'No'], null, ['class' => 'form-control', 'placeholder' => 'Select Option']) }}
+                {{ Form::select('product_type', ['rented' => 'Rented Product', 'purchase' => 'Purchase Product'], null, ['class' => 'form-control', 'placeholder' => 'Select Option', 'id' => 'product_type']) }}
             </span>
-         </div>
-      </div>
-      <div class="form-group col-lg-4 rent-dates" style="display: none;">
-         {{ Form::label('rent_start_date', 'Rent Start Date') }}
-         <div class="input-group">
+        </div>
+    </div>
+    
+    <div class="form-group col-lg-4 rent-dates" style="display: none;">
+        {{ Form::label('rent_start_date', 'Rent Start Date') }}
+        <div class="input-group">
             <span class="input-group-addon">
-            {{ Form::date('rent_start_date', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
+                {{ Form::date('rent_start_date', null, ['class' => 'form-control']) }}
             </span>
-         </div>
-      </div>
-      <div class="form-group col-lg-4 rent-dates" style="display: none;">
-         {{ Form::label('rent_end_date', 'Rent End Date') }}
-         <div class="input-group">
+        </div>
+    </div>
+    
+    <div class="form-group col-lg-4 rent-dates" style="display: none;">
+        {{ Form::label('rent_end_date', 'Rent End Date') }}
+        <div class="input-group">
             <span class="input-group-addon">
-            {{ Form::date('rent_end_date', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
+                {{ Form::date('rent_end_date', null, ['class' => 'form-control']) }}
             </span>
-         </div>
-      </div>
-      <div class="form-group col-lg-4">
-         {{ Form::label('purchase', 'Purchase Product') }}
-         <div class="input-group">
+        </div>
+    </div>
+    
+    {{-- <div class="form-group col-lg-4 purchase-product" style="display: none;">
+        {{ Form::label('purchase', 'Purchase Product') }}
+        <div class="input-group">
             <span class="input-group-addon">
-            {{ Form::select('purchase', ['1' => 'Yes', '0' => 'No'], null, ['class' => 'form-control', 'placeholder' => 'Select Option']) }}
+                {{ Form::select('purchase', ['1' => 'Yes', '0' => 'No'], null, ['class' => 'form-control', 'placeholder' => 'Select Option']) }}
             </span>
-         </div>
-      </div>
+        </div>
+    </div> --}}
+    
+    <script>
+        // Listen for changes in the "Product Type" dropdown
+        document.getElementById('product_type').addEventListener('change', function () {
+            var selectedValue = this.value;
+            var rentDatesFields = document.querySelectorAll('.rent-dates');
+            var purchaseProductField = document.querySelectorAll('.purchase-product');
+
+    
+            // Hide all "Rent Start Date" and "Rent End Date" fields
+            rentDatesFields.forEach(function (field) {
+                field.style.display = 'none';
+            });
+    
+            // If "Rented Product" is selected, show the "Rent Start Date" and "Rent End Date" fields
+            if (selectedValue === 'rented') {
+                rentDatesFields.forEach(function (field) {
+                    field.style.display = 'block';
+                });
+            }
+
+             // If "Purchase Product" is selected, show the "Purchase Field" field
+            if (selectedValue === 'purchase') {
+                purchaseProductField.forEach(function (field) {
+                    field.style.display = 'block';
+                });
+            }
+        });
+    </script>
+    
+    
       <div class="form-group col-lg-4">
          {{ Form::label('description', 'Product Description') }}
          <div class="">
@@ -172,26 +224,22 @@
        // Function to calculate total amount and GST amount
        function calculateTotalPrice() {
            var price = parseFloat($('input[name="price"]').val());
-           var quantity = parseInt($('input[name="count"]').val());
+          // var quantity = parseInt($('input[name="count"]').val());
            var gstRate = $('select[name="gst_rate"]').val();
    
-           if (!isNaN(price) && !isNaN(quantity)) {
+           if (!isNaN(price)) {
                var gstAmount = 0;
    
                if (gstRate === 'igst') {
-                   gstAmount = price * quantity * 0.18; // IGST 18%
+                   gstAmount = price * 0.18; // IGST 18%
                } else if (gstRate === 'sgst' || gstRate === 'cgst') {
-                   gstAmount = price * quantity * 0.09; // SGST 9% or CGST 9%
+                   gstAmount = price * 0.09; // SGST 9% or CGST 9%
                } else if (gstRate === 'sgst_cgst') {
-                   gstAmount = (price * quantity * 0.09) * 2; // SGST 9% + CGST 9%
+                   gstAmount = (price * 0.09) * 2; // SGST 9% + CGST 9%
                }
    
-            //    var totalPrice = price * quantity + gstAmount;
-            //    $('#gstAmount').val(gstAmount.toFixed(2));
-            //    $('#total_amount').val(totalPrice.toFixed(2));
-            //    $('#price_with_gst').val((totalPrice).toFixed(2));
 
-            var totalPrice = price * quantity + gstAmount;
+            var totalPrice = price + gstAmount;
             var roundedGstAmount = gstAmount.toFixed(2);
             var roundedTotalPrice = totalPrice.toFixed(2);
 

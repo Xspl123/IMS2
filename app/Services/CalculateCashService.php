@@ -23,27 +23,43 @@ class CalculateCashService
         $products = ProductsModel::all();
         $sales = SalesModel::all();
         $finances = FinancesModel::all();
-
+    
+        // Initialize sum variables
         $productSum = 0;
         $salesSum = 0;
         $financesSum = 0;
-
+    
+        // Calculate product sum
         foreach ($products as $product) {
             $productSum += $product->price * $product->count;
         }
-
-        foreach ($finances as $finance) {
-            $financesSum += $finance->net;
-        }
-
+    
+        // Calculate sales and finances sums
         foreach ($sales as $sale) {
             $salesSum += $sale->price * $sale->quantity;
         }
-
+        foreach ($finances as $finance) {
+            $financesSum += $finance->net;
+        }
+    
+        // Calculate the total sum
         $officialSum = $productSum + $salesSum + $financesSum;
-
-        return Money::{$this->settingsService->loadSettingValue('currency')}($officialSum);
+    
+        $currencyCode = $this->settingsService->loadSettingValue('currency');
+    
+        // Check if the currency code is empty or null, and if so, use a default currency code (e.g., 'USD')
+        if (empty($currencyCode)) {
+            $currencyCode = 'USD'; // Replace with your desired default currency code
+        }
+    
+        // Ensure that the currency code is not an empty string
+        if (empty($currencyCode)) {
+            throw new \Exception('Invalid currency code');
+        }
+    
+        return Money::$currencyCode($officialSum);
     }
+    
 
     public function loadCountTodayIncome()
     {
@@ -53,47 +69,83 @@ class CalculateCashService
         $productSum = 0;
         $salesSum = 0;
         $financesSum = 0;
-
+    
         foreach ($products as $product) {
             $productSum += $product->price * $product->count;
         }
-
+    
         foreach ($sales as $sale) {
             $salesSum += $sale->price * $sale->quantity;
         }
-
+    
         foreach ($finances as $finance) {
             $financesSum += $finance->net;
         }
-
+    
         $todayIncome = $productSum + $salesSum + $financesSum;
-
-        return Money::{$this->settingsService->loadSettingValue('currency')}($todayIncome);
+    
+        $currencyCode = $this->settingsService->loadSettingValue('currency');
+    
+        // Check if the currency code is empty or null, and if so, use a default currency code (e.g., 'USD')
+        if (empty($currencyCode)) {
+            $currencyCode = 'USD'; // You can replace 'USD' with your desired default currency code
+        }
+    
+        // Ensure that the currency code is not an empty string
+        if (empty($currencyCode)) {
+            throw new \Exception('Invalid currency code');
+        }
+    
+        return Money::$currencyCode($todayIncome);
     }
+    
+    
 
     public function loadCountYesterdayIncome()
-    {
-        $products = ProductsModel::whereDate('created_at', Carbon::yesterday())->get();
-        $sales = SalesModel::whereDate('created_at', Carbon::yesterday())->get();
-        $finances = FinancesModel::whereDate('created_at', Carbon::yesterday())->get();
-        $salesSum = 0;
-        $productSum = 0;
-        $financesSum = 0;
+{
+    $yesterday = Carbon::yesterday();
 
-        foreach ($products as $product) {
-            $productSum += $product->price * $product->count;
-            foreach ($sales as $sale) {
-                $salesSum += $product->price * $sale->quantity;
-            }
-            foreach ($finances as $finance) {
-                $financesSum += $finance->net;
-            }
-        }
+    // Fetch data for the specified date
+    $products = ProductsModel::whereDate('created_at', $yesterday)->get();
+    $sales = SalesModel::whereDate('created_at', $yesterday)->get();
+    $finances = FinancesModel::whereDate('created_at', $yesterday)->get();
 
-        $yesterdayIncome = $productSum + $salesSum + $financesSum;
+    // Initialize sum variables
+    $salesSum = 0;
+    $productSum = 0;
+    $financesSum = 0;
 
-        return Money::{$this->settingsService->loadSettingValue('currency')}($yesterdayIncome);
+    // Calculate sales and finances sums
+    foreach ($sales as $sale) {
+        $salesSum += $sale->price * $sale->quantity;
     }
+    foreach ($finances as $finance) {
+        $financesSum += $finance->net;
+    }
+
+    // Calculate product sum separately as it's not dependent on sales and finances
+    foreach ($products as $product) {
+        $productSum += $product->price * $product->count;
+    }
+
+    // Calculate the total income
+    $yesterdayIncome = $productSum + $salesSum + $financesSum;
+
+    $currencyCode = $this->settingsService->loadSettingValue('currency');
+
+    // Check if the currency code is empty or null, and if so, use a default currency code (e.g., 'USD')
+    if (empty($currencyCode)) {
+        $currencyCode = 'USD'; // Replace with your desired default currency code
+    }
+
+    // Ensure that the currency code is not an empty string
+    if (empty($currencyCode)) {
+        throw new \Exception('Invalid currency code');
+    }
+
+    return Money::$currencyCode($yesterdayIncome);
+}
+
 
     public function loadCountAllRowsInDb()
     {

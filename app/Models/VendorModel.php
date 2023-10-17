@@ -54,8 +54,6 @@ class VendorModel extends Model
                 'billing_address' => $requestedData['billing_address'],
                 'country' => $requestedData['country'],
                 'postal_code' => $requestedData['postal_code'],
-                'fax' => $requestedData['fax'],
-                'description' => $requestedData['description'],
                 'created_at' => now(),
                 'is_active' => true,
                 'admin_id' => $adminId
@@ -74,9 +72,6 @@ class VendorModel extends Model
                 'billing_address' => $requestedData['billing_address'],
                 'country' => $requestedData['country'],
                 'postal_code' => $requestedData['postal_code'],
-                'employees_size' => $requestedData['employees_size'],
-                'fax' => $requestedData['fax'],
-                'description' => $requestedData['description'],
                 'client_id' => $requestedData['client_id'],
                 'is_active' => true,
                 'updated_at' => now()
@@ -117,8 +112,16 @@ class VendorModel extends Model
 
     public function getPaginate()
     {
-        return $this->paginate(SettingsModel::where('key', 'pagination_size')->get()->last()->value);
+        $settings = SettingsModel::where('key', 'pagination_size')->latest('created_at')->first();
+
+        if ($settings && !empty($settings->value)) {
+            return $this->paginate($settings->value);
+        } else {
+            // Provide a default pagination size or handle the case when the value is empty
+            return $this->paginate(10); // You can replace 10 with your desired default pagination size
+        }
     }
+
 
     public function getVendor(int $vendorId)
     {

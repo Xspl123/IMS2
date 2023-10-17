@@ -36,8 +36,8 @@
                                     <th class="text-center">Phone</th>
                                     <th class="text-center">Email address</th>
                                     <th class="text-center">Section</th>
-                                    <th class="text-center">Budget</th>
-                                    <th class="text-center">Status</th>
+                                    {{-- <th class="text-center">Budget</th>
+                                    <th class="text-center">Status</th> --}}
                                     <th class="text-center" style="width:200px">Action</th>
                                 </tr>
                                 </thead>
@@ -48,7 +48,7 @@
                                         <td class="text-center">{{ $value->phone }}</td>
                                         <td class="text-center">{{ $value->email }}</td>
                                         <td class="text-center">{{ $value->section }}</td>
-                                        <td class="text-center">
+                                        {{-- <td class="text-center">
                                             <button type="submit"
                                                     class="btn btn-default">₹ {{ $value->budget }}</button>
                                         </td>
@@ -66,7 +66,7 @@
                                                     <span class="slider"></span>
                                                 </label>
                                             @endif
-                                        </td>
+                                        </td> --}}
                                         <td class="text-right" style="text-align: center">
                                             <div class="btn-group">
                                                 <a class="btn btn-small btn-primary"

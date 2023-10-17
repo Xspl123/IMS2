@@ -40,7 +40,7 @@
                                 {{ Form::label('account', 'Choose Account') }}
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-handshake-o"></i></span>
-                                    {{ Form::select('account', $dataOfAccounts, null, ['class' => 'form-control', 'placeholder' => 'Choose Account']) }}
+                                    {{ Form::select('account', $dataOfAccounts, null, ['class' => 'form-control', 'placeholder' => 'Choose Account','required']) }}
                                 </div>
                             </div>
                         </div>
@@ -51,7 +51,7 @@
                                 {{ Form::label('date', 'Date') }}
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                    {{ Form::date('date', \Carbon\Carbon::now(), ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
+                                    {{ Form::date('date', \Carbon\Carbon::now(), ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText') ,'required']) }}
                                 </div>
                             </div>                            
                         </div>
@@ -61,7 +61,7 @@
                                 {{ Form::label('description', 'Description') }}
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-handshake-o"></i></span>
-                                    {{ Form::text('description', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
+                                    {{ Form::text('description', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText') ,'required']) }}
                                 </div>
                             </div>
                         </div>
@@ -79,7 +79,7 @@
                                 {{ Form::label('amount', 'Amount') }}
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-money"></i></span>
-                                    {{ Form::text('amount', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
+                                    {{ Form::number('amount', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText') ,'required']) }}
                                 </div>
                             </div>
                         </div>
@@ -98,7 +98,7 @@
                                 {{ Form::label('tags', 'Tags') }}
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-handshake-o"></i></span>
-                                    {{ Form::text('tags', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
+                                    {{ Form::text('tags', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText') ,'required']) }}
                                 </div>
                             </div>
                         </div>
@@ -131,7 +131,7 @@
                                 {{ Form::label('ref', 'Ref') }}
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-handshake-o"></i></span>
-                                    {{ Form::text('ref', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
+                                    {{ Form::text('ref', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText') ,'required']) }}
                                 </div>
                             </div>
                         </div>
@@ -144,81 +144,50 @@
                 </div>
             </div>
         </div>
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Include jQuery Validation Plugin -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
 
         <script>
             $(document).ready(function () {
-                //create formValidator object
-                //there are a lot of configuration options that need to be passed,
-                //but this makes it extremely flexibility and doesn't make any assumptions
-                var validator = new formValidator({
-                    //this function adds an error message to a form field
-                    addError: function (field, message) {
-                        //get existing error message field
-                        var error_message_field = $('.error_message', field.parent('.input-group'));
-
-                        //if the error message field doesn't exist yet, add it
-                        if (!error_message_field.length) {
-                            error_message_field = $('<span/>').addClass('error_message');
-                            field.parent('.input-group').append(error_message_field);
-                        }
-
-                        error_message_field.text(message).show(200);
-                        field.addClass('error');
+                // Initialize form validation
+                $('form').validate({
+                    rules: {
+                        // Define validation rules for your form fields
+                        account: {
+                            required: true
+                        },
+                        date: {
+                            required: true,
+                            date: true
+                        },
+                        description: {
+                            required: true
+                        },
+                        // Add rules for other fields
                     },
-                    //this removes an error from a form field
-                    removeError: function (field) {
-                        $('.error_message', field.parent('.input-group')).text('').hide();
-                        field.removeClass('error');
+                    messages: {
+                        // Define custom error messages for your form fields
+                        account: {
+                            required: "The account field is required."
+                        },
+                        date: {
+                            required: "The date field is required.",
+                            date: "The date must be a valid date format."
+                        },
+                        description: {
+                            required: "The description field is required."
+                        },
+                        // Add custom error messages for other fields
                     },
-                    //this is a final callback after failing to validate one or more fields
-                    //it can be used to display a summary message, scroll to the first error, etc.
-                    onErrors: function (errors, event) {
-                        //errors is an array of objects, each containing a 'field' and 'message' parameter
-                    },
-                    //this defines the actual validation rules
-                   
-                });
-
-                //now, we attach events
-
-                //this does validation every time a field loses focus
-                $('form').on('blur', 'input,select', function () {
-                    validator.validateField($(this).attr('name'), 'blur');
-                });
-
-                //this clears errors every time a field gains focus
-                $('form').on('focus', 'input,select', function () {
-                    validator.clearError($(this).attr('name'));
-                });
-
-                //this is for the validate links
-                $('.validate_section').click(function () {
-                    var fields = [];
-                    $('input,select', $(this).closest('.section')).each(function () {
-                        fields.push($(this).attr('name'));
-                    });
-
-                    if (validator.validateFields(fields, 'submit')) {
-                        alert('success');
+                    errorElement: 'span',
+                    errorPlacement: function (error, element) {
+                        // Display error messages next to the form fields
+                        error.addClass('text-danger');
+                        error.insertAfter(element);
                     }
-                    return false;
-                });
-                $('.validate_form').click(function () {
-                    if (!validator.validateFields('submit')) {
-                        return false;
-                    }
-                    return true;
-                });
-
-                //this is for the clear links
-                $('.clear_section').click(function () {
-                    var fields = [];
-                    $('input,select', $(this).closest('.section')).each(function () {
-                        fields.push($(this).attr('name'));
-                    });
-
-                    validator.clearErrors(fields);
-                    return false;
                 });
             });
         </script>

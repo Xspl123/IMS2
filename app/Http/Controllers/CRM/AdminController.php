@@ -55,54 +55,54 @@ class AdminController extends Controller
     }
 
     public function processLoginAdmin(Request $request)
-{
-    // Validate the request data
-    $validator = Validator::make($request->all(), [
-        'email' => 'required|email',
-        'password' => 'required',
-    ]);
+    {
+        // Validate the request data
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-    // Check if the validation fails
-    if ($validator->fails()) {
-        if ($request->expectsJson()) {
-            throw new ValidationException($validator);
+        // Check if the validation fails
+        if ($validator->fails()) {
+            if ($request->expectsJson()) {
+                throw new ValidationException($validator);
+            } else {
+                return redirect('login')->withErrors($validator)->withInput();
+            }
+        }
+
+        // Attempt to authenticate the user
+        if (Auth::attempt($request->only('email', 'password'))) {
+            $user = Auth::user();
+            $token = Str::random(60);
+
+            $user->api_token = $token;
+            $user->save();
+
+            if ($request->expectsJson()) {
+                DB::table('live_agent')->insert([
+                    'user_name' => $user->name, 
+                ]);
+
+                return response()->json([
+                    'message' => 'Login successful',
+                    'token' => $token,
+                ]);
+            } else {
+                return redirect('/');
+            }
         } else {
-            return redirect('login')->withErrors($validator)->withInput();
+            $errorMessage = 'Wrong email or password';
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => $errorMessage,
+                ], Response::HTTP_UNAUTHORIZED);
+            } else {
+                return redirect('login')->with('message-error', $errorMessage);
+            }
         }
     }
-
-    // Attempt to authenticate the user
-    if (Auth::attempt($request->only('email', 'password'))) {
-        $user = Auth::user();
-        $token = Str::random(60);
-
-        $user->api_token = $token;
-        $user->save();
-
-        if ($request->expectsJson()) {
-            DB::table('live_agent')->insert([
-                'user_name' => $user->name, 
-            ]);
-
-            return response()->json([
-                'message' => 'Login successful',
-                'token' => $token,
-            ]);
-        } else {
-            return redirect('/');
-        }
-    } else {
-        $errorMessage = 'Wrong email or password';
-
-        if ($request->expectsJson()) {
-            return response()->json([
-                'message' => $errorMessage,
-            ], Response::HTTP_UNAUTHORIZED);
-        } else {
-            return redirect('login')->with('message-error', $errorMessage);
-        }
-    }
-}
 
     // public function processLoginAdmin(Request $request)
     // {

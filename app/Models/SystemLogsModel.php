@@ -5,7 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use Request;
+use Illuminate\Support\Facades\Request;
 
 class SystemLogsModel extends Model
 {

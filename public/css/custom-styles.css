@@ -17,6 +17,8 @@ body {
     font-size: 18px;
     margin-top: 30px !important;
 }
+/* Footer CSS */
+
 
 input[type="search"] {
     color: #000;
@@ -40,13 +42,15 @@ input[type="search"] {
     width: 100%;
     background:#09192A;
 }
-    footer{
-    
-    bottom: 0px;
-    background-color: #0a72e0;
-    width: 100%;
-    color: white;
-    }
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #333; /* Change the background color as per your design */
+    color: #fff; /* Change the text color as per your design */
+    padding: 10px; /* Adjust padding as per your design */
+}
 #page-wrapper {
     padding: 0px 15px;
     /* height: 100vh; */
@@ -385,6 +389,8 @@ padding-top: 4px;
 }
 .sidebar-collapse > .nav > li {
 	border-bottom: 1px solid rgba(107, 108, 109, 0.19);
+    color: #fff;
+    background: #000;
 }
 ul.nav.nav-second-level.collapse.in {
 background: #da6464;

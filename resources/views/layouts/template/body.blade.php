@@ -16,7 +16,7 @@
         </div>
         <a href="{{ URL::to('sales/showReplaceItem') }}" style="padding: 5px">
             <button class="btn btn-primary">
-            Replacement Product
+            Replacement Item
         </button> </a>
         <ul class="nav navbar-top-links navbar-right">
             <li class="time_date">

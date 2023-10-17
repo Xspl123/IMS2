@@ -67,31 +67,33 @@
                                 </div>
                             </div>
 
-                            <div class="form-group input-row">
-                                {{ Form::label('billing_address', 'Billing address') }}
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-home"></i></span>
-                                    {{ Form::text('billing_address', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
-                                </div>
-                            </div>
-
-                            <div class="form-group input-row">
-                                {{ Form::label('country', 'Country') }}
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-home"></i></span>
-                                    {{ Form::text('country', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
-                                </div>
-                            </div>
+                           
                         </div>
 
                         <div class="col-lg-6">
                             <div class="form-group input-row">
-                                {{ Form::label('postal_code', 'Postal code') }}
+                                {{ Form::label('postal_code', 'Zip') }}
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-address-card"></i></span>
                                     {{ Form::text('postal_code', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
                                 </div></div>
 
+                                <div class="form-group input-row">
+                                    {{ Form::label('billing_address', 'Address') }}
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-home"></i></span>
+                                        {{ Form::text('billing_address', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
+                                    </div>
+                                </div>
+    
+                                <div class="form-group input-row">
+                                    {{ Form::label('country', 'Country') }}
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-home"></i></span>
+                                        {{ Form::text('country', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
+                                    </div>
+                                </div>
+                        </div>
                             {{-- <div class="form-group input-row">
                                 {{ Form::label('employees_size', 'Employee size') }}
                                  <div class="input-group">
@@ -100,12 +102,12 @@
                                   </div> 
                             </div> --}}
 
-                            <div class="form-group input-row">
+                            {{-- <div class="form-group input-row">
                                 {{ Form::label('fax', 'Fax number') }}
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-home"></i></span>
                                     {{ Form::text('fax', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
-                                </div></div>
+                                </div></div> --}}
 
                             {{-- <div class="form-group input-row">
                                 {{ Form::label('client_id', 'Assign client') }}
@@ -115,10 +117,10 @@
                                 </div>
                             </div> --}}
 
-                            <div class="form-group input-row">
+                            {{-- <div class="form-group input-row">
                                 {{ Form::label('description', 'Description') }}
                                 {{ Form::textarea('description', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
-                                </div>
+                            </div> --}}
 
                         </div>
 
@@ -236,27 +238,27 @@
                         //         }
                         //     }
                         // },
-                        'fax': {
-                            'field': $('input[name=fax]'),
-                            'validate': function(field, event) {
-                                if(!field.val()) {
-                                    throw "A fax is required.";
-                                }
+                        // 'fax': {
+                        //     'field': $('input[name=fax]'),
+                        //     'validate': function(field, event) {
+                        //         if(!field.val()) {
+                        //             throw "A fax is required.";
+                        //         }
 
-                                var fax_pattern = /[0-9]$/i;
-                                if (!fax_pattern.test(field.val())) {
-                                    throw "Please enter a valid fax number.";
-                                }
-                            }
-                        },
-                        'description': {
-                            'field': $('textarea[name=description]'),
-                            'validate': function(field, event) {
-                                if(!field.val()) {
-                                    throw "A description is required.";
-                                }
-                            }
-                        },
+                        //         var fax_pattern = /[0-9]$/i;
+                        //         if (!fax_pattern.test(field.val())) {
+                        //             throw "Please enter a valid fax number.";
+                        //         }
+                        //     }
+                        // },
+                        // 'description': {
+                        //     'field': $('textarea[name=description]'),
+                        //     'validate': function(field, event) {
+                        //         if(!field.val()) {
+                        //             throw "A description is required.";
+                        //         }
+                        //     }
+                        // },
                         //this demonstrates more than one error message
                         //and handling more than one event
                         'phone': {

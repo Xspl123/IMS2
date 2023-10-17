@@ -28,18 +28,20 @@ class ProductStoreRequest extends FormRequest
             'barcode' => 'nullable',
             'name' => 'required|string',
             'description' => 'nullable',
-            'brand_name' => 'required|string|unique:products',
-            'count' => 'required|integer',
+            'brand_name' => 'nullable',
             'price' => 'required|integer',
-            'rented' => 'nullable|string',
-            'purchase' => 'nullable|string',
             'rent_start_date' => 'nullable',
             'rent_end_date' => 'nullable',
             'price_with_gst' => 'nullable',
             "gstAmount"  => 'nullable',
-            'vendor_id' => 'nullable',
+            'vendor_id' => 'required',
             'gst_rate' => 'nullable',
             'total_amount' => 'nullable',
+            'product_serial_no'=> 'nullable',
+            'catgory_name' => 'nullable',
+            'product_serial_no',
+            'product_type' => 'nullable',
+            
         ];
         
     }

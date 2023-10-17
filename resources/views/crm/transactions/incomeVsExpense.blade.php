@@ -29,7 +29,6 @@
                 </tr>
             @endif
         @endforeach
-             
         </tbody>
         <tfoot>
             <tr>
@@ -41,7 +40,6 @@
             </tr>
         </tfoot>
     </table>
-   
     <canvas id="comparisonChart" width="300" height="100"></canvas>
 
 </div>

@@ -45,9 +45,16 @@
             width: 100%;
             height: 100%;
             z-index: 9999;
-            @if(\App\Models\SettingsModel::where('key', 'loading_circle')->get()->last()->value)
-                background: url({{ asset("images/loader.gif") }}) center no-repeat #fff;
+                    @if($settings = \App\Models\SettingsModel::where('key', 'loading_circle')->latest('created_at')->first())
+            @if(!empty($settings->value))
+                <link rel="shortcut icon" type="image/png" href="{{ asset('/images/logo-color.jpg') }}"/>
+            @else
+                <!-- Handle the case when the value is empty -->
             @endif
+        @else
+            <!-- Handle the case when the settings object doesn't exist -->
+        @endif
+
         }
     </style>
     <script>

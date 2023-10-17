@@ -96,31 +96,6 @@
             </div>
     </div>
 </div> 
-{{-- <div class="login-page">
-    <div class="d-none d-xl-flex align-items-center justify-content-center"
-                        style="height: calc(100vh - 127px);">
-                        <img src="{{asset('images/5858333.webp')}}" alt="" class="img-fluid" width="800">
-                    </div> 
-    <div style="text-align: center;color:white">
-        <h1>VERT-AGE</h1>
-        <h4 class="small-text">Inventory management system</h4></div>
-    <div class="form">
-        @if(Session::has('message-error'))
-            <div class="alert alert-danger">
-                <strong>Danger!</strong> {{ Session::get('message-error') }}
-            </div>
-            @elseif(Session::has('message-success'))
-            <div class="alert alert-success">
-                <strong>Success!</strong> {{ Session::get('message-success') }}
-            </div>
-        @endif
-        <form method="POST" action="{{ route('login/process') }}" class="login-form">
-            {{ csrf_field() }}
-            <input id="email" type="email" name="email" placeholder="Write your email here ..." value=""/>
-            <input id="password" type="password" name="password" placeholder="Write your password here ..." value=""/>
-            <button>login</button>
-        </form>
-    </div>
-</div> --}}
+    
 </body>
 </html>

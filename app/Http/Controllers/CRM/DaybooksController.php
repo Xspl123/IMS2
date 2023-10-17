@@ -9,7 +9,7 @@ use App\Http\Requests\DaybookUpdateRequest;
 use App\Services\CompaniesService;
 use App\Services\DaybooksService;
 use App\Services\SystemLogService;
-use View;
+use Illuminate\Support\Facades\View;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -76,21 +76,104 @@ class DaybooksController extends Controller
 
     public function processListOfDaybooks()
     {
-        $sumexpense = DaybooksModel::where('type', 'Expense')->sum('dr');
-        $sumIncome = DaybooksModel::where('type', 'Income')->sum('cr');
-        $latestBalance = DB::table('daybooks')->latest('created_at')->value('bal');
+        // Calculate total expenses for different time periods
+        $adminId = $this->getAdminId();
+        $totalExpenseDayWise = $this->calculateExpensesDayWise();
+        $totalExpenseWeekWise = $this->calculateExpensesWeekWise();
+        $totalExpenseMonthWise = $this->calculateExpensesMonthWise();
 
-        return View::make('crm.daybooks.index')->with(
-            [
-                
-                'daybooksPaginate' => $this->daybooksService->loadPagination(),
-                'sumIncome' =>$sumIncome,
-                'sumexpense'=>$sumexpense,
-                'latestBalance'=>$latestBalance
-            ]
-        );
+        // Calculate average expenses for different time periods
+        $averageExpenseDayWise = calculateAverage($totalExpenseDayWise, $this->countExpenses('day'));
+        $averageExpenseWeekWise = calculateAverage($totalExpenseWeekWise, $this->countExpenses('week'));
+        $averageExpenseMonthWise = calculateAverage($totalExpenseMonthWise, $this->countExpenses('month'));
+
+        // Calculate expenses for the last three months using the helper method
+        $today = Carbon::now();
+        $threeMonthsAgo = clone $today;
+        $threeMonthsAgo->subMonths(3);
+        $totalExpenseLastThreeMonths = calculateExpensesBetweenDates($threeMonthsAgo, $today);
+
+        // Calculate expenses for the last week
+        $startDateLastWeek = Carbon::now()->subWeek()->startOfWeek();
+        $endDateLastWeek = Carbon::now()->subWeek()->endOfWeek();
+        $totalExpenseLastWeek = DaybooksModel::where('type', 'Expense')
+            ->whereBetween('created_at', [$startDateLastWeek, $endDateLastWeek])
+            ->sum('dr');
+
+        // Calculate expenses for the last month
+        $startDateLastMonth = Carbon::now()->subMonth()->startOfMonth();
+        $endDateLastMonth = Carbon::now()->subMonth()->endOfMonth();
+        $totalExpenseLastMonth = DaybooksModel::where('type', 'Expense')
+            ->whereBetween('created_at', [$startDateLastMonth, $endDateLastMonth])
+            ->sum('dr');
+
+        // Calculate average expenses for the last week and last month
+        $daysInLastWeek = $startDateLastWeek->diffInDays($endDateLastWeek) + 1;
+        $averageExpenseLastWeek = $totalExpenseLastWeek / $daysInLastWeek;
+
+        $daysInLastMonth = $startDateLastMonth->diffInDays($endDateLastMonth) + 1;
+        $averageExpenseLastMonth = $totalExpenseLastMonth / $daysInLastMonth;
+
+        // Initialize default values for max and min expenses
+        $maxExpenseLastThreeMonths = null;
+        $minExpenseLastThreeMonths = null;
+
+        // Check if $totalExpenseLastThreeMonths is an array and not empty
+        if (is_array($totalExpenseLastThreeMonths) && count($totalExpenseLastThreeMonths) > 0) {
+            // Find the maximum and minimum expenses for the last three months
+            $maxExpenseLastThreeMonths = max($totalExpenseLastThreeMonths);
+            $minExpenseLastThreeMonths = min($totalExpenseLastThreeMonths);
+        }
+
+        // Retrieve the required data
+        $daybooksPaginate = $this->daybooksService->loadPagination();
+        $sumExpense = DaybooksModel::where('type', 'Expense')->sum('dr');
+        $latestBalance = DB::table('daybooks')->latest('created_at')->value('dr');
+
+        return view('crm.daybooks.index', compact(
+            'daybooksPaginate',
+            'sumExpense',
+            'latestBalance',
+            'totalExpenseDayWise',
+            'totalExpenseWeekWise',
+            'totalExpenseMonthWise',
+            'averageExpenseDayWise',
+            'averageExpenseWeekWise',
+            'averageExpenseMonthWise',
+            'totalExpenseLastThreeMonths',
+            'maxExpenseLastThreeMonths',
+            'minExpenseLastThreeMonths',
+            'totalExpenseLastWeek',
+            'totalExpenseLastMonth',
+            'averageExpenseLastWeek',
+            'averageExpenseLastMonth' 
+        ));
+    }
+    
+    
+
+    private function countExpenses($period)
+    {
+        switch ($period) {
+            case 'day':
+                return DaybooksModel::where('type', 'Expense')
+                    ->whereDate('created_at', Carbon::today())
+                    ->count();
+            case 'week':
+                return DaybooksModel::where('type', 'Expense')
+                    ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+                    ->count();
+            case 'month':
+                return DaybooksModel::where('type', 'Expense')
+                    ->whereYear('created_at', Carbon::now()->year)
+                    ->whereMonth('created_at', Carbon::now()->month)
+                    ->count();
+            default:
+                return 0;
+        }
     }
 
+    
     public function processRenderUpdateForm($daybookId)
     {
         $categoryLimit = 6;
@@ -205,65 +288,80 @@ class DaybooksController extends Controller
 
     public function processStoreExpense(DayBooksStoreRequest $request)
     {
-
-        
         $wallet_amt = $request->wallet_amt;
         $amount = $request->amount;
-    
-        // Use Laravel validation to check if the amount is greater than the wallet amount
         $validator = Validator::make($request->all(), [
-            'amount' => 'required|numeric|min:0.01', // Adjust the min value as needed
+            'amount' => 'required|numeric|min:0.01',
         ]);
-    
+
         if ($validator->fails() || $amount > $wallet_amt) {
-            // Validation fails or amount is greater than wallet amount
             $errorMessage = $amount > $wallet_amt ? 'Wallet balance is insufficient' : 'Invalid Amount';
-    
+
             return redirect()->back()
                 ->withErrors($validator)
                 ->with('message_danger', $errorMessage);
-        } 
-        else{
+        } else {
             $walletupdate = $wallet_amt - $amount;
 
-        // Validate the incoming request data using the DayBooksStoreRequest rules
-        $daybookData = $request->validated();
-        // Get the admin ID
-        $adminId = $this->getAdminId();
-        DB::table('wallet')->where('id',$adminId)->update(['amount'=>$walletupdate]);
-        // Fetch the previous "bal" value from the database based on the user or account ID
-        $previousBalValue = DaybooksModel::where('admin_id', $adminId)
-            ->orderBy('created_at', 'desc')
-            ->value('bal');
-        // If there is no previous "bal" value, set it to 0
-        if ($previousBalValue === null) {
-            $previousBalValue = 0;
+            $daybookData = $request->validated();
+
+            $adminId = $this->getAdminId();
+            DB::table('wallet')->where('admin_id', $adminId)->update(['amount' => $walletupdate]);
+
+            $previousBalValue = DaybooksModel::where('admin_id', $adminId)
+                ->orderBy('created_at', 'desc')
+                ->value('bal');
+            if ($previousBalValue === null) {
+                $previousBalValue = 0;
+            }
+
+            $daybookData['type'] = 'Expense';
+            $daybookData['dr'] = $daybookData['amount'];
+
+            $storedDaybookId = $this->daybooksService->execute($daybookData, $adminId);
+
+            if ($storedDaybookId) {
+                $message = 'Daybook has been added with ID ' . $storedDaybookId . ' - ' . json_encode($validator);
+                $this->systemLogsService->loadInsertSystemLogs($message, $this->systemLogsService::successCode, $this->getAdminId());
+                // Calculate expenses for different time periods
+                $totalExpenseDayWise = $this->calculateExpensesDayWise();
+                $totalExpenseWeekWise = $this->calculateExpensesWeekWise();
+                $totalExpenseMonthWise = $this->calculateExpensesMonthWise();
+
+                return redirect()
+                    ->route('daybooks')
+                    ->with('message_success', $this->getMessage('messages.SuccessDaybooksStore'))
+                    ->with('totalExpenseDayWise', $totalExpenseDayWise)
+                    ->with('totalExpenseWeekWise', $totalExpenseWeekWise)
+                    ->with('totalExpenseMonthWise', $totalExpenseMonthWise);
+            } else {
+                return redirect()->back()->with('message_danger', $this->getMessage('messages.ErrorDaybooksStore'));
+            }
         }
-        
-        // Set the "type" to 'Expense'
-        $daybookData['type'] = 'Expense';
-        
-        $daybookData['dr'] = $daybookData['amount'];
-        // Calculate the updated balance (bal) by subtracting the new "dr" value from the previous "bal" value
-        $updatedBalance = $previousBalValue - $daybookData['amount'];
-        
-        // Save the updated balance in the "bal" field
-        $daybookData['bal'] = $updatedBalance;
-        
-        // Store the transaction in the database using the daybooksService
-        $storedDaybookId = $this->daybooksService->execute($daybookData, $adminId);
-        
-        // Check if the transaction was successfully stored
-        if ($storedDaybookId) {
-            // Log the success and redirect with a success message
-            $this->systemLogsService->loadInsertSystemLogs('DaybooksModel has been added with id: ' . $storedDaybookId, $this->systemLogsService::successCode, $adminId);
-            return redirect()->route('daybooks')->with('message_success', $this->getMessage('messages.SuccessDaybooksStore'));
-        } else {
-            // If storing fails, redirect back with an error message
-            return redirect()->back()->with('message_danger', $this->getMessage('messages.ErrorDaybooksStore'));
-        }
-       }
     }
+
+    private function calculateExpensesDayWise()
+    {
+        return DaybooksModel::where('type', 'Expense')
+            ->whereDate('created_at', Carbon::today())
+            ->sum('amount');
+    }
+    
+    private function calculateExpensesWeekWise()
+    {
+        return DaybooksModel::where('type', 'Expense')
+            ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+            ->sum('amount');
+    }
+    
+    private function calculateExpensesMonthWise()
+    {
+        return DaybooksModel::where('type', 'Expense')
+            ->whereYear('created_at', Carbon::now()->year)
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->sum('amount');
+    }
+    
     
     public function processUpdateDaybook(DaybookUpdateRequest $request, $daybookId)
     {

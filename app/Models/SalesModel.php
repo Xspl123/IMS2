@@ -14,12 +14,21 @@ class SalesModel extends Model
     protected $fillable = [
         'name',
         'status',
+        'product_id',
         'replace_remark',
         'replacement_with',
         'replacement_to',
         'sn',
         'replacement_product_sn',
-        'approved_by'
+        'replacement_product_vendor',
+        'defulty_product_name',
+        'defulty_product_sn',
+        'defulty_product_vendor',
+        'defulty_product_remark',
+        'approved_by',
+        'product_brand_id',
+        'brand_name',
+        'cat_id'
         
     ];
 
@@ -42,6 +51,12 @@ class SalesModel extends Model
         return $this->belongsTo(ProductsModel::class, 'product_id');
     }
 
+
+    public function category()
+    {
+        return $this->belongsTo(ProductCategory::class, 'cat_id');
+    }
+
     // public function storeSale(array $requestedData, int $adminId) : int
     // {
     //     return $this->insertGetId(
@@ -61,6 +76,7 @@ class SalesModel extends Model
 
     public function storeSale(array $requestedData, int $adminId): int
     {
+
         $now = Carbon::now();
         $requestedData['admin_id'] = $adminId; // Add admin_id to the requested data
     
@@ -73,18 +89,31 @@ class SalesModel extends Model
     }
     
 
-    public function updateSale(int $saleId, array $requestedData) : int
+    // public function updateSale(int $saleId, array $requestedData) : int
+    // {
+        
+    //     return $this->where('id', '=', $saleId)->update(
+    //         [
+    //             'name' => $requestedData['name'],
+    //             'date_of_payment' => $requestedData['date_of_payment'],
+    //             'product_id' => $requestedData['product_id'],
+    //             'replacement_product_vendor'=> $requestedData['replacement_product_vendor'],
+    //             'defulty_product_vendor'=> $requestedData['defulty_product_vendor'],
+    //             'updated_at' => now()
+    //         ]
+    //     );
+    // }
+
+    public function updateSale(int $saleId, array $requestedData): int
     {
-        return $this->where('id', '=', $saleId)->update(
-            [
-                'name' => $requestedData['name'],
-                'quantity' => $requestedData['quantity'],
-                'date_of_payment' => $requestedData['date_of_payment'],
-                'product_id' => $requestedData['product_id'],
-                'updated_at' => now()
-            ]
-        );
+        dd($requestedData->all());
+        // Add 'updated_at' timestamp
+        $requestedData['updated_at'] = now();
+
+        // Perform the database update
+        return $this->where('id', '=', $saleId)->update($requestedData);
     }
+
 
     public function setActive(int $saleId, int $activeType) : int
     {
@@ -103,7 +132,14 @@ class SalesModel extends Model
 
     public function getPaginate()
     {
-        return $this->paginate(SettingsModel::where('key', 'pagination_size')->get()->last()->value);
+        $settings = SettingsModel::where('key', 'pagination_size')->latest('created_at')->first();
+
+        if ($settings && !empty($settings->value)) {
+            return $this->paginate($settings->value);
+        } else {
+            // Provide a default pagination size or handle the case when the value is empty
+            return $this->paginate(10); // You can replace 10 with your desired default pagination size
+        }
     }
 
     public function getSalesSortedByCreatedAt()

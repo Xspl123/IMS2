@@ -7,7 +7,7 @@
 @section('lyric', 'lorem ipsum')
 
 @section('content')
-    @if(session()->has('message_success'))
+    @if (session()->has('message_success'))
         <div class="alert alert-success">
             <strong>Well done!</strong> {{ session()->get('message_success') }}
         </div>
@@ -16,7 +16,7 @@
             <strong>Danger!</strong> {{ session()->get('message_danger') }}
         </div>
     @endif
-   
+
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
@@ -26,7 +26,7 @@
                             {{ Form::model($sale, ['route' => ['processUpdateSale', $sale->id], 'method' => 'PUT']) }}
                             <div class="form-group input-row">
                                 {{ Form::label('name', 'Name') }}
-                                {{ Form::text('name', null, ['class' => 'form-control' ,'readonly']) }}
+                                {{ Form::text('name', null, ['class' => 'form-control', 'readonly']) }}
                             </div>
                         </div>
 
@@ -39,7 +39,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        {{-- <div class="col-lg-6">
                             <div class="form-group input-row">
                                 <div class="form-group input-row">
                                     {{ Form::label('quantity', 'Quantity') }}
@@ -49,7 +49,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col-lg-6">
                             <div class="form-group">
                                 {{ Form::label('date_of_payment', 'Date of payment') }}
@@ -74,30 +74,74 @@
                                 {{ Form::label('status', 'Status') }}
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-flag"></i></span>
-                                    {{ Form::select('status', [
-                                        'ok' => 'Ok',
-                                        'defected' => 'Defected',
-                                        'replacement' => 'Replacement',
-                                    ], null, ['class' => 'form-control', 'id' => 'statusSelect']) }}
+                                    {{ Form::select(
+                                        'status',
+                                        [
+                                            'ok' => 'Ok',
+                                            'defected' => 'Defected',
+                                            'replacement' => 'Replacement',
+                                        ],
+                                        null,
+                                        ['class' => 'form-control', 'id' => 'statusSelect'],
+                                    ) }}
                                 </div>
                             </div>
                         </div>
-                        
-                         <div class="col-lg-6" id="approved_by" style="display: none;">
+
+                        <div class="col-lg-6" id="approved_by" style="display: none;">
                             <div class="form-group">
                                 {{ Form::label('approved_by', 'Approved By') }}
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-exclamation-circle"></i></span>
-                                    {{ Form::text('approved_by', $auth, ['class' => 'form-control' ,'readonly', 'placeholder' => 'Write product issues here']) }}
+                                    {{ Form::text('approved_by', $auth, ['class' => 'form-control', 'readonly', 'placeholder' => 'Write product issues here']) }}
                                 </div>
                             </div>
                         </div>
 
 
-                        
+                        <div class="col-lg-6" id="defulty_product_name" style="display: none;">
+                            <div class="form-group">
+                                {{ Form::label('defulty_product_name', 'Defulty Product Item') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-comment"></i></span>
+                                    {{ Form::text('defulty_product_name', null, ['class' => 'form-control', 'placeholder' => 'Write product details here']) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6" id="defulty_product_sn" style="display: none;">
+                            <div class="form-group">
+                                {{ Form::label('defulty_product_sn', 'Defulty Product SN') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-comment"></i></span>
+                                    {{ Form::text('defulty_product_sn', null, ['class' => 'form-control', 'placeholder' => 'Write product details here']) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6" id="defulty_product_vendor" style="display: none;">
+                            <div class="form-group">
+                                {{ Form::label('defulty_product_vendor', 'Defulty Product Vendor') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-exclamation-circle"></i></span>
+                                    {{ Form::select('defulty_product_vendor', $dataOfVendors, null, ['class' => 'form-control', 'id' => 'defectedInput', 'placeholder' => 'Select a Vendor']) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6" id="defulty_product_remark" style="display: none;">
+                            <div class="form-group">
+                                {{ Form::label('defulty_product_remark', 'Defulty Product Remark') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-comment"></i></span>
+                                    {{ Form::text('defulty_product_remark', null, ['class' => 'form-control', 'placeholder' => 'Write product issues hear']) }}
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="col-lg-6" id="replacementWith" style="display: none;">
                             <div class="form-group">
-                                {{ Form::label('replacement_with', 'Replacement with') }}
+                                {{ Form::label('replacement_with', 'Replacement Product Item') }}
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-exclamation-circle"></i></span>
                                     {{ Form::select('replacement_with', $dataWithPluckOfProducts, null, ['class' => 'form-control', 'id' => 'defectedInput', 'placeholder' => 'Select a Product']) }}
@@ -107,39 +151,46 @@
 
                         <div class="col-lg-6" id="replacement_product_sn" style="display: none;">
                             <div class="form-group">
-                                {{ Form::label('replacement_product_sn', 'Replacement Serial') }}
+                                {{ Form::label('replacement_product_sn', 'Replacement Product SN') }}
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-comment"></i></span>
                                     {{ Form::text('replacement_product_sn', null, ['class' => 'form-control', 'placeholder' => 'Write product issues here']) }}
                                 </div>
                             </div>
                         </div>
-                        
+
+                        <div class="col-lg-6" id="replacement_product_vendor" style="display: none;">
+                            <div class="form-group">
+                                {{ Form::label('replacement_to', 'Replacement Product Vendor') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-exclamation-circle"></i></span>
+                                    {{ Form::select('replacement_product_vendor', $dataOfVendors, null, ['class' => 'form-control', 'id' => 'defectedInput', 'placeholder' => 'Select a Vendor']) }}
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="col-lg-6" id="replacementTo" style="display: none;">
                             <div class="form-group">
-                                {{ Form::label('replacement_to', 'Replacement To') }}
+                                {{ Form::label('replacement_to', 'Replacement Product Customer') }}
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-exclamation-circle"></i></span>
-                                    {{ Form::select('replacement_to', $dataOfCustomer, null, ['class' => 'form-control', 'id' => 'defectedInput', 'placeholder' => 'Select a Customer']) }}
+                                    {{ Form::select('replacement_to', $dataOfCustomer, null, ['class' => 'form-control', 'id' => 'defectedInput', 'placeholder' => 'Select a Vendor']) }}
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="col-lg-6" id="replacementRemarkInput" style="display: none;">
                             <div class="form-group">
-                                {{ Form::label('replace_remark', 'Replacement Remark') }}
+                                {{ Form::label('replace_remark', 'Replacement Product Remark') }}
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-comment"></i></span>
-                                    {{ Form::text('replace_remark', null, ['class' => 'form-control','placeholder' => 'Write product issues hear']) }}
+                                    {{ Form::text('replace_remark', null, ['class' => 'form-control', 'placeholder' => 'Write product issues hear']) }}
                                 </div>
                             </div>
                         </div>
-                        
-                        <script>
-                           
-                        </script>
-                        
+
+                        <script></script>
+
 
                         <div class="col-lg-6">
                         </div>
@@ -155,13 +206,13 @@
         </div>
     </div>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             //create formValidator object
             //there are a lot of configuration options that need to be passed,
             //but this makes it extremely flexibility and doesn't make any assumptions
             var validator = new formValidator({
                 //this function adds an error message to a form field
-                addError: function (field, message) {
+                addError: function(field, message) {
                     //get existing error message field
                     var error_message_field = $('.error_message', field.parent('.input-row'));
 
@@ -175,13 +226,13 @@
                     field.addClass('error');
                 },
                 //this removes an error from a form field
-                removeError: function (field) {
+                removeError: function(field) {
                     $('.error_message', field.parent('.input-row')).text('').hide();
                     field.removeClass('error');
                 },
                 //this is a final callback after failing to validate one or more fields
                 //it can be used to display a summary message, scroll to the first error, etc.
-                onErrors: function (errors, event) {
+                onErrors: function(errors, event) {
                     //errors is an array of objects, each containing a 'field' and 'message' parameter
                 },
                 //this defines the actual validation rules
@@ -189,7 +240,7 @@
                     //this is a basic non-empty check
                     'name': {
                         'field': $('input[name=name]'),
-                        'validate': function (field, event) {
+                        'validate': function(field, event) {
                             if (!field.val()) {
                                 throw "A name is required.";
                             }
@@ -201,19 +252,19 @@
             //now, we attach events
 
             //this does validation every time a field loses focus
-            $('form').on('blur', 'input,select', function () {
+            $('form').on('blur', 'input,select', function() {
                 validator.validateField($(this).attr('name'), 'blur');
             });
 
             //this clears errors every time a field gains focus
-            $('form').on('focus', 'input,select', function () {
+            $('form').on('focus', 'input,select', function() {
                 validator.clearError($(this).attr('name'));
             });
 
             //this is for the validate links
-            $('.validate_section').click(function () {
+            $('.validate_section').click(function() {
                 var fields = [];
-                $('input,select', $(this).closest('.section')).each(function () {
+                $('input,select', $(this).closest('.section')).each(function() {
                     fields.push($(this).attr('name'));
                 });
 
@@ -222,7 +273,7 @@
                 }
                 return false;
             });
-            $('.validate_form').click(function () {
+            $('.validate_form').click(function() {
                 if (!validator.validateFields('submit')) {
                     return false;
                 }
@@ -230,9 +281,9 @@
             });
 
             //this is for the clear links
-            $('.clear_section').click(function () {
+            $('.clear_section').click(function() {
                 var fields = [];
-                $('input,select', $(this).closest('.section')).each(function () {
+                $('input,select', $(this).closest('.section')).each(function() {
                     fields.push($(this).attr('name'));
                 });
 
@@ -240,8 +291,8 @@
                 return false;
             });
         });
- 
-        $('#statusSelect').change(function () {
+
+        $('#statusSelect').change(function() {
             var selectedStatus = $(this).val();
 
             // Hide both input fields initially
@@ -249,7 +300,12 @@
             $('#replacementTo').hide();
             $('#replacementRemarkInput').hide();
             $('#replacement_product_sn').hide();
+            $('#replacement_product_vendor').hide();
             $('#approved_by').hide();
+            $('#defulty_product_name').hide();
+            $('#defulty_product_sn').hide();
+            $('#defulty_product_vendor').hide();
+            $('#defulty_product_remark').hide();
 
 
             // Show/hide input fields based on selected option
@@ -258,22 +314,25 @@
                 $('#replacementTo').show();
                 $('#replacementRemarkInput').show();
                 $('#replacement_product_sn').show();
+                $('#replacement_product_vendor').show();
                 $('#approved_by').show();
+                $('#defulty_product_name').show();
+                $('#defulty_product_sn').show();
+                $('#defulty_product_vendor').show();
+                $('#defulty_product_remark').show();
             }
 
-            $('#productSelect').change(function () {
-            var selectedProductId = $(this).val();
+            $('#productSelect').change(function() {
+                var selectedProductId = $(this).val();
 
-            // Fetch the product name based on the selected product ID (dataWithPluckOfProducts is assumed to be an object mapping product IDs to product names)
-            var productName = dataWithPluckOfProducts[selectedProductId];
+                // Fetch the product name based on the selected product ID (dataWithPluckOfProducts is assumed to be an object mapping product IDs to product names)
+                var productName = dataWithPluckOfProducts[selectedProductId];
 
-            // Update the input field with the product name
-            $('#defectedInput').val(productName);
+                // Update the input field with the product name
+                $('#defectedInput').val(productName);
+            });
+
+
         });
-    
-          
-});
-
-        
     </script>
 @endsection

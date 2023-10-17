@@ -26,18 +26,26 @@ class SaleUpdateRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'quantity' => 'required|integer',
             'product_id' => 'required|integer',
             'date_of_payment' => 'required',
             'price' => 'required',
             'total_amount' => 'nullable',
+            'product_brand_id'=> 'nullable',
             'gst_rate' => 'nullable',
             'status' => 'required|in:ok,defected,replacement',
             'replace_remark' => 'nullable',
             'replacement_with'=> 'nullable',
             'replacement_to' => 'nullable',
             'replacement_product_sn' => 'nullable',
-            'approved_by' => 'nullable'
+            'approved_by' => 'nullable',
+            'replacement_product_vendor' => 'nullable',
+            'defulty_product_name' => 'nullable',
+            'defulty_product_sn' => 'nullable',
+            'defulty_product_vendor' => 'nullable',
+            'defulty_product_remark' => 'nullable',
+            'challan_no' => 'nullable',
+            'brand_name' => 'nullable',
+            'cat_id' => 'nullable',
 
         ];
     }

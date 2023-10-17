@@ -19,15 +19,17 @@ class SettingsModel extends Model
 
     public static function getSettingValue(string $key)
     {
-        $query = self::where('key', $key)->get()->last();
-
-        if($query) {
+        $query = self::where('key', $key)->latest('created_at')->first();
+    
+        if ($query) {
             return $query->value;
         } else {
-            new \Exception('invalid key');
+            // Return a default value or an empty string, for example
+            return ''; // You can modify this to return an appropriate default value
         }
     }
-
+    
+    
     public function getAllSettings()
     {
         return $this->all()->toArray();

@@ -55,7 +55,8 @@ class ClientController extends Controller
         $storedClientId = $this->clientService->execute($request->validated(), $this->getAdminId());
 
         if ($storedClientId) {
-            $this->systemLogsService->loadInsertSystemLogs('ClientsModel has been add with id: ' . $storedClientId, $this->systemLogsService::successCode, $this->getAdminId());
+            $message = 'Client has been added with ID ' . $storedClientId . ' - ' . json_encode($request->validated());
+            $this->systemLogsService->loadInsertSystemLogs($message, $this->systemLogsService::successCode, $this->getAdminId());
             return Redirect::to('clients')->with('message_success', $this->getMessage('messages.SuccessClientStore'));
         } else {
             return Redirect::back()->with('message_success', $this->getMessage('messages.ErrorClientStore'));

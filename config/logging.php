@@ -41,6 +41,11 @@ return [
             'ignore_exceptions' => false,
         ],
 
+        'custom_sales_log' => [
+            'driver' => 'database',
+            'table' => 'logs',
+        ],
+
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),

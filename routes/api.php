@@ -19,7 +19,7 @@ use App\Http\Controllers\DecryptionController;
 
 Route::post('/register', [AdminController::class, 'register']);
 Route::post('/login', [DecryptionController::class, 'login']);
-Route::get('/getBarcodeValue', [DecryptionController::class, 'getBarcodeValue']);
+// Route::get('/getBarcodeValue', [DecryptionController::class, 'getBarcodeValue']);
 
 
 
