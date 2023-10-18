@@ -27,166 +27,126 @@
                                 {{ Form::label('barcode', 'Barcode') }}
                                 {{ Form::text('barcode', null, ['class' => 'form-control', 'readonly' => 'readonly', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
                             </div>
-                            
+
                             <div class="form-group input-row">
                                 {{ Form::label('name', 'Product Name') }}
                                 {{ Form::text('name', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
                             </div>
+
                             <div class="form-group input-row">
                                 {{ Form::label('description', 'Product Description') }}
                                 {{ Form::text('description', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
                             </div>
-                            <div class="form-group input-row">
-                                {{ Form::label('brand_name', 'Brand Name') }}
-                                {{ Form::text('brand_name', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
+
+                            <div class="form-group">
+                                {{ Form::label('vendor_id', 'Assign Vendor') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-handshake-o"></i></span>
+                                    {{ Form::select('vendor_id', $dataOfVendors, null, ['class' => 'form-control', 'required', 'placeholder' => 'Select a Vendor Name']) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                {{ Form::label('price_with_gst', 'Product Price (Incl. GST):  ') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        {{ Form::text('price_with_gst', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText'), 'name' => 'price_with_gst', 'readonly', 'id' => 'price_with_gst']) }}
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="form-group input-row">
-                                {{ Form::label('count', 'Quantity') }}
-                                {{ Form::text('count', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
-                            </div>
-                            <div class="form-group input-row">
-                                {{ Form::label('price', 'Price') }}
-                                {{ Form::text('price', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
+
+                        <div class="form-group">
+                            {{ Form::label('product_category_id', 'Product Category') }}
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-handshake-o"></i></span>
+                                {{ Form::select('product_category_id', $product_cat, null, ['class' => 'form-control', 'required', 'placeholder' => 'Select a Category Name']) }}
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="form-group input-row">
-                                {{ Form::label('rented', 'Rented Product') }}
-                                {{ Form::text('rented', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
-                            </div>
-                            <div class="form-group input-row">
-                                {{ Form::label('purchase', 'Purchase Product') }}
-                                {{ Form::text('purchase', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
-                            </div>
-                            
-                            <div class="form-group input-row">
-                                {{ Form::label('rent_start_date', 'Rent Start Date') }}
-                                {{ Form::text('rent_start_date', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
-                            </div>
-                            <div class="form-group input-row">
-                                {{ Form::label('rent_end_date', 'Rent End Date') }}
-                                {{ Form::text('rent_end_date', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
+
+                        <div class="form-group">
+                            {{ Form::label('product_serial_no', 'Product Serial Number') }}
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    {{ Form::text('product_serial_no', null, ['class' => 'form-control', 'placeholder' => 'Enter product serial number', 'id' => 'barcode']) }}
+                                </span>
                             </div>
                         </div>
-                        <div class="col-lg-12 validate_form">
-                            {{ Form::submit('Edit product', ['class' => 'btn btn-primary']) }}
+
+                        <div class="form-group">
+                            {{ Form::label('price', 'Product Base Price') }}
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    {{ Form::number('price', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText'), 'name' => 'price']) }}
+                                </span>
+                            </div>
                         </div>
-                    {{ Form::close() }}
+
+                        <div class="form-group">
+                            {{ Form::label('gstAmount', 'GST Amount') }}
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    {{ Form::number('gstAmount', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText'), 'name' => 'gstAmount', 'readonly', 'id' => 'gstAmount']) }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 validate_form">
+                        {{ Form::submit('Edit product', ['class' => 'btn btn-primary']) }}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script>
-        $(document).ready(function () {
-            //create formValidator object
-            //there are a lot of configuration options that need to be passed,
-            //but this makes it extremely flexibility and doesn't make any assumptions
-            var validator = new formValidator({
-                //this function adds an error message to a form field
-                addError: function (field, message) {
-                    //get existing error message field
-                    var error_message_field = $('.error_message', field.parent('.input-row'));
-
-                    //if the error message field doesn't exist yet, add it
-                    if (!error_message_field.length) {
-                        error_message_field = $('<span/>').addClass('error_message');
-                        field.parent('.input-row').append(error_message_field);
-                    }
-
-                    error_message_field.text(message).show(200);
-                    field.addClass('error');
-                },
-                //this removes an error from a form field
-                removeError: function (field) {
-                    $('.error_message', field.parent('.input-row')).text('').hide();
-                    field.removeClass('error');
-                },
-                //this is a final callback after failing to validate one or more fields
-                //it can be used to display a summary message, scroll to the first error, etc.
-                onErrors: function (errors, event) {
-                    //errors is an array of objects, each containing a 'field' and 'message' parameter
-                },
-                //this defines the actual validation rules
-                rules: {
-                    //this is a basic non-empty check
-                    'name': {
-                        'field': $('input[name=name]'),
-                        'validate': function (field, event) {
-                            if (!field.val()) {
-                                throw "A name is required.";
-                            }
-                        }
-                    },
-                    'brand_name': {
-                        'field': $('input[name=brand_name]'),
-                        'validate': function (field, event) {
-                            if (!field.val()) {
-                                throw "A brand_name is required.";
-                            }
-                        }
-                    },
-                    'count': {
-                        'field': $('input[name=count]'),
-                        'validate': function (field, event) {
-                            //if the validation is fired from a blur event,
-                            //don't throw any errors if it is empty
-                            if (event === 'blur' && !field.val()) field.addClass('success');
-
-                            if (!field.val()) throw "A count is required.";
-
-                            var count_pattern = /[0-9]$/i;
-                            if (!count_pattern.test(field.val())) {
-                                throw "Please write a valid count number.";
-                            }
+</div>
+<script>
+    $(document).ready(function () {
+        // Create a formValidator object
+        var validator = new formValidator({
+            addError: function (field, message) {
+                var error_message_field = $('.error_message', field.parent('.input-row'));
+                if (!error_message_field.length) {
+                    error_message_field = $('<span/>').addClass('error_message');
+                    field.parent('.input-row').append(error_message_field);
+                }
+                error_message_field.text(message).show(200);
+                field.addClass('error');
+            },
+            removeError: function (field) {
+                $('.error_message', field.parent('.input-row')).text('').hide();
+                field.removeClass('error');
+            },
+            onErrors: function (errors, event) {
+                // Handle errors, if needed
+            },
+            rules: {
+                'name': {
+                    'field': $('input[name=name]'),
+                    'validate': function (field, event) {
+                        if (!field.val()) {
+                            throw "A name is required.";
                         }
                     }
-                }
-            });
-
-            //now, we attach events
-
-            //this does validation every time a field loses focus
-            $('form').on('blur', 'input,select', function () {
-                validator.validateField($(this).attr('name'), 'blur');
-            });
-
-            //this clears errors every time a field gains focus
-            $('form').on('focus', 'input,select', function () {
-                validator.clearError($(this).attr('name'));
-            });
-
-            //this is for the validate links
-            $('.validate_section').click(function () {
-                var fields = [];
-                $('input,select', $(this).closest('.section')).each(function () {
-                    fields.push($(this).attr('name'));
-                });
-
-                if (validator.validateFields(fields, 'submit')) {
-                    alert('success');
-                }
-                return false;
-            });
-            $('.validate_form').click(function () {
-                if (!validator.validateFields('submit')) {
-                    return false;
-                }
-                return true;
-            });
-
-            //this is for the clear links
-            $('.clear_section').click(function () {
-                var fields = [];
-                $('input,select', $(this).closest('.section')).each(function () {
-                    fields.push($(this).attr('name'));
-                });
-
-                validator.clearErrors(fields);
-                return false;
-            });
+                },
+                // Add more validation rules here if needed
+            }
         });
-    </script>
+
+        $('form').on('blur', 'input,select', function () {
+            validator.validateField($(this).attr('name'), 'blur');
+        });
+
+        $('form').on('focus', 'input,select', function () {
+            validator.clearError($(this).attr('name'));
+        });
+
+        $('.validate_form').click(function () {
+            if (!validator.validateFields('submit')) {
+                return false;
+            }
+            return true;
+        });
+    });
+</script>
 @endsection

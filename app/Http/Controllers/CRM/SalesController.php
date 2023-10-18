@@ -136,8 +136,8 @@ class SalesController extends Controller
     {
         $result = sendChallanEmail($id);
         return view('sachallandownload', [
-            'pdfComWatermarkPath' => $result['pdfComWatermarkPath'],
-            'pdfCustWatermarkPath' => $result['pdfCustWatermarkPath'],
+            'pdfComWatermarkPathChallan' => $result['pdfComWatermarkPathChallan'],
+            'pdfCustWatermarkPathChallan' => $result['pdfCustWatermarkPathChallan'],
         ]);
     }
     
@@ -576,18 +576,18 @@ class SalesController extends Controller
         return response()->download($pdfCustWatermarkPath, 'invoice_cust_watermark.pdf');
     }
 
-        // for sale invoice
-    public function challanDownloadCompanyPDF()
-    {
-        $pdfComWatermarkPath = storage_path('app/tmp/challan_com_watermark.pdf');
-        return response()->download($pdfComWatermarkPath, 'challan_cust_watermark.pdf');
-    }
-
-    public function challanDownloadCustomerPDF()
-    {
-        $pdfCustWatermarkPath = storage_path('app/tmp/challan_cust_watermark.pdf');
-        return response()->download($pdfCustWatermarkPath, 'challan_cust_watermark.pdf');
-    }
+        // for sale challan
+        public function challanDownloadCompanyPDF()
+        {
+            $pdfComWatermarkPath = storage_path('app/tmp/challan_com_watermark.pdf');
+            return response()->download($pdfComWatermarkPath, 'challan_com_watermark.pdf');
+        }
+        
+        public function challanDownloadCustomerPDF()
+        {
+            $pdfCustWatermarkPath = storage_path('app/tmp/challan_cust_watermark.pdf');
+            return response()->download($pdfCustWatermarkPath, 'challan_cust_watermark.pdf');
+        }
 
 
     public function getProductName(Request $request)

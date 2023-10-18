@@ -26,7 +26,7 @@ class VendorUpdateRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'gst_number' => 'required|integer',
+            'gst_number' => 'nullable',
             'city' => 'required|string',
             'billing_address' => 'required|string',
             'country' => 'required|string',

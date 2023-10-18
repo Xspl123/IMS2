@@ -58,7 +58,13 @@ class ProductsController extends Controller
 
     public function processRenderUpdateForm(int $productId)
     {
-        return View::make('crm.products.edit')->with(['product' => $this->productsService->loadProduct($productId)]);
+        $dataOfVendors = VendorModel::pluck('name','id');
+        $product_cat =  ProductCategory::pluck('cat_name','id');
+        return View::make('crm.products.edit')->with([
+            'product' => $this->productsService->loadProduct($productId),
+            'product_cat' =>$product_cat,
+            'dataOfVendors' => $dataOfVendors
+        ]);
     }
 
     public function processListOfProducts()

@@ -67,7 +67,6 @@ function sendChallanEmail($id) {
     $challanInvoice = [
         'challanInvoice' => SalesModel::find($id),
     ];
-  
 
     $pdfOptions = [
         'isHtml5ParserEnabled' => true,
@@ -75,41 +74,41 @@ function sendChallanEmail($id) {
         'page_size' => 'A4',
     ];
 
-    $pdfComWatermark = PDF::loadView('saleChallanCreate', $challanInvoice, $pdfOptions);
+    $pdfComWatermarkPathChallan = PDF::loadView('saleChallanCreate', $challanInvoice, $pdfOptions);
     $pdfCustWatermark = PDF::loadView('saleChallanCreate', $challanInvoice, $pdfOptions);
-     
-    $pdfComWatermark->getDomPDF()->getCanvas()->page_text(50, 750, 'Company use', null, 10, [255, 0, 0]);
+
+    $pdfComWatermarkPathChallan->getDomPDF()->getCanvas()->page_text(50, 750, 'Company use', null, 10, [255, 0, 0]);
     $pdfCustWatermark->getDomPDF()->getCanvas()->page_text(50, 750, 'Customer use', null, 10, [0, 0, 255]);
 
-    $pdfComWatermarkPath = storage_path('app/tmp/challan_com_watermark.pdf');
-    $pdfComWatermark->save($pdfComWatermarkPath);
+    $pdfComWatermarkPathChallanFile = storage_path('app/tmp/challan_com_watermark.pdf');
+    $pdfComWatermarkPathChallan->save($pdfComWatermarkPathChallanFile);
 
-    $pdfCustWatermarkPath = storage_path('app/tmp/challan_cust_watermark.pdf');
-    $pdfCustWatermark->save($pdfCustWatermarkPath);
+    $pdfCustWatermarkPathChallanFile = storage_path('app/tmp/challan_cust_watermark.pdf');
+    $pdfCustWatermark->save($pdfCustWatermarkPathChallanFile);
 
-    Mail::send([], [], function ($message) use ($pdfComWatermarkPath) {
+    Mail::send([], [], function ($message) use ($pdfComWatermarkPathChallanFile) {
         $message->to(['manikant.verma@vert-age.com'])
             ->cc(['sahadev@vert-age.com','accounts@vert-age.com','accounts1@vert-age.com'])
             ->subject('Challan for Company')
-            ->attach($pdfComWatermarkPath, [
-                'as' => 'challan_com.pdf',
+            ->attach($pdfComWatermarkPathChallanFile, [ // Use the file path here
+                'as' => 'challan_com1.pdf',
                 'mime' => 'application/pdf',
             ])
             ->setBody(view('email_template')->render(), 'text/html');
     });
 
-    Mail::send([], [], function ($message) use ($pdfCustWatermarkPath, $customerRecipient) {
+    Mail::send([], [], function ($message) use ($pdfCustWatermarkPathChallanFile) {
         $message->to('abhishek@vert-age.com')
             ->subject('Challan for Customer')
-            ->attach($pdfCustWatermarkPath, [
-                'as' => 'challan_cust.pdf',
+            ->attach($pdfCustWatermarkPathChallanFile, [ // Use the file path here
+                'as' => 'challan_cust.pdf1',
                 'mime' => 'application/pdf',
             ])
             ->setBody(view('email_template')->render(), 'text/html');
     });
 
     return [
-        'pdfComWatermarkPath' => $pdfComWatermarkPath,
-        'pdfCustWatermarkPath' => $pdfCustWatermarkPath,
+        'pdfComWatermarkPathChallan' => $pdfComWatermarkPathChallanFile,
+        'pdfCustWatermarkPathChallan' => $pdfCustWatermarkPathChallanFile,
     ];
 }

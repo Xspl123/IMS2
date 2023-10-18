@@ -14,8 +14,8 @@
 {{-- <script src="{{ asset('js/main.js')}}"></script> --}}
 
 <script>
-        // Set the inactivity timeout (10 seconds)
-        var inactivityTimeout = 60000; // 10 seconds in milliseconds
+        // Set the inactivity timeout (10 minutes)
+        var inactivityTimeout = 100000; // 10 minutes in milliseconds
 
         // Variables to keep track of user activity
         var activityDetected = false;

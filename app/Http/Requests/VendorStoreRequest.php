@@ -16,7 +16,7 @@ class VendorStoreRequest extends FormRequest
     {
         return [
             'name' => 'nullable',
-            'gst_number' => 'required|integer',
+            'gst_number' => 'nullable',
             'city' => 'required|string',
             'billing_address' => 'required|string',
             'country' => 'required|string',

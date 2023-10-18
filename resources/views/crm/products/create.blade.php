@@ -35,7 +35,7 @@
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-handshake-o"></i></span>
             <select name="catgory_name" class="form-control" id="catgory_name">
-                <option value="" disabled selected>Select Product Brand</option>
+                <option value="" disabled selected>Select Product Category</option>
                 @foreach ($product_cat as $value)
                     <option value="{{ $value->id }}" >{{ $value->cat_name }}</option>
                     @endforeach
@@ -54,7 +54,7 @@
         {{ Form::label('product_serial_no', 'Product Serial Number') }}
         <div class="input-group">
             <span class="input-group-addon">
-            {{ Form::number('product_serial_no', null, ['class' => 'form-control', 'placeholder' => 'Enter product serial number', 'id' => 'barcode']) }}
+            {{ Form::text('product_serial_no', null, ['class' => 'form-control', 'placeholder' => 'Enter product serial number', 'id' => 'barcode']) }}
             </span>
          </div>
      </div>
@@ -70,6 +70,7 @@
                 <option value="Hp">Hp</option>
                 <option value="Hcl">Hcl</option>
                 <option value="OTHER">OTHER</option>
+
             </select>
         </div>
     </div>

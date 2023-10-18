@@ -66,7 +66,7 @@ class VendorModel extends Model
         return $this->where('id', '=', $vendorsId)->update(
             [
                 'name' => $requestedData['name'],
-                'tax_number' => $requestedData['tax_number'],
+                'gst_number' => $requestedData['gst_number'],
                 'phone' => $requestedData['phone'],
                 'city' => $requestedData['city'],
                 'billing_address' => $requestedData['billing_address'],

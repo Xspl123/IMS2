@@ -45,7 +45,7 @@
                                     <th>Product Name</th>
                                     <td>{{ $product->name }}</td>
                                     <th>Product Category</th>
-                                    <td>{{ $product->category }}</td>
+                                    <td>{{ $product->category->cat_name }}</td>
                                     <th>Product Base Price</th>
                                     <td>₹{{ $product->price }}</td>
                                 </tr>
