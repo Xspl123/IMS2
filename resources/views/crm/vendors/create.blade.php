@@ -178,16 +178,12 @@
                         'gst_number': {
                             'field': $('input[name=gst_number]'),
                             'validate': function(field, event) {
-                                if(!field.val()) {
+                                if (!field.val()) {
                                     throw "A gst number is required.";
-                                }
-
-                                var gst_pattern = /[0-9]$/i;
-                                if (!gst_pattern.test(field.val())) {
-                                    throw "Please enter a valid gst number.";
                                 }
                             }
                         },
+
                         'city': {
                             'field': $('input[name=city]'),
                             'validate': function(field, event) {

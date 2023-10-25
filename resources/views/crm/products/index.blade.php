@@ -24,65 +24,70 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="fa fa-keyboard-o" aria-hidden="true"></i> List of Products
+                    <button class="btn btn-primary" onclick="printBarcodes()">Print Barcodes</button>
                 </div>
                 <div class="panel-body">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-text">
-                                <span class="badge badge-primary" style="background-color: blue; color: white;">
-                                    Total Products: {{ $productCount }}
-                                </span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel-body">
-                <div class="table">
-                    <table class="table table-striped table-bordered table-hover" id="dataTables-example" data-sortable>
-                        <thead>
-                            <tr>
-                                <th class="text-center">Barcode</th>
-                                <th class="text-center">Vendor Name</th>
-                                <th class="text-center">Product Name</th>
-                                <th class="text-center">Product Category</th>
-                                <th class="text-center">Product Serial No.</th>
-                                <th class="text-center">Product Descriptions</th>
-                                <th class="text-center">Product Brand Name</th>
-                                <th class="text-center">Product Type</th>
-                                <th class="text-center" style="width: 100px">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($productsPaginate as $key => $value)
-                                @if ($value->is_active) <!-- Check if the product is active -->
-                                    <tr class="odd gradeX">
-                                        <td class="text-center">
-                                            <input type="checkbox" name="barcode[]" value="{{ $value->barcode }}">
-                                            {!! DNS1D::getBarcodeHTML($value->barcode, 'C128') !!}
+                    <div class="table-responsive" style="overflow-x: auto;">
+                        <table class="table table-striped table-bordered table-hover" id="dtBasicExample" data-sortable>
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="checkAll"></th>
+                                    <th>Barcode</th>
+                                    <th>Product Name</th>
+                                    <th>Product Category</th>
+                                    <th>Product Serial No.</th>
+                                    <th>Product Brand Name</th>
+                                    <th>Product Type</th>
+                                    <th>Status</th>
+                                    <th style="width: 100px">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($productCount as $product)
+                                    <tr class="{{ $product->barcode ? 'barcode-available' : 'barcode-not-available' }}">
+                                        <td>
+                                            <input type="checkbox" class="barcode-checkbox">
                                         </td>
-                                        
-                                        <td class="text-center">
-                                            @if ($value->vendor)
-                                                <a href="{{ URL::to('vendors/view/' . $value->vendor->id) }}">{{ $value->vendor->name }}</a>
+                                        <td>
+                                            @if ($product->barcode)
+                                                @php
+                                                    $barcodeValue = $product->barcode;
+                                                    $barcodeOptions = ['text' => $barcodeValue];
+                                                    $rendererOptions = ['imageType' => 'png'];
+                                                    $barcode = Zend\Barcode\Barcode::factory('code128', 'image', $barcodeOptions, $rendererOptions);
+                                                    $imageResource = $barcode->draw();
+                                                    $storagePath = storage_path('barcodes/');
+                                                    if (!file_exists($storagePath)) {
+                                                        mkdir($storagePath, 0777, true);
+                                                    }
+                                                    $barcodeImagePath = $storagePath . $product->barcode . '-' . $barcodeValue . '.png';
+                                                    imagepng($imageResource, $barcodeImagePath);
+                                                @endphp
+                                                <img src="{{ asset('storage/barcodes/' . $barcodeValue . '-' . $barcodeValue . '.png') }}"
+                                                    alt="Barcode">
+                                            @else
+                                                No Barcode Available
                                             @endif
                                         </td>
-                                        <td class="text-center">{{ $value->name }}</td>
-                                        <td class="text-center">{{ $value->category->cat_name }}</td>
-                                        <td class="text-center">{{ $value->product_serial_no }}</td>
-                                        <td class="text-center">{{ $value->description }}</td>
-                                        <td class="text-center">{{ $value->brand_name }}</td>
-                                        <td class="text-center">{{ $value->product_type }}</td>
-                                        <td style="width: 40px;">
+                                        <td>{{ $product->name }}</td>
+                                        <td>{{ $product->category->cat_name }}</td>
+                                        <td>{{ $product->product_serial_no }}</td>
+                                        <td>{{ $product->brand_name }}</td>
+                                        <td>{{ $product->product_type }}</td>
+                                        <td>
+                                            {{ $product->is_active ? 'Available' : 'Sold Out' }}
+                                        </td>
+                                        <td style="width: 100px;">
                                             <div class="btn-group">
-                                                <a class="btn btn-small btn-primary"
-                                                    href="{{ URL::to('products/view/' . $value->id) }}">Details</a>
-                                                <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-sm "><span
+                                                <a class="btn btn-small btn-primary btn-sm"
+                                                    href="{{ URL::to('products/view/' . $product->id) }}">Details</a>
+                                                <button data-toggle="dropdown"
+                                                    class="btn btn-primary dropdown-toggle btn-sm "><span
                                                         class="caret"></span></button>
                                                 <ul class="dropdown-menu">
                                                     <li>
-                                                        <a href="{{ URL::to('products/form/update/' . $value->id) }}">Edit</a>
+                                                        <a
+                                                            href="{{ URL::to('products/form/update/' . $product->id) }}">Edit</a>
                                                     </li>
                                                     <li class="divider"></li>
                                                     <li><a href="#">Some option</a></li>
@@ -90,13 +95,68 @@
                                             </div>
                                         </td>
                                     </tr>
-                                @endif
-                            @endforeach
-                        </tbody>
-                    </table>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                {!! $productsPaginate->render() !!}
             </div>
         </div>
     </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#dtBasicExample').DataTable();
+            $('.dataTables_length').addClass('bs-select');
+        });
+
+        function printBarcodes() {
+            var table = document.getElementById("dtBasicExample");
+            var rows = table.getElementsByTagName("tr");
+            var printTable = document.createElement("div");
+            printTable.style.width = '210mm'; // A4 width in millimeters
+            printTable.style.height = '42mm'; // A4 height in millimeters
+            printTable.style.margin = 'auto'; // Center the content on the page
+            printTable.style.display = 'flex';
+            printTable.style.flexWrap = 'wrap';
+
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                var checkbox = row.querySelector(".barcode-checkbox");
+
+                if (checkbox && checkbox.checked) {
+                    var barcodeCell = row.cells[row.cells.length - 8];
+                    console.log(barcodeCell);
+                    if (barcodeCell) {
+                        var img_tag = barcodeCell.innerHTML;
+                        if (img_tag.indexOf('img') != -1) {
+                            var printRow = document.createElement("div");
+                            printRow.style.marginRight = '5px';
+                            printRow.style.marginBottom = '5px';
+                            printRow.innerHTML = img_tag;
+                            printTable.appendChild(printRow);
+                        }
+                    }
+                }
+            }
+
+            var printWindow = window.open("", "_blank");
+            printWindow.document.open();
+            printWindow.document.write('<html><head><title>Barcodes</title>');
+            printWindow.document.write('</head><body>');
+            printWindow.document.write(printTable.outerHTML);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+        }
+
+        document.getElementById('checkAll').addEventListener('change', function() {
+            var checkboxes = document.getElementsByClassName('barcode-checkbox');
+            for (var i = 0; i < checkboxes.length; i++) {
+                var row = checkboxes[i].closest('tr');
+                if (row.classList.contains('barcode-available')) {
+                    checkboxes[i].checked = this.checked;
+                }
+            }
+        });
+    </script>
 @endsection

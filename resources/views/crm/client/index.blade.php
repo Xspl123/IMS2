@@ -19,9 +19,9 @@
                 </div>
             @endif
 
-            <a href="{{ URL::to('clients/form/create') }}">
+            {{-- <a href="{{ URL::to('clients/form/create') }}">
                 <button type="button" class="btn btn-primary btn active">Add Coustmor Company</button>
-            </a>
+            </a> --}}
             <br><br>
                 <div class="panel panel-default">
                     <div class="panel-heading">

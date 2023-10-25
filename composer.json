@@ -22,7 +22,9 @@
         "maxmind-db/reader": "^1.11",
         "milon/barcode": "^10.0",
         "picqer/php-barcode-generator": "^2.2",
-        "pragmarx/version": "^1.0"
+        "pragmarx/version": "^1.0",
+        "spatie/laravel-backup": "^6.16",
+        "zendframework/zend-barcode": "^2.8"
     },
     "require-dev": {
         "facade/ignition": "^2.9.0",

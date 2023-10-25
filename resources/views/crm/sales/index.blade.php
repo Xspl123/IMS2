@@ -29,10 +29,11 @@
                 <div class="panel-body">
 
                     <div class="table">
-                        <table class="table table-striped table-bordered table-hover" id="dataTables-example" data-sortable>
+                        <table id="dtBasicExample" class="table table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
-                                    <th class="text-center">Customer name</th>
+                                    <th class="text-center">Select</th>
+                                    {{-- <th class="text-center">Customer name</th> --}}
                                     <th class="text-center">Customer Company</th>
                                     <th class="text-center">Category Name</th>
                                     <th class="text-center">Brand Name</th>
@@ -47,7 +48,8 @@
                                     dd($value);
                                 @endphp --}}
                                     <tr class="odd gradeX">
-                                        <td class="text-center">{{$value->name}}</td>
+                                        <td><input type="checkbox" onchange="toggleItem({{$value->id}})" /></td>
+                                        {{-- <td class="text-center">{{$value->name}}</td> --}}
                                         <td class="text-center">
                                             @if ($value->custmorData)
                                                 <a href="{{ URL::to('clients/view/' . $value->custmorData->id) }}">{{ $value->custmorData->full_name }}</a>
@@ -63,9 +65,9 @@
                                         <td class="text-center">{{$value->sn}}</td>
                                         <td >
                                             <div class="btn-group">
-                                                <a class="btn btn-small btn-primary btn-sm"
+                                                <a class="btn btn-small btn-primary btn-md"
                                                     href="{{ URL::to('sales/view/' . $value->id) }}">Details</a>
-                                                <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-sm "><span
+                                                <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-md "><span
                                                         class="caret"></span></button>
                                                 <ul class="dropdown-menu">
                                                     <li>
@@ -75,17 +77,40 @@
                                                     <li><a href="#">Some option</a></li>
                                                 </ul>
                                             </div>
-                                            <a href="{{ URL::to('sales/sendmailChallan/' . $value->id) }}"><button type="button" class="btn btn-success btn-sm"> <i class="fa fa-paper-plane"> Send Mail</i>
-                                            </button></a>
+                                            {{-- <a href="{{ URL::to('sales/sendmailChallan?id=' . $value->id) }}"><button type="button" class="btn btn-success btn-sm"> <i class="fa fa-paper-plane"> Send Mail</i>
+                                            </button></a> --}}
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
-                    {!! $salesPaginate->render() !!}
+                </div>
+                <div >
+                    <a id="challan_btn" href="sales/sendmailChallan"><button type="button" class="btn btn-success btn-sm"> <i class="fa fa-paper-plane"> Send Mail</i>
+                    </button></a>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function () {
+        $('#dtBasicExample').DataTable();
+        $('.dataTables_length').addClass('bs-select');
+        });
+        var selectedItems = [];
+        function toggleItem(id) {
+            console.log(id)
+            const itemIndex = selectedItems.findIndex((item) => item === id);
+            if (itemIndex > -1) {
+                selectedItems.splice(itemIndex, 1);
+            } else {
+                selectedItems.push(id)
+            }
+            const elm = document.querySelector('#challan_btn');
+            if (elm){
+                elm.setAttribute('href', `sales/sendmailChallan?id=${selectedItems.join(',')}`)
+            }
+        }
+    </script>
 @endsection

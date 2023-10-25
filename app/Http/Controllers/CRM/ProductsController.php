@@ -69,11 +69,10 @@ class ProductsController extends Controller
 
     public function processListOfProducts()
     {
-        $productCount = ProductsModel::where('is_active', 1)->count();
+        $productCount = ProductsModel::get();
 
         return View::make('crm.products.index')->with(
             [
-                'productsPaginate' => $this->productsService->loadPagination(),
                 'productCount' => $productCount
             ]
         );
@@ -83,21 +82,17 @@ class ProductsController extends Controller
     public function processStoreProduct(ProductStoreRequest $request)
     {
         $validatedData = $request->validated();
-    
         // Check if the barcode is provided
         $barcode = $validatedData['barcode'] ?? null;
         if (!$barcode) {
             // Generate a random 11-digit barcode
             $barcode = $this->generateRandomBarcode();
         }
-    
+
         // Add the generated or provided barcode to the validated data
         $validatedData['barcode'] = $barcode;
-    
         $product = VendorModel::find($validatedData['vendor_id']);
-       
         $storedProductId = $this->productsService->execute($validatedData, $this->getAdminId());
-       
             // Use the customLog helper function to log and insert data
             $message = 'Product has been added ';
             $logData = ['data' => $validatedData];
@@ -178,4 +173,6 @@ class ProductsController extends Controller
             return Redirect::back()->with('message_danger', $this->getMessage('messages.ProductsIsActived'));
         }
     }
+
+    
 }

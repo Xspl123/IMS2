@@ -38,7 +38,7 @@ function sendInvoiceEmail($id) {
 
     Mail::send([], [], function ($message) use ($pdfComWatermarkPath) {
         $message->to(['manikant.verma@vert-age.com'])
-            ->cc(['sahadev@vert-age.com','accounts@vert-age.com','accounts1@vert-age.com'])
+             ->cc(['sahadev@vert-age.com','accounts@vert-age.com','accounts1@vert-age.com'])
             ->subject('Challan for Company')
             ->attach($pdfComWatermarkPath, [
                 'as' => 'challan_invoice_com.pdf',
@@ -64,8 +64,9 @@ function sendInvoiceEmail($id) {
 }
 
 function sendChallanEmail($id) {
+    $ids = explode(",", $id);
     $challanInvoice = [
-        'challanInvoice' => SalesModel::find($id),
+        'challanInvoice' => SalesModel::whereIn("id",$ids)->get(),
     ];
 
     $pdfOptions = [

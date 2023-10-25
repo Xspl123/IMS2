@@ -98,9 +98,9 @@
             </td>
             <td style="width: 50%; vertical-align: top; text-align:center; border:none">
                 <h4>To</h4><br>
-                <p>{{ $challanInvoice->custmorData->full_name ?? 'N/A' }}</p>
-            <p>{{ $challanInvoice->custmorData->location ?? 'N/A' }}</p>
-            <p>{{ $challanInvoice->custmorData->city ?? 'N/A' }}</p>
+                <p>{{ $challanInvoice[0]->custmorData->full_name ?? 'N/A' }}</p>
+            <p>{{ $challanInvoice[0]->custmorData->location ?? 'N/A' }}</p>
+            <p>{{ $challanInvoice[0]->custmorData->city ?? 'N/A' }}</p>
             
             </td>
         </tr>
@@ -113,11 +113,11 @@
                 <table style="border: 1px solid black;">
                     <tr>
                         <th class="table-wd">Challan No</th>
-                        <td>#Xeno/Up23-24/{{ $challanInvoice->id }}</td>
+                        <td>#Xeno/Up23-24/@php echo date("d-m-Y-H-i-s") @endphp</td>
                     </tr>
                     <tr>
                         <th class="table-wd">Challan Date</th>
-                        <td>{{ $challanInvoice->created_at->format('d-M-Y H:i') }}</td>
+                        <td>{{ $challanInvoice[0]->created_at->format('d-M-Y H:i') }}</td>
                     </tr>
                 </table>
             </td>
@@ -126,21 +126,23 @@
 
     <table style="width: 100%;">
         <tr>
-            <th>Customer Name</th>
-            <th>Customer Company</th>
+            {{-- <th>Customer Name</th>
+            <th>Customer Company</th> --}}
             <th>Product Name</th>
             <th>Product Brand</th>
-            <th>Product ategory</th>
+            <th>Product Category</th>
             <th>Product Serial Number</th>
         </tr>
+        @foreach($challanInvoice as $item)
         <tr>
-            <td>{{ $challanInvoice->name }}</td>
-            <td>{{ $challanInvoice->custmorData->full_name }}</td>
-            <td>{{ $challanInvoice->products->name ?? 'N/A' }}</td>
-            <td>{{ $challanInvoice->brand_name ?? 'N/A' }}</td>
-            <td>{{ $challanInvoice->category->cat_name ?? 'N/A' }}</td>
-            <td>{{ $challanInvoice->sn ?? 'N/A' }}</td>
+            {{-- <td>{{ $item->name }}</td>
+            <td>{{ $item->custmorData->full_name }}</td> --}}
+            <td>{{ $item->products->name ?? 'N/A' }}</td>
+            <td>{{ $item->brand_name ?? 'N/A' }}</td>
+            <td>{{ $item->category->cat_name ?? 'N/A' }}</td>
+            <td>{{ $item->sn ?? 'N/A' }}</td>
         </tr>
+        @endforeach
     </table>
 
     <br><br>

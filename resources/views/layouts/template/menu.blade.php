@@ -170,20 +170,7 @@
                     </ul>
                 </li>
             @endif
-            @if ($userRoleType == 2)
-                <li style="margin-top: 10px; color: #dee7f1; font-size: 14px; background-color: #09192a;">
-                    <h4>Informations <a href="{{ route('reload-info') }}"><span
-                                class="refresh-info">Refresh</span></a></h4>
-                    {{-- <li><i class="fa fa-money" aria-hidden="true"></i> Today income:  {{ Cache::get('todayIncome') }}</li>
-                    <li><i class="fa fa-money" aria-hidden="true"></i> Yesterday income: {{ Cache::get('yesterdayIncome') }}</li>
-                    <li><i class="fa fa-money" aria-hidden="true"></i> Cash turnover:  {{ Cache::get('cashTurnover') }}</li> --}}
-                    <br>
-                    <li><i class="fa fa-cogs" aria-hidden="true"></i> Operations:
-                        {{ Cache::get('countAllRowsInDb') }}</li>
-                    <li><i class="fa fa-book" aria-hidden="true"></i> System logs:
-                        {{ Cache::get('countSystemLogs') }}</li>
-                </li>
-            @endif
+            
         </ul>
     </div>
 </nav>

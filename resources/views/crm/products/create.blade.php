@@ -69,6 +69,7 @@
                 <option value="Sumsung">Sumsung</option>
                 <option value="Hp">Hp</option>
                 <option value="Hcl">Hcl</option>
+                <option value="CASQ">CASQ</option>
                 <option value="OTHER">OTHER</option>
 
             </select>

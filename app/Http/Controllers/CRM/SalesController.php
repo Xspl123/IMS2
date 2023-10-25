@@ -132,8 +132,9 @@ class SalesController extends Controller
         ]);
     }
 
-    public function sendmailChallan($id)
+    public function sendmailChallan(Request $request)
     {
+        $id = $request["id"];
         $result = sendChallanEmail($id);
         return view('sachallandownload', [
             'pdfComWatermarkPathChallan' => $result['pdfComWatermarkPathChallan'],
@@ -164,9 +165,9 @@ class SalesController extends Controller
 
     public function processListOfSales()
     {
-        $salesPaginate = SalesModel::latest('created_at')->paginate(10);
+        $salesPaginate = SalesModel::latest('created_at')->get();
         return View::make('crm.sales.index')->with([
-            'sales' => $this->salesService->loadSales(),
+            // 'sales' => $this->salesService->loadSales(),
             'salesPaginate' => $salesPaginate,
             'dataWithPluckOfProducts' => ProductsModel::pluck('name', 'id'),
         ]);
@@ -431,6 +432,8 @@ class SalesController extends Controller
                 ]);
                 
                 if ($storedSaleId) {
+                    $message = 'Sale has been added with ID ' . $storedSaleId . ' - ' . json_encode($validatedData);
+                    $this->systemLogsService->loadInsertSystemLogs($message, $this->systemLogsService::successCode, $this->getAdminId());
                     // Create and save the invoice data
                     $invoiceData = [
                         'sale_id' => $storedSaleId,
@@ -445,6 +448,7 @@ class SalesController extends Controller
                     $storedInvoiceId = $this->invoicesService->execute($invoiceData, $this->getAdminId());
 
                     if ($storedInvoiceId) {
+                        
                         // Update the product's is_active field to 0 (deactivate)
                         $product->is_active = 0;
                         $product->save();
@@ -592,8 +596,10 @@ class SalesController extends Controller
 
     public function getProductName(Request $request)
     {
-       $getproduct =  ProductsModel::where('product_category_id',$request->category_id)->get();
-        $data = array(
+        $getproduct = ProductsModel::where('product_category_id', $request->category_id)
+        ->where('is_active', 1) // Assuming 1 represents active products
+        ->get();
+            $data = array(
             'status'=>'success',
             'getproducts' =>$getproduct,
         );

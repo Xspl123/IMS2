@@ -22,16 +22,30 @@ class ProductsExport implements FromCollection, WithHeadings, WithStyles
 
     public function collection(): Collection
     {
-        return ProductsModel::select('name', 'description', 'brand_name', 'product_type', 'price', 'gstAmount', 'price_with_gst', 'product_type')
+        $data = ProductsModel::select('name', 'description', 'brand_name', 'product_type', 'price', 'gstAmount', 'price_with_gst', 'product_type', 'is_active')
             ->join('product_categories', 'products.product_category_id', '=', 'product_categories.id')
-            ->select('products.name', 'products.description', 'product_categories.cat_name', 'products.brand_name', 'products.price', 'products.gstAmount', 'products.price_with_gst', 'products.product_type')
+            ->select('products.name', 'products.description', 'product_categories.cat_name', 'products.brand_name', 'products.price', 'products.gstAmount', 'products.price_with_gst', 'products.product_type','products.is_active')
             ->get();
+
+        // Apply the transformation to 'is_active'
+        $data->transform(function ($item) {
+            // Check the 'is_active' value and set accordingly
+            if ($item->is_active == 1) {
+                $item->is_active = 'Available';
+            } else {
+                $item->is_active = 'Sold Out';
+            }
+            return $item;
+        });
+        
+
+        return $data;
     }
 
 
     public function headings(): array
     {
-        return ['Product Name', 'Product Description', 'Category Name', 'Brand Name','Base Price', 'GST Amount',  'Price (Incl. GST)', 'Product Type'];
+        return ['Product Name', 'Product Description', 'Category Name', 'Brand Name','Base Price', 'GST Amount',  'Price (Incl. GST)', 'Product Type','Product Status'];
     }
 
     public function styles(Worksheet $sheet)

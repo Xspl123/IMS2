@@ -100,7 +100,7 @@ Route::group(['prefix' => 'sales'], function () {
     Route::get('challan-invoice/{id}', 'CRM\SalesController@challanInvoice')->name('challanInvoice');
 
     Route::get('challan-invoice-mail/{id}', 'CRM\SalesController@sendmailInvoice')->name('sendmailInvoice');
-    Route::get('sendmailChallan/{id}', 'CRM\SalesController@sendmailChallan')->name('sendmailChallan');
+    Route::get('sendmailChallan/', 'CRM\SalesController@sendmailChallan')->name('sendmailChallan');
 
     Route::post('store', 'CRM\SalesController@processStoreSale')->name('processStoreSale');
     Route::put('update/{employeeId}', 'CRM\SalesController@processUpdateSale')->name('processUpdateSale');

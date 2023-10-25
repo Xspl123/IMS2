@@ -24,11 +24,9 @@ class SettingsModel extends Model
         if ($query) {
             return $query->value;
         } else {
-            // Return a default value or an empty string, for example
-            return ''; // You can modify this to return an appropriate default value
+            throw new \Exception('Invalid key');
         }
     }
-    
     
     public function getAllSettings()
     {

@@ -138,7 +138,7 @@ class SalesModel extends Model
             return $this->paginate($settings->value);
         } else {
             // Provide a default pagination size or handle the case when the value is empty
-            return $this->paginate(10); // You can replace 10 with your desired default pagination size
+            return $this->paginate(5); // You can replace 10 with your desired default pagination size
         }
     }
 
