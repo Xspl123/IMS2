@@ -69,8 +69,7 @@ class ProductsController extends Controller
 
     public function processListOfProducts()
     {
-        $productCount = ProductsModel::get();
-
+        $productCount = ProductsModel::orderBy('created_at', 'desc')->get();
         return View::make('crm.products.index')->with(
             [
                 'productCount' => $productCount

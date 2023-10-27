@@ -172,10 +172,10 @@
                                     <td style="width: 15%;">₹ {{$sale->total_amount}}</td>
                                 </tr>
                                
-                                {{-- <tr>
+                                <tr>
                                     <td style="width: 85%; text-align: left;"><strong>Status:</strong></td>
-                                    <td style="width: 15%;">{{ isset($sale->is_active) ? ($sale->is_active ? 'Active' : 'Deactivate') : 'N/A' }}</td>
-                                </tr> --}}
+                                    <td style="width: 15%;">{{$sale->status}}</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

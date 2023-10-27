@@ -28,8 +28,8 @@ class SalesModel extends Model
         'approved_by',
         'product_brand_id',
         'brand_name',
-        'cat_id'
-        
+        'cat_id',
+        'return_remark'
     ];
 
     protected $table = 'sales';

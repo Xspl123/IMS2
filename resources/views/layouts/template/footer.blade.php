@@ -15,7 +15,7 @@
 
 <script>
         // Set the inactivity timeout (10 minutes)
-        var inactivityTimeout = 100000; // 10 minutes in milliseconds
+        var inactivityTimeout = 600000; // 10 minutes in milliseconds
 
         // Variables to keep track of user activity
         var activityDetected = false;

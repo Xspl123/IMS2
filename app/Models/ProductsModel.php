@@ -66,6 +66,7 @@ class ProductsModel extends Model
         $data = [
             'barcode' => $requestedData['barcode'],
             'product_serial_no' => $requestedData['product_serial_no'],
+            'mac_address' => $requestedData['mac_address'],
             'name' => $requestedData['name'],
             'product_category_id' => $requestedData['catgory_name'],
             'description' => $requestedData['description'],
@@ -98,6 +99,7 @@ class ProductsModel extends Model
         $data = [
             'name' => $requestedData['name'],
             'description' => $requestedData['description'],
+            'mac_address' => $requestedData['mac_address'],
             'brand_name' => $requestedData['brand_name'],
             'count' => $requestedData['count'],
             'price' => $requestedData['price'],

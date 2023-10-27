@@ -39,6 +39,7 @@ class ProductUpdateRequest extends FormRequest
             'gst_rate' => 'nullable',
             'total_amount' => 'nullable',
             'product_type'=> 'nullable',
+            'mac_address' =>'required'
         ];
     }
 }

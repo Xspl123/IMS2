@@ -58,6 +58,15 @@
             </span>
          </div>
      </div>
+
+     <div class="form-group col-lg-4">
+        {{ Form::label('mac_address', 'Mac Address') }}
+        <div class="input-group">
+            <span class="input-group-addon">
+            {{ Form::text('mac_address', null, ['class' => 'form-control', 'placeholder' => 'Mac Address', 'id' => 'macaddress']) }}
+            </span>
+         </div>
+     </div>
      <div class="form-group col-lg-4">
         <label for="brand_name">Product Brand Name</label>
         <div class="input-group">
@@ -67,9 +76,11 @@
                 <option value="Dell">Dell</option>
                 <option value="Lenovo">Lenovo</option>
                 <option value="Sumsung">Sumsung</option>
-                <option value="Hp">Hp</option>
-                <option value="Hcl">Hcl</option>
+                <option value="HP">Hp</option>
+                <option value="Thinkpad">Thinkpad</option>
                 <option value="CASQ">CASQ</option>
+                <option value="Openvox">Openvox</option>
+                <option value="Dinstar">Dinstar</option>
                 <option value="OTHER">OTHER</option>
 
             </select>

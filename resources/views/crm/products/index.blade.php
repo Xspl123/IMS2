@@ -16,15 +16,16 @@
                     <strong>Danger!</strong> {{ session()->get('message_danger') }}
                 </div>
             @endif
-            <button class="btn btn-primary btn active pb-2" style="margin-bottom: 10px;">
-                <a href="{{ route('export.products') }}" style="color: white;">Download Products List</a>
-            </button>
+            <button class="btn btn-primary btn active">
+                <a href="{{ route('export.products') }}" style="color: white;">Download Products List</a>&nbsp;
+
+            </button> <button class="btn btn-primary btn active " onclick="printBarcodes()">Print Barcodes</button>
+
 
             <br>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="fa fa-keyboard-o" aria-hidden="true"></i> List of Products
-                    <button class="btn btn-primary" onclick="printBarcodes()">Print Barcodes</button>
                 </div>
                 <div class="panel-body">
                     <div class="table-responsive" style="overflow-x: auto;">
@@ -32,7 +33,8 @@
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" id="checkAll"></th>
-                                    <th>Barcode</th>
+                                    <th style="display: none">Barcode</th>
+                                    <th>Date</th>
                                     <th>Product Name</th>
                                     <th>Product Category</th>
                                     <th>Product Serial No.</th>
@@ -48,7 +50,8 @@
                                         <td>
                                             <input type="checkbox" class="barcode-checkbox">
                                         </td>
-                                        <td>
+                                        <td>{{ $product->created_at->format('Y-m-d') }}</td>
+                                        <td style="display: none">
                                             @if ($product->barcode)
                                                 @php
                                                     $barcodeValue = $product->barcode;
@@ -64,7 +67,7 @@
                                                     imagepng($imageResource, $barcodeImagePath);
                                                 @endphp
                                                 <img src="{{ asset('storage/barcodes/' . $barcodeValue . '-' . $barcodeValue . '.png') }}"
-                                                    alt="Barcode">
+                                                    alt="Barcode" style="width:200px; height:73px;">
                                             @else
                                                 No Barcode Available
                                             @endif

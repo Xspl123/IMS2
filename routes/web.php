@@ -110,6 +110,7 @@ Route::group(['prefix' => 'sales'], function () {
     Route::get('showReplaceItem', 'CRM\SalesController@showReplaceItem')->name('showReplaceItem');
     Route::post('getProducts', 'CRM\SalesController@getProductName')->name('getProductName');
     Route::get('saleCreateChallan/{id}', 'CRM\SalesController@saleChallanCreate')->name('saleChallanCreate');
+    Route::get('productUpdate/{id}', 'CRM\SalesController@productUpdate')->name('productUpdate');
 
 
 });

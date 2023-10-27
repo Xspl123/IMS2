@@ -23,6 +23,9 @@
             <a href="{{ URL::to('sales/challan') }}">
                 <button type="button" class="btn btn-primary btn active">Replacement Challan</button>
             </a>
+                <a id="challan_btn" href="sales/sendmailChallan"><button type="button" class="btn btn-success "> <i class="fa fa-paper-plane"> Send Mail</i>
+                </button></a>
+            
             
             <div class="panel panel-default">
 
@@ -33,13 +36,15 @@
                             <thead>
                                 <tr>
                                     <th class="text-center">Select</th>
-                                    {{-- <th class="text-center">Customer name</th> --}}
+                                    <th class="text-center">Date</th>
                                     <th class="text-center">Customer Company</th>
                                     <th class="text-center">Category Name</th>
                                     <th class="text-center">Brand Name</th>
                                     <th class="text-center">Product Name</th>
                                     <th class="text-center">Serial Number</th>
-                                    <th class="text-center" style="width: 400px; text-align:center">Action</th>
+                                    <th class="text-center">Status</th>
+                                    <th>Action</th>
+                                    {{-- <th class="text-center" style="width: 400px; text-align:center">Move</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -49,7 +54,7 @@
                                 @endphp --}}
                                     <tr class="odd gradeX">
                                         <td><input type="checkbox" onchange="toggleItem({{$value->id}})" /></td>
-                                        {{-- <td class="text-center">{{$value->name}}</td> --}}
+                                        <td>{{ $value->created_at->format('F j, Y') }}</td>
                                         <td class="text-center">
                                             @if ($value->custmorData)
                                                 <a href="{{ URL::to('clients/view/' . $value->custmorData->id) }}">{{ $value->custmorData->full_name }}</a>
@@ -63,6 +68,7 @@
                                             @endif
                                         </td>
                                         <td class="text-center">{{$value->sn}}</td>
+                                        <td class="text-center">{{$value->status}}</td>
                                         <td >
                                             <div class="btn-group">
                                                 <a class="btn btn-small btn-primary btn-md"
@@ -80,16 +86,18 @@
                                             {{-- <a href="{{ URL::to('sales/sendmailChallan?id=' . $value->id) }}"><button type="button" class="btn btn-success btn-sm"> <i class="fa fa-paper-plane"> Send Mail</i>
                                             </button></a> --}}
                                         </td>
+                                        {{-- @if($value->status == 'return')
+                                         <td><a href="{{ URL::to('sales/productUpdate/' . $value->id) }}"><button type="button" class="btn btn-warning">Move</button></a></td>
+                                         @else
+                                         <td></td>
+                                         @endif --}}
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div >
-                    <a id="challan_btn" href="sales/sendmailChallan"><button type="button" class="btn btn-success btn-sm"> <i class="fa fa-paper-plane"> Send Mail</i>
-                    </button></a>
-                </div>
+                
             </div>
         </div>
     </div>

@@ -41,6 +41,7 @@ class ProductStoreRequest extends FormRequest
             'catgory_name' => 'nullable',
             'product_serial_no',
             'product_type' => 'nullable',
+            'mac_address' => 'required'
             
         ];
         

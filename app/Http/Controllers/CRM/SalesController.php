@@ -165,12 +165,21 @@ class SalesController extends Controller
 
     public function processListOfSales()
     {
-        $salesPaginate = SalesModel::latest('created_at')->get();
+        $salesPaginate = SalesModel::orderBy('created_at', 'desc')->get();
         return View::make('crm.sales.index')->with([
             // 'sales' => $this->salesService->loadSales(),
             'salesPaginate' => $salesPaginate,
             'dataWithPluckOfProducts' => ProductsModel::pluck('name', 'id'),
         ]);
+    }
+
+    public function productUpdate($id){
+        $data = SalesModel::where('id',$id)->first();
+        $serial_number =  $data->sn;
+         ProductsModel::where('product_serial_no',$serial_number)->update(['is_active'=>1]);
+         SalesModel::where('id',$id)->update(['status'=>'Returned']);
+
+         return Redirect::back()->with('message_success', 'product return successfully');
     }
 
     // public function processStoreSale(SaleStoreRequest $request)
@@ -497,54 +506,62 @@ class SalesController extends Controller
             }
         }
     
-    public function processUpdateSale(SaleUpdateRequest $request, int $saleId)
-    {
-        try {
-            // Find the sale record to update
-            $sale = $this->salesService->find($saleId);
-
-            if (!$sale) {
-                return Redirect::back()->with('message_danger', 'Sale not found.');
+        public function processUpdateSale(SaleUpdateRequest $request, int $saleId)
+        {
+            try {
+                // Find the sale record to update
+                $sale = $this->salesService->find($saleId);
+    
+                if (!$sale) {
+                    return redirect()->back()->with('message_danger', 'Sale not found.');
+                }
+    
+                $requestData = $request->validated();
+    
+                // Update the sale
+                $updatedSale = $this->salesService->updateSale($saleId, $requestData);
+    
+                $data = SalesModel::where('id', $saleId)->first(); // Corrected the variable name $id to $saleId
+                $serial_number = $data->sn;
+    
+                if ($requestData['status'] == 'return') {
+                    ProductsModel::where('product_serial_no', $serial_number)->update(['is_active' => 1]);
+                    SalesModel::where('id', $saleId)->update(['status' => 'Returned']);
+                }
+    
+                // Generate a random 4-digit challan number
+                $challanNumber = mt_rand(1000, 9999);
+    
+                // Prepare the data for creating or updating the chalan entry
+                $chalanData = [
+                    'sale_id' => $saleId,
+                    'challan_no' => '#Xeno/Up23-24/' . $challanNumber,
+                    'replacement_Remark' => $requestData['replace_remark'],
+                    'replacement_product_item' => $requestData['replacement_with'],
+                    'replacement_to_custmor' => $requestData['replacement_to'],
+                    'replacement_product_serial' => $requestData['replacement_product_sn'],
+                    'replacement_product_vendor' => $requestData['replacement_product_vendor'],
+                    'defulty_product_name' => $requestData['defulty_product_name'],
+                    'defulty_product_sn' => $requestData['defulty_product_sn'],
+                    'defulty_product_vendor' => $requestData['defulty_product_vendor'],
+                    'defulty_product_remark' => $requestData['defulty_product_remark'],
+                    'approved_by' => $requestData['approved_by'],
+                ];
+    
+                // Create or update the chalan entry
+                Chalan::updateOrInsert(['sale_id' => $saleId], $chalanData);
+    
+                // Manually update the updated_at timestamp for the chalan
+                $chalan = Chalan::where('sale_id', $saleId)->first();
+                if ($chalan) {
+                    $chalan->touch(); // This will update the updated_at timestamp
+                }
+    
+                return Redirect::to('sales')->with('message_success', 'Sale updated successfully.');
+            } catch (\Exception $e) {
+                return redirect()->back()->with('message_danger', 'Failed to update sale: ' . $e->getMessage());
             }
-
-            $requestData = $request->validated();
-
-            // Update the sale
-            $updatedSale = $this->salesService->updateSale($saleId, $requestData);
-
-            // Generate a random 4-digit challan number
-            $challanNumber = mt_rand(1000, 9999);
-
-            // Prepare the data for creating or updating the chalan entry
-            $chalanData = [
-                'sale_id' => $saleId,
-                'challan_no' => '#Xeno/Up23-24/' . $challanNumber,
-                'replacement_Remark' => $requestData['replace_remark'],
-                'replacement_product_item' => $requestData['replacement_with'],
-                'replacement_to_custmor' => $requestData['replacement_to'],
-                'replacement_product_serial' => $requestData['replacement_product_sn'],
-                'replacement_product_vendor' => $requestData['replacement_product_vendor'],
-                'defulty_product_name' => $requestData['defulty_product_name'],
-                'defulty_product_sn' => $requestData['defulty_product_sn'],
-                'defulty_product_vendor' => $requestData['defulty_product_vendor'],
-                'defulty_product_remark' => $requestData['defulty_product_remark'],
-                'approved_by' => $requestData['approved_by'],
-            ];
-
-            // Create or update the chalan entry
-            Chalan::updateOrInsert(['sale_id' => $saleId], $chalanData);
-
-            // Manually update the updated_at timestamp for the chalan
-            $chalan = Chalan::where('sale_id', $saleId)->first();
-            if ($chalan) {
-                $chalan->touch(); // This will update the updated_at timestamp
-            }
-
-            return Redirect::to('sales')->with('message_success', 'Sale updated successfully.');
-        } catch (\Exception $e) {
-            return Redirect::back()->with('message_danger', 'Failed to update sale: ' . $e->getMessage());
         }
-    }
 
     
     public function processDeleteSale(int $saleId)

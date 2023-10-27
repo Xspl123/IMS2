@@ -80,6 +80,7 @@
                                             'ok' => 'Ok',
                                             'defected' => 'Defected',
                                             'replacement' => 'Replacement',
+                                            'return' => 'Return'
                                         ],
                                         null,
                                         ['class' => 'form-control', 'id' => 'statusSelect'],
@@ -185,6 +186,16 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-comment"></i></span>
                                     {{ Form::text('replace_remark', null, ['class' => 'form-control', 'placeholder' => 'Write product issues hear']) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6" id="return_remark" style="display: none;">
+                            <div class="form-group">
+                                {{ Form::label('return_remark', 'Return Product Remark') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-comment"></i></span>
+                                    {{ Form::text('return_remark', null, ['class' => 'form-control', 'placeholder' => 'Write product issues hear']) }}
                                 </div>
                             </div>
                         </div>
@@ -306,6 +317,7 @@
             $('#defulty_product_sn').hide();
             $('#defulty_product_vendor').hide();
             $('#defulty_product_remark').hide();
+            $('#return_remark').hide();
 
 
             // Show/hide input fields based on selected option
@@ -320,6 +332,10 @@
                 $('#defulty_product_sn').show();
                 $('#defulty_product_vendor').show();
                 $('#defulty_product_remark').show();
+            }
+
+            if (selectedStatus === 'return') {
+                $('#return_remark').show();
             }
 
             $('#productSelect').change(function() {

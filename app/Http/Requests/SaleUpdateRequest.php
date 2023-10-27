@@ -32,7 +32,7 @@ class SaleUpdateRequest extends FormRequest
             'total_amount' => 'nullable',
             'product_brand_id'=> 'nullable',
             'gst_rate' => 'nullable',
-            'status' => 'required|in:ok,defected,replacement',
+            'status' => 'required|in:ok,defected,replacement,return',
             'replace_remark' => 'nullable',
             'replacement_with'=> 'nullable',
             'replacement_to' => 'nullable',
@@ -46,6 +46,7 @@ class SaleUpdateRequest extends FormRequest
             'challan_no' => 'nullable',
             'brand_name' => 'nullable',
             'cat_id' => 'nullable',
+            'return_remark'
 
         ];
     }
