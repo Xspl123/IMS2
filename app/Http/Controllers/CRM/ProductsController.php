@@ -124,12 +124,25 @@ class ProductsController extends Controller
 
     public function processUpdateProduct(ProductUpdateRequest $request, int $productId)
     {
-        if ($this->productsService->update($productId, $request->validated())) {
-            return Redirect::to('products')->with('message_success', $this->getMessage('messages.SuccessProductsStore'));
+        $validatedData = $request->validated();
+    
+        if ($this->productsService->update($productId, $validatedData)) {
+            // Use the customLog helper function to log and insert data
+            $message = 'Product has been Updated ';
+            $logData = ['data' => $validatedData];
+            $userId = Auth::id();
+            $ipAddress = $request->ip();
+            customLog($message, $logData, $userId, $ipAddress); 
+            //end customLog helper function
+            $message = 'Product with ID ' . $productId . ' has been updated - ' . json_encode($validatedData);
+            $this->systemLogsService->loadInsertSystemLogs($message, $this->systemLogsService::successCode, $this->getAdminId());
+    
+            return Redirect::to('products')->with('message_success', $this->getMessage('messages.SuccessProductsUpdate'));
         } else {
-            return Redirect::back()->with('message_danger', $this->getMessage('messages.ErrorProductsStore'));
+            return Redirect::back()->with('message_danger', $this->getMessage('messages.FailedProductsUpdate'));
         }
     }
+    
 
     public function processDeleteProduct(int $productId)
     {

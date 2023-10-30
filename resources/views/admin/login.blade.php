@@ -33,8 +33,8 @@
                     <div
                         class="authentication-login min-vh-100 bg-body row justify-content-center align-items-center p-4">
                         <div class="col-sm-8 col-md-6 col-xl-9">
-                            <h2 class="mb-3 fs-7 fw-bolder">Welcome To Vert-Age</h2>
-                            <h4 class=" mb-9">IMS</h4>
+                            <h2 class="mb-3 fs-7 fw-bolder" style="text-align: center">Welcome To Vert-Age</h2>
+                            <p class="fs-7 fw-bolder" style="text-align: center">Inventory Management system</p>
                             <div class="login-page">
                           
                                 <div class="">
@@ -47,27 +47,27 @@
                                             <strong>Success!</strong> {{ Session::get('message-success') }}
                                         </div>
                                     @endif
-                            <form method="POST" action="{{ route('login/process') }}" class="login-form">
+                              <form method="POST" action="{{ route('login/process') }}" class="login-form">
                                 {{ csrf_field() }}
                                 <div class="mb-3">
                                     
                                     <label for="exampleInputEmail1" class="form-label">Email</label>
                                     <div class="form-group">
                                     <input type="email"  id="email" type="email" name="email" class="form-control"
-                                        aria-describedby="emailHelp" required>
+                                        aria-describedby="emailHelp" required placeholder="Enter valid email address">
                                         <span class="example_input"><i class="fad fa-user"></i></span>
                                     </div>
                                 </div>
                                 <div class="mb-4">
                                     <label for="exampleInputPassword1" class="form-label">Password</label>
                                     <div class="form-group">
-                                    <input id="password" type="password" name="password" class="form-control" name="password" value="" required>
+                                    <input id="password" type="password" name="password" class="form-control" name="password" value="" required placeholder="Enter valid password">
                                     <span toggle="#password-field"
                                         class="fa fa-fw fa-eye field-icon toggle-password"></span>
                                         <span class="example_input"><i class="fas fa-key"></i></span>
                                     </div>
                                 </div>
-                                <div class="d-flex align-items-center justify-content-between mb-4">
+                                {{-- <div class="d-flex align-items-center justify-content-between mb-4">
                                     <div class="form-check">
                                         <input class="form-check-input primary" type="checkbox" value=""
                                             id="flexCheckChecked" checked="">
@@ -76,14 +76,14 @@
                                         </label>
                                     </div>
                                     <a class="text-primary fw-medium" href="forgetpassword.html">Forgot Password ?</a>
-                                </div>
+                                </div> --}}
                                <button
                                     class="btn btn-primary btn_login w-100 py-8 mb-4 rounded-2"><i class="fad fa-sign-in-alt"></i> Sign In</button> 
-                               <div class="d-flex align-items-center justify-content-center">
+                               {{-- <div class="d-flex align-items-center justify-content-center">
                                     <p class="fs-4 mb-0 fw-medium">Already hava an account? </p>
                                     <a class="text-primary fw-medium ms-2"
                                         href="signup.html"> Login</a>
-                                </div>
+                                </div> --}}
                             </form>
                         </div>
                     </div>

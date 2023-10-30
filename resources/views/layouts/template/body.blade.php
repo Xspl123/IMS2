@@ -19,14 +19,14 @@
             Replacement Item
         </button> </a>
         <ul class="nav navbar-top-links navbar-right">
-            <li class="time_date">
+            {{-- <li class="time_date">
             <span style="margin-right: 25px">
                 <span class="clock">
                             {{ \Carbon\Carbon::now()->format('d F Y') }} |
             </span>
             <span id="localclock" class="clock"></span>
             </span>
-            </li>
+            </li> --}}
            
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
@@ -47,4 +47,13 @@
                 </ul>
             </li>
         </ul>
+        <form action="{{route('search')}}" method="post" class="navbar-form navbar-right">
+            @csrf
+            <div class="form-group">
+                <input type="text" name="status" placeholder="Search..." class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-default">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
     </nav>

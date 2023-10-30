@@ -40,14 +40,13 @@ class SaleUpdateRequest extends FormRequest
             'approved_by' => 'nullable',
             'replacement_product_vendor' => 'nullable',
             'defulty_product_name' => 'nullable',
-            'defulty_product_sn' => 'nullable',
+            'defulty_product_sn' => 'nullable|defulty_product_sn|unique:sales,defulty_product_sn',
             'defulty_product_vendor' => 'nullable',
             'defulty_product_remark' => 'nullable',
             'challan_no' => 'nullable',
             'brand_name' => 'nullable',
             'cat_id' => 'nullable',
             'return_remark'
-
         ];
     }
 }

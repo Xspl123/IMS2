@@ -29,7 +29,6 @@ class ProductUpdateRequest extends FormRequest
             'name' => 'required|string',
             'description' => 'nullable',
             'brand_name' => 'required',
-            'count' => 'required|integer',
             'price' => 'required|integer',
             'rent_start_date' => 'nullable',
             'rent_end_date' => 'nullable',
@@ -39,7 +38,8 @@ class ProductUpdateRequest extends FormRequest
             'gst_rate' => 'nullable',
             'total_amount' => 'nullable',
             'product_type'=> 'nullable',
-            'mac_address' =>'required'
+            'product_serial_no' =>'nullable',
+            'product_category_id' =>'nullable',
         ];
     }
 }

@@ -223,3 +223,4 @@ Route::get('/challanCompanyPDF', 'CRM\SalesController@downloadCompanyPDF')->name
 Route::get('/challanCustomerPDF', 'CRM\SalesController@downloadCustomerPDF')->name('download.cust');
 Route::get('/challanDownloadCompanyPDF', 'CRM\SalesController@challanDownloadCompanyPDF')->name('challanDownloadCompanyPDF');
 Route::get('/challanDownloadCustomerPDF', 'CRM\SalesController@challanDownloadCustomerPDF')->name('challanDownloadCustomerPDF');
+Route::post('/related-data', 'CRM\SalesController@getData')->name('search');

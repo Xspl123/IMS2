@@ -106,7 +106,6 @@ class SalesModel extends Model
 
     public function updateSale(int $saleId, array $requestedData): int
     {
-        dd($requestedData->all());
         // Add 'updated_at' timestamp
         $requestedData['updated_at'] = now();
 

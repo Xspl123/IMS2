@@ -430,15 +430,13 @@ class SalesController extends Controller
                 // Save the sale with the GST amount and total amount
                 $storedSaleId = $this->salesService->execute($validatedData, $this->getAdminId());
 
-               // Log the action with additional data
-                $logData = ['action' => 'StoreSale', 'data' => $validatedData];
-                Log::channel('custom_sales_log')->info('Sale stored successfully', $logData);
-
-                // Insert log entry into the custom log table
-                CustomLog::create([
-                    'message' => 'Sale stored successfully',
-                    'context' => json_encode($logData),
-                ]);
+               // Use the customLog helper function to log and insert data
+                    $message = 'Sale has been added'. $storedSaleId;
+                    $logData = ['data' => $validatedData];
+                    $userId = Auth::id();
+                    $ipAddress = $request->ip();
+                    customLog($message, $logData, $userId, $ipAddress); 
+                    //end customLog helper function
                 
                 if ($storedSaleId) {
                     $message = 'Sale has been added with ID ' . $storedSaleId . ' - ' . json_encode($validatedData);
@@ -645,6 +643,13 @@ class SalesController extends Controller
         $challanInvoice = SalesModel::all();
         return view('crm.sales.challan_create',compact('challanInvoice'));
         
+    }
+
+    public function getData(Request $request)
+    {
+        $status = $request->status;
+        $relatedData = SalesModel::where('status', 'like', '%' . $status . '%')->get();
+        return view('related-data', ['relatedData' => $relatedData, 'status' => $status]);
     }
 
 }

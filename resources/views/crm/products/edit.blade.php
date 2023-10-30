@@ -28,24 +28,17 @@
                                 {{ Form::text('barcode', null, ['class' => 'form-control', 'readonly' => 'readonly', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
                             </div>
 
+                         </div>
+                         <div class="col-lg-6">
                             <div class="form-group input-row">
                                 {{ Form::label('name', 'Product Name') }}
                                 {{ Form::text('name', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
                             </div>
-
-                            <div class="form-group input-row">
-                                {{ Form::label('description', 'Product Description') }}
-                                {{ Form::text('description', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText')]) }}
-                            </div>
-
-                            <div class="form-group">
-                                {{ Form::label('vendor_id', 'Assign Vendor') }}
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-handshake-o"></i></span>
-                                    {{ Form::select('vendor_id', $dataOfVendors, null, ['class' => 'form-control', 'required', 'placeholder' => 'Select a Vendor Name']) }}
-                                </div>
-                            </div>
-
+                        </div>
+                    </div>
+                   
+                    <div class="row">
+                        <div class="col-lg-6">
                             <div class="form-group">
                                 {{ Form::label('price_with_gst', 'Product Price (Incl. GST):  ') }}
                                 <div class="input-group">
@@ -54,44 +47,89 @@
                                     </span>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            {{ Form::label('product_category_id', 'Product Category') }}
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-handshake-o"></i></span>
-                                {{ Form::select('product_category_id', $product_cat, null, ['class' => 'form-control', 'required', 'placeholder' => 'Select a Category Name']) }}
-                            </div>
                         </div>
-
-                        <div class="form-group">
-                            {{ Form::label('product_serial_no', 'Product Serial Number') }}
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    {{ Form::text('product_serial_no', null, ['class' => 'form-control', 'placeholder' => 'Enter product serial number', 'id' => 'barcode']) }}
-                                </span>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="product_category_id">Product Category</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                    {{ Form::select('product_category_id', $product_cat, null, ['class' => 'form-control', 'required', 'placeholder' => 'Select a Category Name']) }}
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            {{ Form::label('price', 'Product Base Price') }}
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    {{ Form::number('price', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText'), 'name' => 'price']) }}
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            {{ Form::label('gstAmount', 'GST Amount') }}
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    {{ Form::number('gstAmount', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText'), 'name' => 'gstAmount', 'readonly', 'id' => 'gstAmount']) }}
-                                </span>
-                            </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="brand_name">Product Brand Name</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                <select name="brand_name" class="form-control" id="brand_name">
+                                    <option value="" disabled>Select Product Brand</option>
+                                    @foreach(['Dell', 'Lenovo', 'Sumsung', 'HP', 'Thinkpad', 'CASQ', 'Openvox', 'Dinstar', 'OTHER'] as $option)
+                                        <option value="{{ $option }}" {{ $product->brand_name === $option ? 'selected' : '' }}>
+                                            {{ $option }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="product_serial_no">Product Serial Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                    {{ Form::text('product_serial_no', null, ['class' => 'form-control', 'readonly','placeholder' => 'Enter product serial number', 'id' => 'barcode']) }}
+                                </div>
+                            </div>
 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                {{ Form::label('price', 'Product Base Price') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        {{ Form::number('price', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText'), 'name' => 'price']) }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                {{ Form::label('gstAmount', 'GST Amount') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        {{ Form::number('gstAmount', null, ['class' => 'form-control', 'placeholder' => App\Traits\Language::getMessage('messages.InputText'), 'name' => 'gstAmount', 'readonly', 'id' => 'gstAmount']) }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                {{ Form::label('vendor_id', 'Assign Vendor') }}
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                    {{ Form::select('vendor_id', $dataOfVendors, null, ['class' => 'form-control', 'required', 'placeholder' => 'Select a Vendor Name']) }}
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group input-row">
+                                {{ Form::label('description', 'Product Description') }}
+                                {{ Form::textarea('description', null, ['class' => 'form-control', 'rows' => 2, 'cols' => 30, 'placeholder' => 'Enter product description']) }}
+                            </div>
+                            
+                        </div>
+
+                    </div>
                     <div class="col-lg-12 validate_form">
                         {{ Form::submit('Edit product', ['class' => 'btn btn-primary']) }}
                     </div>

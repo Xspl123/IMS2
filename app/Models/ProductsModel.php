@@ -96,26 +96,10 @@ class ProductsModel extends Model
 
     public function updateProduct(int $productId, array $requestedData): int
     {
-        $data = [
-            'name' => $requestedData['name'],
-            'description' => $requestedData['description'],
-            'mac_address' => $requestedData['mac_address'],
-            'brand_name' => $requestedData['brand_name'],
-            'count' => $requestedData['count'],
-            'price' => $requestedData['price'],
-            'rented' => isset($requestedData['rented']) ? $requestedData['rented'] : 0,
-            'rent_start_date' => isset($requestedData['rent_start_date']) ? $requestedData['rent_start_date'] : null,
-            'rent_end_date' => isset($requestedData['rent_end_date']) ? $requestedData['rent_end_date'] : null,
-            'updated_at' => now()
-        ];
-
-        if ($requestedData['rented'] != '1') {
-            $data['rent_start_date'] = null;
-            $data['rent_end_date'] = null;
-        }
-
-        return $this->where('id', '=', $productId)->update($data);
-       }
+        
+        $requestedData['updated_at'] = now();
+        return $this->where('id', '=', $productId)->update($requestedData);
+    }
 
 
         public function setActive(int $productId, int $activeType) : int
