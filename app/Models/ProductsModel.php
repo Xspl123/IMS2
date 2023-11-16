@@ -90,13 +90,8 @@ class ProductsModel extends Model
         return $this->insertGetId($data);
     }
 
-
-
-
-
     public function updateProduct(int $productId, array $requestedData): int
     {
-        
         $requestedData['updated_at'] = now();
         return $this->where('id', '=', $productId)->update($requestedData);
     }

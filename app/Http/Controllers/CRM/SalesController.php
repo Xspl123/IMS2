@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Log;
 use App\Models\CustomLog;
 use App\Models\ProductCategory;
-
+use Illuminate\Support\Facades\Auth;
 // use PDF;
 use Barryvdh\DomPDF\Facade as PDF;
 
@@ -651,5 +651,31 @@ class SalesController extends Controller
         $relatedData = SalesModel::where('status', 'like', '%' . $status . '%')->get();
         return view('related-data', ['relatedData' => $relatedData, 'status' => $status]);
     }
-
+    public function getDataBehafOfBarcode(Request $request)
+    {
+        $barcode = $request->barcode;
+        $searchProduct =  DB::table('products')
+                         ->join('product_categories','products.product_category_id','=','product_categories.id')
+                         ->select('products.*','product_categories.cat_name')
+                         ->where('products.barcode',$barcode)
+                         ->where('products.is_active',1)->first();
+                         if($searchProduct)
+                         {
+                $data = [
+                    'status'=>'success',
+                    'products' =>  $searchProduct,
+                ];
+            }
+        else{
+            $data = [
+                'status'=>'error',
+            ];
+        }
+        return $data;
+    }
+    public function storeDataBehafOfBarcode(SaleStoreRequest $request)
+    { 
+        
+        return $this->processStoreSale($request);
+    }
 }

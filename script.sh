@@ -9,7 +9,7 @@ target_month="$current_month"
 target_day="$current_day"
 
 # Set the source directory
-source_directory="/var/www/html/Abhishek/IMS/storage/app/Laravel/"
+source_directory="/var/www/html/IMS/storage/app/Laravel/"
 
 # Get the latest .zip file in the source directory
 latest_file=$(find "$source_directory" -maxdepth 1 -type f -name "*.zip" -printf "%T@ %p\n" | sort -n | tail -n 1 | cut -d' ' -f2-)
@@ -22,10 +22,10 @@ if [ -n "$latest_file" ]; then
     file_name="$(date "+%Y")-$target_month-$target_day-$(basename "$latest_file")"
 
     # Set the destination path on the remote server
-    remote_server="root@192.168.1.194:/phoenix/$file_name"
+    remote_server="xspl@192.168.1.110:/home/xspl/Desktop/xspldatbasebackup/IMS/$file_name"
 
     # Set the password for the remote server
-    password="akkish@123"
+    password="xspl@123"
 
     # Perform the file transfer using rsync with password authentication
     sshpass -p "$password" rsync -avz -e "ssh -o StrictHostKeyChecking=no" "$latest_file" "$remote_server"

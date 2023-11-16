@@ -39,9 +39,9 @@ class ProductStoreRequest extends FormRequest
             'total_amount' => 'nullable',
             'product_serial_no'=> 'nullable',
             'catgory_name' => 'nullable',
-            'product_serial_no'=> 'required|product_serial_no|unique:products,product_serial_no',
+            'product_serial_no'=>'required|unique:products,product_serial_no',
             'product_type' => 'nullable',
-            'mac_address' => 'required|mac_address|unique:products,mac_address'
+            'mac_address' => 'nullable'
             
         ];
         

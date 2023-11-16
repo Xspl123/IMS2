@@ -1,0 +1,47 @@
+Abhishek
+abhi.zip
+app
+AwesomeProject
+awsmp.zip
+carParking
+car.zip
+employee-expense-management-system
+html
+h.zip
+ibilling
+IMS
+laravel-car-parking-management
+licence
+licensemanagement
+licenseSystem
+licenseSystem.zip
+lm.zip
+miscumaccount.zip
+multi-clinte-wha
+mul.zip
+New_backup
+python
+qr
+qr-php
+qr.zip
+QuickAdminPanel-ExpenseManager
+society2
+society3
+society4
+Teesri Eye
+TESTDEV
+thirdeyeapp
+VertAgeCrm
+VertAgeCrm_1
+vertapp
+vertardb_carParking.sql
+vtage923.zip
+Filesystem               Size  Used Avail Use% Mounted on
+devtmpfs                 4.8G     0  4.8G   0% /dev
+tmpfs                    4.9G     0  4.9G   0% /dev/shm
+tmpfs                    4.9G   97M  4.8G   2% /run
+tmpfs                    4.9G     0  4.9G   0% /sys/fs/cgroup
+/dev/mapper/centos-root   50G   24G   27G  48% /
+/dev/sda1               1014M  238M  777M  24% /boot
+/dev/mapper/centos-home   45G   49M   44G   1% /home
+tmpfs                    984M     0  984M   0% /run/user/0

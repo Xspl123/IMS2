@@ -37,7 +37,7 @@ class SaleStoreRequest extends FormRequest
             'vendor_id' =>'nullable',
             'client_id' => 'nullable',
             'product_brand_id'=> 'nullable',
-            'sn' => 'required|sn|unique:sales,sn',
+            'sn' => 'required',
             'replacement_product_vendor' => 'nullable',
             'defulty_product_name' => 'nullable',
             'defulty_product_sn' => 'nullable',

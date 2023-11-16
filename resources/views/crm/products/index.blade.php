@@ -35,6 +35,7 @@
                                     <th><input type="checkbox" id="checkAll"></th>
                                     <th style="display: none">Barcode</th>
                                     <th>Date</th>
+                                    <th>Vendor</th>
                                     <th>Product Name</th>
                                     <th>Product Category</th>
                                     <th>Product Serial No.</th>
@@ -50,7 +51,12 @@
                                         <td>
                                             <input type="checkbox" class="barcode-checkbox">
                                         </td>
-                                        <td>{{ $product->created_at->format('Y-m-d') }}</td>
+                                        <td>{{ $product->created_at->format('l, F d, Y H:i:s') }}</td>
+                                        <td>
+                                            @if ($product->vendor)
+                                            <a href="{{ URL::to('vendors/view/' . $product->vendor->id) }}">{{ $product->vendor->name }}</a>
+                                            @endif
+                                        </td>
                                         <td style="display: none">
                                             @if ($product->barcode)
                                                 @php
@@ -80,12 +86,12 @@
                                         <td>
                                             {{ $product->is_active ? 'Available' : 'Sold Out' }}
                                         </td>
-                                        <td style="width: 100px;">
-                                            <div class="btn-group">
-                                                <a class="btn btn-small btn-primary btn-sm"
+                                        <td style="width: 100px">
+                                            <div class="btn-group" style="width: 100px">
+                                                <a class="btn btn-small btn-primary "
                                                     href="{{ URL::to('products/view/' . $product->id) }}">Details</a>
                                                 <button data-toggle="dropdown"
-                                                    class="btn btn-primary dropdown-toggle btn-sm "><span
+                                                    class="btn btn-primary dropdown-toggle  "><span
                                                         class="caret"></span></button>
                                                 <ul class="dropdown-menu">
                                                     <li>

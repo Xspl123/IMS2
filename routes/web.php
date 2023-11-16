@@ -101,6 +101,7 @@ Route::group(['prefix' => 'sales'], function () {
 
     Route::get('challan-invoice-mail/{id}', 'CRM\SalesController@sendmailInvoice')->name('sendmailInvoice');
     Route::get('sendmailChallan/', 'CRM\SalesController@sendmailChallan')->name('sendmailChallan');
+    Route::post('/barcode', 'CRM\SalesController@getDataBehafOfBarcode')->name('barcode');
 
     Route::post('store', 'CRM\SalesController@processStoreSale')->name('processStoreSale');
     Route::put('update/{employeeId}', 'CRM\SalesController@processUpdateSale')->name('processUpdateSale');
@@ -224,3 +225,4 @@ Route::get('/challanCustomerPDF', 'CRM\SalesController@downloadCustomerPDF')->na
 Route::get('/challanDownloadCompanyPDF', 'CRM\SalesController@challanDownloadCompanyPDF')->name('challanDownloadCompanyPDF');
 Route::get('/challanDownloadCustomerPDF', 'CRM\SalesController@challanDownloadCustomerPDF')->name('challanDownloadCustomerPDF');
 Route::post('/related-data', 'CRM\SalesController@getData')->name('search');
+Route::post('storeDataBehafOfBarcode', 'CRM\SalesController@storeDataBehafOfBarcode')->name('storeDataBehafOfBarcode');

@@ -25,8 +25,7 @@
             </a>
                 <a id="challan_btn" href="sales/sendmailChallan"><button type="button" class="btn btn-success "> <i class="fa fa-paper-plane"> Send Mail</i>
                 </button></a>
-            
-            
+
             <div class="panel panel-default">
 
                 <div class="panel-body">
@@ -69,8 +68,8 @@
                                         </td>
                                         <td class="text-center">{{$value->sn}}</td>
                                         <td class="text-center">{{$value->status}}</td>
-                                        <td >
-                                            <div class="btn-group">
+                                        <td style="width: 100px">
+                                            <div class="btn-group" style="width: 100px">
                                                 <a class="btn btn-small btn-primary btn-md"
                                                     href="{{ URL::to('sales/view/' . $value->id) }}">Details</a>
                                                 <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-md "><span
